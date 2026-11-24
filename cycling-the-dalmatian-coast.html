@@ -258,7 +258,7 @@ function planbHTML(s, rough){
   const body = items.map(e => e.kind === 'leg' ? legHTML(e) : e.kind === 'fallback' ? fallbackHTML(e) : `<li>${esc(e.text)}</li>`).join('');
   return `<details class="planb${rough ? ' rough' : ''}"${rough ? ' open' : ''}>
     <summary>${rough ? 'Rough weather forecast: your options on this day' : 'If the weather turns: options on this day'}</summary>
-    <ul>${body}</ul><p class="lbl">You decide whether to walk; these are the options, with their sources.</p></details>`;
+    <ul>${body}</ul><p class="lbl">You decide whether to go; these are the options, with their sources.</p></details>`;
 }
 function planbAllHTML(){
   const all = (P.planb || {}).all || [];
