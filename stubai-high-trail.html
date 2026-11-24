@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stage Weather</title>
+<style>
+:root{
+  --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
+  --accent:#1f6f8b; --warn-bg:#fff4e0; --warn-ink:#8a4b00; --rain:#2f6db5;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#15191c; --card:#1e2428; --ink:#e8ecee; --muted:#9aa6ad; --line:#2e363b;
+         --accent:#6cc0dc; --warn-bg:#3a2a12; --warn-ink:#f3c27a; --rain:#7fb2ef; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.45rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 18px}
+.picker{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.picker input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.status{font-size:.9rem;color:var(--muted);margin:0 0 14px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.stage h2{font-size:1.08rem;margin:0}
+.meta{color:var(--muted);font-size:.9rem;margin:2px 0 10px}
+.pts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.pts{grid-template-columns:1fr}}
+.pt{border:1px solid var(--line);border-radius:10px;padding:10px}
+.pt .lbl{font-size:.82rem;color:var(--muted)}
+.big{display:flex;align-items:center;gap:10px;margin:4px 0}
+.sym{font-size:2rem;line-height:1}
+.temp{font-size:1.25rem;font-weight:600}
+.facts{font-size:.92rem;margin:0;padding:0;list-style:none}
+.facts li{margin:2px 0}
+.rain{color:var(--rain)}
+.planb{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.92rem}
+.planb summary{cursor:pointer;font-weight:600}
+.planb.rough{border-color:var(--warn-ink);background:var(--warn-bg)}
+.planb ul,.planb-all ul{margin:6px 0;padding-left:18px}
+.planb li{margin:6px 0}
+.planb-all{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
+.choice{margin:6px 0 2px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pick{font:inherit;font-size:.85rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink);cursor:pointer}
+.pick.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.flag{display:inline-block;background:var(--warn-bg);color:var(--warn-ink);border-radius:6px;
+  padding:1px 7px;font-size:.85rem;margin-top:6px}
+.later{color:var(--muted);font-size:.93rem}
+a{color:var(--accent)}
+.hours{display:flex;gap:4px;overflow-x:auto;margin-top:8px;padding-bottom:2px}
+.h{flex:0 0 auto;text-align:center;font-size:.75rem;color:var(--muted);min-width:34px}
+.h b{display:block;font-size:1rem;color:var(--ink);font-weight:400}
+footer{color:var(--muted);font-size:.82rem;margin-top:22px}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Weather for your stages</h1>
+  <p class="sub" id="subtitle"></p>
+  <div class="picker">
+    <label for="start">Arrival date (Day 1)</label>
+    <input type="date" id="start">
+  </div>
+  <p class="status" id="status"></p>
+  <div id="planb-all"></div>
+  <div id="stages"></div>
+  <footer>
+    <p>Forecast for the highest point and the finish of each stage (on days without a stage, for the town), for daytime hours (08:00–18:00 local time).
+      Mountain and coastal weather can change fast: check again in the morning before you set off.</p>
+    <p>Weather data: <a href="https://www.met.no/en" target="_blank" rel="noopener">MET Norway</a>
+      (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>);
+      in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
+      (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
+      in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+  </footer>
+</main>
+
+<script id="product-data" type="application/json">{"product": "Stubai High Trail", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Arrival to Neustift and ascent to Starkenburger Hütte", "kind": "route_day", "route_name": "Kreuzjoch Cable Car Top Station -> Starkenburger Hütte", "ops_route": 1258, "parts": [{"ops_route": 1258, "name": "Kreuzjoch Cable Car Top Station -> Starkenburger Hütte", "rwgps_id": "53107666"}], "km": 4.2, "gain_m": 264, "points": [{"role": "high", "label": "Highest point", "lat": 47.135, "lon": 11.2897, "ele": 2328}, {"role": "end", "label": "Finish · Starkenburger Hütte", "lat": 47.1269, "lon": 11.2795, "ele": 2220}]}, {"stage": 2, "day": 2, "title": "Starkenburger Hütte — Franz Senn Hütte", "kind": "route_day", "route_name": "Starkenburger Hütte -> Franz-Senn-Hütte (2147m)", "ops_route": 686, "parts": [{"ops_route": 686, "name": "Starkenburger Hütte -> Franz-Senn-Hütte (2147m)", "rwgps_id": "53108553"}], "km": 15.3, "gain_m": 594, "points": [{"role": "high", "label": "Highest point", "lat": 47.1375, "lon": 11.254, "ele": 2542}, {"role": "end", "label": "Finish · Franz-Senn-Hütte", "lat": 47.0849, "lon": 11.1686, "ele": 2143}]}, {"stage": 3, "day": 3, "title": "Franz Senn Hütte — Neue Regensburger Hütte", "kind": "route_day", "route_name": "Franz-Senn-Hütte (2147m) -> Neue Regensburger Hütte", "ops_route": 687, "parts": [{"ops_route": 687, "name": "Franz-Senn-Hütte (2147m) -> Neue Regensburger Hütte", "rwgps_id": "53143185"}], "km": 9.1, "gain_m": 608, "points": [{"role": "high", "label": "Highest point", "lat": 47.0714, "lon": 11.2049, "ele": 2699}, {"role": "end", "label": "Finish · Neue Regensburger Hütte", "lat": 47.0549, "lon": 11.1982, "ele": 2279}]}, {"stage": 4, "day": 4, "title": "Neue Regensburger Hütte — Dresdner Hütte", "kind": "route_day", "route_name": "Neue Regensburger Hütte -> Dresdner Hütte", "ops_route": 919, "parts": [{"ops_route": 919, "name": "Neue Regensburger Hütte -> Dresdner Hütte", "rwgps_id": "53143991"}], "km": 13.2, "gain_m": 915, "points": [{"role": "high", "label": "Highest point", "lat": 47.0366, "lon": 11.166, "ele": 2862}, {"role": "end", "label": "Finish · Dresdner Hütte", "lat": 46.9969, "lon": 11.1401, "ele": 2288}]}, {"stage": 5, "day": 5, "title": "Dresdner Hütte — Nürnberger Hütte", "kind": "route_day", "route_name": "Dresdner Hütte -> Nürnberger Hütte", "ops_route": 2006, "parts": [{"ops_route": 2006, "name": "Dresdner Hütte -> Nürnberger Hütte", "rwgps_id": "53151257"}], "km": 9.5, "gain_m": 838, "points": [{"role": "high", "label": "Highest point", "lat": 46.9922, "lon": 11.1543, "ele": 2675}, {"role": "end", "label": "Finish · Nürnberger Hütte", "lat": 46.9936, "lon": 11.2178, "ele": 2276}]}, {"stage": 6, "day": 6, "title": "Nürnberger Hütte — Innsbrucker Hütte", "kind": "route_day", "route_name": "Nürnberger Hütte -> Innsbrucker Hütte am Habicht", "ops_route": 2007, "parts": [{"ops_route": 2007, "name": "Nürnberger Hütte -> Innsbrucker Hütte am Habicht", "rwgps_id": "53151842"}], "km": 15.8, "gain_m": 1239, "points": [{"role": "high", "label": "Highest point", "lat": 46.989, "lon": 11.2447, "ele": 2735}, {"role": "end", "label": "Finish · Innsbrucker Hütte", "lat": 47.0433, "lon": 11.3106, "ele": 2355}]}, {"stage": 7, "day": 7, "title": "Innsbrucker Hütte — Elferlifte (cable car back to Neustift) / Neder", "kind": "route_day", "route_name": "Innsbrucker Hütte am Habicht -> Elfer Panoramabahn Top Station", "ops_route": 777, "parts": [{"ops_route": 777, "name": "Innsbrucker Hütte am Habicht -> Elfer Panoramabahn Top Station", "rwgps_id": "46912856"}], "km": 9.4, "gain_m": 402, "points": [{"role": "high", "label": "Highest point", "lat": 47.0437, "lon": 11.3116, "ele": 2364}, {"role": "end", "label": "Finish · Elfer Panoramabahn Top Station", "lat": 47.0985, "lon": 11.3235, "ele": 1789}]}]}</script>
+<script>
+const P = JSON.parse(document.getElementById('product-data').textContent);
+const TZ = P.timezone || 'Europe/Zagreb';
+const DAY_FROM = 8, DAY_TO = 18;          // riding hours, local time
+const HORIZON_DAYS = 9;                    // met.no gives about 9-10 days
+const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
+const CACHE_KEY = 'stage-weather:v1:';
+
+document.getElementById('title').textContent = 'Weather for your stages';
+document.getElementById('subtitle').textContent = P.product;
+
+// ---------- small helpers ----------
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(CACHE_KEY+k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(CACHE_KEY+k, JSON.stringify(v)); }catch(e){} }
+};
+function addDays(iso, n){ const d = new Date(iso+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+function todayLocal(){ return new Intl.DateTimeFormat('en-CA',{timeZone:TZ}).format(new Date()); }
+function localParts(isoTime){
+  const f = new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'});
+  const o = Object.fromEntries(f.formatToParts(new Date(isoTime)).map(p=>[p.type,p.value]));
+  return {date:`${o.year}-${o.month}-${o.day}`, hour:+o.hour};
+}
+function fmtDate(iso){ return new Date(iso+'T12:00:00Z').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'}); }
+function fmtStamp(ms){ return new Date(ms).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
+function yrLink(pt){ return `https://www.yr.no/en/forecast/daily-table/${pt.lat},${pt.lon}`; }
+const ms2kmh = v => Math.round(v*3.6);
+
+const SYM = [ // first match wins, most severe first
+  ['thunder','⛈️'],['snow','🌨️'],['sleet','🌨️'],['heavyrain','🌧️'],['rainshowers','🌦️'],['rain','🌧️'],
+  ['fog','🌫️'],['cloudy','☁️'],['partlycloudy','⛅'],['fair','🌤️'],['clearsky','☀️']];
+const SEVERITY = ['clearsky','fair','partlycloudy','cloudy','fog','lightrainshowers','rainshowers','lightrain','rain','heavyrainshowers','heavyrain','sleet','snow','thunder'];
+function symIcon(code){ if(!code) return '·'; for(const [k,i] of SYM){ if(code.includes(k)) return i; } return '·'; }
+function sev(code){ if(!code) return -1; let s=-1; SEVERITY.forEach((k,i)=>{ if(code.replace(/_(day|night|polartwilight)$/,'').includes(k)) s=Math.max(s,i); }); return s; }
+function words(code){
+  if(!code) return '';
+  return code.replace(/_(day|night|polartwilight)$/,'')
+    .replace('andthunder',' and thunder').replace('heavy','heavy ').replace('light','light ')
+    .replace('showers',' showers').replace('partlycloudy','partly cloudy').replace('clearsky','clear sky')
+    .replace(/\s+/g,' ').trim().replace(/^./,c=>c.toUpperCase());
+}
+
+// ---------- met.no ----------
+// ---------- weather sources ----------
+// The finest free source with a point forecast a browser may read, chosen by where the point is (24 Nov 2026):
+//   GeoSphere Austria, AROME 1 km, box 43.0-51.5 N / 5.0-22.6 E (Alps, Switzerland, Dolomites, Slovenia, northern
+//   Croatia, Mont Blanc), about 60 hours ahead; NWS in the United States, about 7 days; MET Norway everywhere else
+//   and after those hours (in the Nordic countries met.no runs its own 2.5 km model).
+// Thunder always comes from met.no (its probability of thunder), so no source invents storms.
+const SRC = {
+  geosphere: {name: 'GeoSphere Austria (1 km)', box: [43.002, 5.0317, 51.498, 22.5682],
+    url: (pt) => `https://dataset.api.hub.geosphere.at/v1/timeseries/forecast/nwp-v2-1h-1km?parameters=2t,tp,sf,10u,10v,10fg,tcc&lat_lon=${pt.lat},${pt.lon}`},
+  nws: {name: 'US National Weather Service', box: [24, -125, 50, -66]},
+  metno: {name: 'MET Norway'}
+};
+const inBox = (pt, b) => pt.lat >= b[0] && pt.lat <= b[2] && pt.lon >= b[1] && pt.lon <= b[3];
+function regionalSource(pt){ for(const k of ['geosphere','nws']) if(inBox(pt, SRC[k].box)) return k; return null; }
+
+async function cached(key, ttlMs, load){
+  const c = store.get(key);
+  if(c && c.expires > Date.now()) return {...c, fromCache:false};
+  try{ const rec = await load(); rec.expires = rec.expires || Date.now() + ttlMs; store.set(key, rec); return {...rec, fromCache:false}; }
+  catch(e){ if(c) return {...c, fromCache:true}; throw e; }
+}
+
+function forecastMetno(pt){
+  // met.no asks clients not to re-ask before the data expires
+  return cached(`${pt.lat},${pt.lon}`, 30*60e3, async () => {
+    const r = await fetch(`${API}?lat=${pt.lat}&lon=${pt.lon}${pt.ele != null ? `&altitude=${pt.ele}` : ''}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    return {fetched: Date.now(), expires: Date.parse(r.headers.get('Expires')) || null,
+            series: data.properties.timeseries.map(x => ({...x, src: 'metno'}))};
+  });
+}
+
+function symbolFrom(precip, snow, cloudPct){
+  if(precip >= 0.1){
+    const k = snow > precip / 2 ? 'snow' : 'rain';
+    return (precip < 1 ? 'light' : precip >= 4 ? 'heavy' : '') + k;
+  }
+  return cloudPct < 15 ? 'clearsky_day' : cloudPct < 40 ? 'fair_day' : cloudPct < 75 ? 'partlycloudy_day' : 'cloudy';
+}
+// dir: degrees the wind comes FROM, as met.no's wind_from_direction (wind on the road needs it)
+function step(time, t, wind, gust, precip, symbol, src, dir){
+  return {time, src, data: {instant: {details: {air_temperature: t, wind_speed: wind, wind_speed_of_gust: gust, wind_from_direction: dir}},
+          next_1_hours: {summary: {symbol_code: symbol}, details: {precipitation_amount: precip}}}};
+}
+
+// GeoSphere allows 5 requests a second and 240 an hour per address, but answers many points in one request:
+// the page asks once for all its points (geoBatch), and a single point falls back to its own request.
+const GEO_PARAMS = '2t,tp,sf,10u,10v,10fg,tcc';
+function geoSeries(feature, ts){
+  const P = feature.properties.parameters, out = [];
+  // a value at hour t covers the hour that ENDS at t; met.no's next_1_hours covers the hour that STARTS at the step
+  for(let i = 0; i < ts.length - 1; i++){
+    const j = i + 1, u = P['10u'].data[i], v = P['10v'].data[i], wind = Math.hypot(u, v);
+    // u/v point where the air goes; the wind comes FROM the opposite direction
+    const dir = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360;
+    out.push(step(new Date(ts[i]).toISOString(), P['2t'].data[i], wind, P['10fg'].data[j],
+                  P.tp.data[j], symbolFrom(P.tp.data[j], P.sf.data[j], P.tcc.data[j]), 'geosphere', dir));
+  }
+  return out;
+}
+let GEO_BATCH = null;      // promise of {"lat,lon": series}
+let GEO_DUE = new Set();   // points whose days fall inside GeoSphere's ~60 hours
+function geoBatch(points){
+  const todo = points.filter(pt => inBox(pt, SRC.geosphere.box));
+  if(!todo.length) return null;
+  const q = todo.map(pt => `lat_lon=${pt.lat},${pt.lon}`).join('&');
+  return fetch(`https://dataset.api.hub.geosphere.at/v1/timeseries/forecast/nwp-v2-1h-1km?parameters=${GEO_PARAMS}&${q}`)
+    .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(d => Object.fromEntries(todo.map((pt, i) => [`${pt.lat},${pt.lon}`, geoSeries(d.features[i], d.timestamps)])));
+}
+function forecastGeosphere(pt){
+  return cached(`geo:${pt.lat},${pt.lon}`, 60*60e3, async () => {
+    const key = `${pt.lat},${pt.lon}`;
+    if(GEO_BATCH){ try{ const b = await GEO_BATCH; if(b[key]) return {fetched: Date.now(), series: b[key]}; }catch(e){} }
+    const r = await fetch(`https://dataset.api.hub.geosphere.at/v1/timeseries/forecast/nwp-v2-1h-1km?parameters=${GEO_PARAMS}&lat_lon=${key}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json();
+    return {fetched: Date.now(), series: geoSeries(d.features[0], d.timestamps)};
+  });
+}
+
+function hoursOf(validTime){      // "2026-11-24T04:00:00+00:00/PT2H" -> [start ms, hours]
+  const [a, dur] = validTime.split('/'), m = /P(?:(\d+)D)?(?:T(?:(\d+)H)?)?/.exec(dur) || [];
+  return [Date.parse(a), (+(m[1]||0))*24 + (+(m[2]||0)) || 1];
+}
+function forecastNws(pt){
+  return cached(`nws:${pt.lat},${pt.lon}`, 60*60e3, async () => {
+    const pr = await fetch(`https://api.weather.gov/points/${pt.lat},${pt.lon}`);
+    if(!pr.ok) throw new Error('HTTP '+pr.status);
+    const grid = await (await fetch((await pr.json()).properties.forecastGridData)).json(), G = grid.properties;
+    const per = (key, spread) => { const m = new Map();
+      for(const v of (G[key] || {}).values || []){ const [t0, h] = hoursOf(v.validTime);
+        for(let k = 0; k < h; k++) m.set(t0 + k*3600e3, spread ? (v.value || 0) / h : v.value); }
+      return m; };
+    const T = per('temperature'), W = per('windSpeed'), Gu = per('windGust'), R = per('quantitativePrecipitation', true),
+          C = per('skyCover'), TH = per('probabilityOfThunder'), D = per('windDirection');
+    const out = [];
+    for(const [t, temp] of [...T.entries()].sort((a, b) => a[0] - b[0])){
+      const p = R.get(t) || 0, sym = symbolFrom(p, 0, C.get(t) ?? 50);
+      const e = step(new Date(t).toISOString(), temp, (W.get(t) || 0) / 3.6, Gu.has(t) ? Gu.get(t) / 3.6 : undefined, p,
+                     (TH.get(t) || 0) >= 30 && p >= 0.1 ? 'rainandthunder' : sym, 'nws', D.get(t));
+      e.data.next_1_hours.details.probability_of_thunder = TH.get(t) || 0;
+      out.push(e);
+    }
+    return {fetched: Date.now(), series: out};
+  });
+}
+
+// all points of a page are asked for at once, each only once per render
+let FC = new Map();
+function forecastOnce(pt){ const k = `${pt.lat},${pt.lon}`; if(!FC.has(k)) FC.set(k, forecast(pt)); return FC.get(k); }
+
+// One series in met.no form: the regional source where it has data, met.no after it; thunder from met.no.
+async function forecast(pt){
+  const met = await forecastMetno(pt);
+  const k = regionalSource(pt);
+  if(!k) return met;
+  if(k === 'geosphere' && !GEO_DUE.has(`${pt.lat},${pt.lon}`)) return met;   // its days are past GeoSphere's hours
+  let reg;
+  try{ reg = await (k === 'geosphere' ? forecastGeosphere(pt) : forecastNws(pt)); }catch(e){ return met; }
+  if(!reg.series.length) return met;
+  const byTime = new Map(met.series.map(x => [Date.parse(x.time), x]));
+  for(const e of reg.series){
+    const m = byTime.get(Date.parse(e.time));
+    const thunderP = m?.data?.next_1_hours?.details?.probability_of_thunder;
+    const metSym = (m?.data?.next_1_hours || m?.data?.next_6_hours)?.summary?.symbol_code || '';
+    if(k === 'geosphere'){
+      if(thunderP != null) e.data.next_1_hours.details.probability_of_thunder = thunderP;
+      if(metSym.includes('thunder') && e.data.next_1_hours.details.precipitation_amount >= 0.1)
+        e.data.next_1_hours.summary.symbol_code = 'rainandthunder';
+    }
+  }
+  const last = Date.parse(reg.series[reg.series.length - 1].time);
+  return {fetched: Math.min(met.fetched, reg.fetched), expires: Math.min(met.expires, reg.expires),
+          fromCache: met.fromCache || reg.fromCache,
+          series: [...reg.series, ...met.series.filter(x => Date.parse(x.time) > last)]};
+}
+
+function dayView(series, date){
+  // hourly steps where met.no has them, else 6-hour blocks overlapping riding hours
+  const hours = [];
+  let precip = 0, tmin = Infinity, tmax = -Infinity, wind = 0, gust = 0, thunderP = 0, worst = null, any = false;
+  const srcs = new Set();
+  const six = [];
+  for(const s of series){
+    const {date:d, hour:h} = localParts(s.time);
+    if(d !== date) continue;
+    const inst = s.data.instant.details;
+    const n1 = s.data.next_1_hours, n6 = s.data.next_6_hours;
+    if(h >= DAY_FROM && h <= DAY_TO){
+      any = true; srcs.add(s.src || 'metno');
+      tmin = Math.min(tmin, inst.air_temperature); tmax = Math.max(tmax, inst.air_temperature);
+      wind = Math.max(wind, inst.wind_speed || 0);
+      gust = Math.max(gust, inst.wind_speed_of_gust || 0);
+    }
+    if(n1 && h >= DAY_FROM && h < DAY_TO){
+      precip += n1.details.precipitation_amount || 0;
+      thunderP = Math.max(thunderP, n1.details.probability_of_thunder || 0);
+      hours.push({h, sym:n1.summary.symbol_code, t:inst.air_temperature, p:n1.details.precipitation_amount||0});
+      if(sev(n1.summary.symbol_code) > sev(worst)) worst = n1.summary.symbol_code;
+    } else if(!n1 && n6 && h + 6 > DAY_FROM && h < DAY_TO){
+      six.push(n6);
+      if(sev(n6.summary.symbol_code) > sev(worst)) worst = n6.summary.symbol_code;
+    }
+  }
+  if(!hours.length && six.length){
+    precip = six.reduce((a,b)=>a+(b.details.precipitation_amount||0),0);
+    // 6-hour blocks carry their own min/max temperature
+    for(const b of six){
+      if(b.details.air_temperature_min!=null) tmin=Math.min(tmin,b.details.air_temperature_min);
+      if(b.details.air_temperature_max!=null) tmax=Math.max(tmax,b.details.air_temperature_max);
+    }
+    any = true;
+  }
+  if(!any) return null;
+  return {precip:Math.round(precip*10)/10, tmin:Math.round(tmin), tmax:Math.round(tmax),
+          wind:ms2kmh(wind), gust:gust?ms2kmh(gust):null, thunderP, worst, hours, coarse: !hours.length,
+          srcs: [...srcs].map(k => SRC[k].name)};
+}
+
+// ---------- render ----------
+function pointHTML(pt, v){
+  const head = `<div class="lbl">${pt.label}${pt.ele != null ? ` · ${pt.ele} m` : ''}</div>`;
+  if(!v) return `<div class="pt">${head}<p class="later">No forecast for this day yet. <a href="${yrLink(pt)}" target="_blank" rel="noopener">Forecast for this point on yr.no</a></p></div>`;
+  const thunder = (v.worst && v.worst.includes('thunder')) || v.thunderP >= 20;
+  const hrs = v.hours.length ? `<div class="hours">${v.hours.map(x=>`<div class="h">${String(x.h).padStart(2,'0')}<b>${symIcon(x.sym)}</b>${Math.round(x.t)}°${x.p?`<br><span class="rain">${x.p}</span>`:''}</div>`).join('')}</div>` : '';
+  return `<div class="pt">${head}
+    <div class="big"><span class="sym">${symIcon(v.worst)}</span>
+      <span><span class="temp">${v.tmin}–${v.tmax} °C</span><br><span class="lbl">${words(v.worst)}</span></span></div>
+    <ul class="facts">
+      <li class="rain">Rain 08–18: ${v.precip} mm</li>
+      <li>Wind up to ${v.wind} km/h${v.gust?`, gusts ${v.gust} km/h`:''}</li>
+      ${v.coarse?'<li class="lbl">Rough forecast (6-hour steps); details come closer to the day.</li>':''}
+    </ul>
+    ${thunder?`<span class="flag">Thunderstorms possible${v.thunderP?` (${Math.round(v.thunderP)} %)`:''}</span>`:''}
+    ${hrs}
+    <p class="lbl" style="margin:8px 0 0">Forecast: ${v.srcs.join(' and ')} · <a href="${yrLink(pt)}" target="_blank" rel="noopener">Full forecast on yr.no</a></p>
+  </div>`;
+}
+
+// ---------- route choice (days with more than one route) ----------
+// order: link (?r=4:7366,5:7368, made per tour from OPS) > the guest's own pick > the product default
+const OPTION_FIELDS = ['route_name','ops_route','parts','km','gain_m','points'];
+const URL_CHOICES = Object.fromEntries((new URLSearchParams(location.search).get('r') || '')
+  .split(',').filter(Boolean).map(x => x.split(':')));
+function chosenKey(s){
+  const keys = s.options.map(o => o.key);
+  const pick = [URL_CHOICES[String(s.day)], store.get(`route:${P.product}:${s.day}`)].find(k => keys.includes(k));
+  return pick || keys[0];
+}
+function applyChoices(){
+  for(const s of P.stages){
+    if(!s.options) continue;
+    const key = chosenKey(s), o = s.options.find(x => x.key === key);
+    for(const f of OPTION_FIELDS) s[f] = o[f];
+    s.chosen = key;
+    s.wind_key = key === s.options[0].key ? String(s.stage) : `${s.stage}:${key}`;
+  }
+}
+function choicesParam(){
+  const r = P.stages.filter(s => s.options && s.chosen !== s.options[0].key).map(s => `${s.day}:${s.chosen}`);
+  return r.length ? `&r=${r.join(',')}` : '';
+}
+function choiceHTML(s){
+  if(!s.options) return '';
+  return `<div class="choice"><span class="lbl">Your route:</span> ${s.options.map(o =>
+    `<button type="button" class="pick${o.key === s.chosen ? ' on' : ''}" data-day="${s.day}" data-key="${o.key}" aria-pressed="${o.key === s.chosen}">${o.label}</button>`).join('')}</div>`;
+}
+document.getElementById('stages').addEventListener('click', e => {
+  const b = e.target.closest('.pick'); if(!b) return;
+  store.set(`route:${P.product}:${b.dataset.day}`, b.dataset.key);
+  delete URL_CHOICES[b.dataset.day];   // the guest's own pick wins over the link from now on
+  render();
+});
+
+// ---------- Plan B (from the product's dossier in Prodigy, checked by a PD; guest wording approved) ----------
+// a day is "rough" when the forecast has thunder, heavy rain or strong wind: then the day's options open by themselves
+function isRough(v){ return !!v && ((v.worst||'').includes('thunder') || v.thunderP >= 20 || v.precip >= 10 || v.wind >= 40); }
+function esc(t){ return String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function legHTML(l){
+  const meta = [l.operator, l.freq, l.months, l.booking && l.booking !== 'Not needed' ? `booking: ${l.booking}` : ''].filter(Boolean).map(esc).join(' · ');
+  return `<li><strong>${esc(l.how)}</strong> ${esc(l.from)} → ${esc(l.to)}
+    ${meta ? `<br><span class="lbl">${meta}</span>` : ''}
+    ${l.runs ? `<br>${esc(l.runs)}` : ''}
+    ${l.link ? `<br><a href="${esc(l.link)}" target="_blank" rel="noopener">Timetable and prices</a>` : ''}${l.checked ? ` <span class="lbl">(checked ${esc(l.checked)})</span>` : ''}</li>`;
+}
+function fallbackHTML(e){
+  const t = e.taxi;
+  const taxi = t ? `<br><strong>${esc(t.name)}</strong>${t.area ? ` · ${esc(t.area)}` : ''}
+    ${t.phone ? `<br><a href="tel:${esc(t.phone.replace(/[^+\d]/g,''))}">${esc(t.phone)}</a>` : ''}${t.website ? ` · <a href="${esc(t.website)}" target="_blank" rel="noopener">website</a>` : ''}
+    ${t.note ? `<br><span class="lbl">${esc(t.note)}</span>` : ''}
+    ${e.must ? `<br><strong>${esc(e.must)}</strong>` : ''}` : '';
+  return `<li>${esc(e.text)}${taxi}</li>`;
+}
+function planbHTML(s, rough){
+  const items = ((P.planb || {}).by_day || {})[String(s.day)] || [];
+  if(!items.length) return '';
+  const body = items.map(e => e.kind === 'leg' ? legHTML(e) : e.kind === 'fallback' ? fallbackHTML(e) : `<li>${esc(e.text)}</li>`).join('');
+  return `<details class="planb${rough ? ' rough' : ''}"${rough ? ' open' : ''}>
+    <summary>${rough ? 'Rough weather forecast: your options on this day' : 'If the weather turns: options on this day'}</summary>
+    <ul>${body}</ul><p class="lbl">You decide whether to go; these are the options, with their sources.</p></details>`;
+}
+function planbAllHTML(){
+  const all = (P.planb || {}).all || [];
+  if(!all.length) return '';
+  return `<div class="planb-all"><strong>If the weather turns</strong><ul>${all.map(e => `<li>${esc(e.text)}</li>`).join('')}</ul></div>`;
+}
+
+async function render(){
+  const start = document.getElementById('start').value;
+  const box = document.getElementById('stages'), status = document.getElementById('status');
+  if(!start){ box.innerHTML=''; status.textContent='Choose your arrival date to see the weather for each stage.'; return; }
+  const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
+  applyChoices();
+  FC = new Map();
+  const due = P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+                      .flatMap(s => s.points).filter(pt => !(store.get(`geo:${pt.lat},${pt.lon}`)?.expires > Date.now()));
+  GEO_BATCH = due.length ? geoBatch(due) : null;
+  GEO_DUE = new Set(P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+                            .flatMap(s => s.points).map(pt => `${pt.lat},${pt.lon}`));
+  for(const s of P.stages){ const dt = addDays(start, s.day-1); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
+  box.innerHTML = P.stages.map(s=>{
+    const date = addDays(start, s.day-1);
+    return `<section class="stage" id="s${s.stage}">
+      <h2>Day ${s.day} · ${s.title}</h2>${choiceHTML(s)}
+      <div class="meta">${fmtDate(date)}${s.km != null ? ` · ${s.km} km · ${s.gain_m} m ascent` : ''}</div>
+      <div class="pts"><p class="later">Loading…</p></div><div class="planb-slot">${planbHTML(s, false)}</div></section>`;
+  }).join('');
+  document.getElementById('planb-all').innerHTML = planbAllHTML();
+  let stamps = [], offline = false, failed = 0;
+  for(const s of P.stages){
+    const date = addDays(start, s.day-1);
+    const el = document.querySelector(`#s${s.stage} .pts`);
+    let notable = false;
+    if(date < today){ el.innerHTML = `<p class="later">This day is in the past.</p>`; continue; }
+    if(date > lastDay){
+      el.innerHTML = s.points.map(pt=>pointHTML(pt,null)).join('') ;
+      el.insertAdjacentHTML('beforeend', `<p class="later" style="grid-column:1/-1;margin:0">The forecast for this day appears here from ${fmtDate(addDays(date,-HORIZON_DAYS))}.</p>`);
+      continue;
+    }
+    const parts = [];
+    for(const pt of s.points){
+      try{
+        const f = await forecastOnce(pt); stamps.push(f.fetched); offline = offline || f.fromCache;
+        const v = dayView(f.series, date);
+        if(isRough(v)) notable = true;
+        parts.push(pointHTML(pt, v));
+      }
+      catch(e){ failed++; parts.push(`<div class="pt"><div class="lbl">${pt.label}</div><p class="later">The forecast could not be loaded (no connection?). <a href="${yrLink(pt)}">yr.no</a></p></div>`); }
+    }
+    el.innerHTML = parts.join('');
+    if(notable) document.querySelector(`#s${s.stage} .planb-slot`).innerHTML = planbHTML(s, true);
+  }
+  const oldest = stamps.length ? Math.min(...stamps) : null;
+  status.textContent = oldest
+    ? (offline ? `No connection: showing the forecast saved on ${fmtStamp(oldest)}.` : `Forecast updated ${fmtStamp(oldest)}.`)
+    : (failed ? 'The forecast could not be loaded.' : 'None of your stages is within the next 9 days yet.');
+  try{ history.replaceState(null,'',`?start=${start}${choicesParam()}`); }catch(e){}
+}
+
+const qs = new URLSearchParams(location.search);
+const inp = document.getElementById('start');
+inp.value = qs.get('start') || store.get('start') || '';
+inp.addEventListener('change', ()=>{ store.set('start', inp.value); render(); });
+render();
+</script>
+<script>
+// keep this page on the phone for days without signal (needs https or localhost)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(() => {
+    // the first visit loads before the worker runs, so save this page once by hand
+    if ('caches' in window) caches.open('stage-weather-pages-v1').then(c => c.add(location.pathname)).catch(() => {});
+  }).catch(() => {});
+}
+</script>
+<script>window.STAGE_WEATHER_REPORTS = false;</script>
+<style>:root{ --head:#c2552d; --tail:#2e8b57; --cross:#c9c5bb; }
+@media (prefers-color-scheme: dark){ :root{ --head:#e07a55; --tail:#5cc08a; --cross:#4a5257; } }
+.wind,.reports{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.wind select{font:inherit;font-size:.85rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px}
+.wbar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:8px 0 2px;gap:1px}
+.wseg.head,.key.head{background:var(--head)} .wseg.tail,.key.tail{background:var(--tail)} .wseg.cross,.key.cross{background:var(--cross)}
+.wscale{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
+.wsum{font-size:.88rem;margin:6px 0}
+.key{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 2px;vertical-align:-1px}
+.rlist{list-style:none;padding:0;margin:6px 0;font-size:.92rem}
+.rlist li{border-left:3px solid var(--accent);padding:2px 0 2px 8px;margin:6px 0}
+.rtag{font-weight:600}
+.radd summary{cursor:pointer;color:var(--accent);font-size:.92rem}
+.radd form{display:grid;gap:8px;margin-top:8px}
+.rtags{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem}
+.radd input[type=number],.radd textarea{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.radd button{justify-self:start;font:inherit;padding:6px 14px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
+</style>
+<script id="wind-data" type="application/json">{}</script>
+<script>// Addons for the stage weather page: wind relative to the riding direction, and trail reports from guests.
+// Loaded after the main script; uses its globals (P, forecast, addDays, localParts, todayLocal, fmtDate, HORIZON_DAYS).
+(function(){
+const W = JSON.parse(document.getElementById('wind-data').textContent || '{}');
+const FLAT_KMH = 16, CLIMB_MH = 600;            // riding model: 16 km/h on the flat, 600 m of climbing per hour
+const SIG_KMH = 8;                              // wind component that counts as head- or tailwind
+const REPORT_DAYS = 14;                         // reports older than this are not shown
+const RKEY = 'stage-weather:reports:v1';
+
+const store = {
+  get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const startHour = () => +(store.get('stage-weather:start-hour', 9));
+
+// ---------- wind ----------
+function nearest(pts, lat, lon){
+  let best = pts[0], bd = Infinity;
+  for(const p of pts){ const d = (p.lat-lat)**2 + ((p.lon-lon)*Math.cos(lat*Math.PI/180))**2; if(d < bd){ bd = d; best = p; } }
+  return best;
+}
+function stepAt(series, date, hourFloat){
+  let best = null, bd = Infinity;
+  for(const s of series){
+    const {date:d, hour:h} = localParts(s.time);
+    if(d !== date) continue;
+    const diff = Math.abs(h - hourFloat);
+    if(diff < bd){ bd = diff; best = s; }
+  }
+  return bd <= 3.5 ? best : null;   // 6-hour steps further out: still the nearest step
+}
+const hhmm = h => `${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
+
+async function windFor(stage, date){
+  const segs = W[stage.wind_key || String(stage.stage)];   // wind_key: the guest's chosen route ("4:7366")
+  if(!segs || !segs.length) return null;
+  const climbScale = stage.gain_m && segs[segs.length-1].climb_total ? stage.gain_m / segs[segs.length-1].climb_total : 1;
+  const series = {};
+  for(const pt of stage.points){ try{ series[pt.lat+','+pt.lon] = (await forecast(pt)).series; }catch(e){} }
+  const out = [];
+  for(const g of segs){
+    const hours = g.km_to / FLAT_KMH + (g.climb_total * climbScale) / CLIMB_MH;
+    const at = startHour() + hours;
+    const pt = nearest(stage.points, g.lat, g.lon);
+    const ser = series[pt.lat+','+pt.lon];
+    const st = ser && stepAt(ser, date, at);
+    if(!st) return null;
+    const det = st.data.instant.details;
+    const ws = (det.wind_speed || 0) * 3.6;
+    // wind_from_direction: where the wind comes FROM; riding into it = headwind
+    const comp = ws * Math.cos((det.wind_from_direction - g.bearing) * Math.PI / 180);
+    const kind = comp >= SIG_KMH ? 'head' : comp <= -SIG_KMH ? 'tail' : 'cross';
+    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind});
+  }
+  return out;
+}
+
+function stretches(segs, kind){
+  const res = []; let cur = null;
+  for(const s of segs){
+    if(s.kind === kind){ if(!cur) cur = {from:s.km_from, to:s.km_to, t0:s.at, t1:s.at, max:Math.abs(s.comp)}; else { cur.to = s.km_to; cur.t1 = s.at; cur.max = Math.max(cur.max, Math.abs(s.comp)); } }
+    else if(cur){ res.push(cur); cur = null; }
+  }
+  if(cur) res.push(cur);
+  return res.filter(r => r.to - r.from >= 2);    // shorter than 2 km is not worth telling
+}
+
+function windHTML(segs, stage){
+  const total = segs[segs.length-1].km_to;
+  const km = k => Math.round(segs.filter(s=>s.kind===k).reduce((a,s)=>a+(s.km_to-s.km_from),0));
+  const bar = segs.map(s => `<span class="wseg ${s.kind}" style="flex:${(s.km_to-s.km_from).toFixed(2)}" title="km ${s.km_from.toFixed(0)}–${s.km_to.toFixed(0)} · ${hhmm(s.at)} · ${s.kind==='head'?'headwind':s.kind==='tail'?'tailwind':'crosswind or calm'} ${Math.abs(s.comp)} km/h"></span>`).join('');
+  const head = stretches(segs,'head').sort((a,b)=>(b.to-b.from)-(a.to-a.from)).slice(0,2);
+  const lines = head.map(h => `<li>Headwind km ${Math.round(h.from)}–${Math.round(h.to)} (about ${hhmm(h.t0)}–${hhmm(h.t1)}), up to ${Math.round(h.max)} km/h against you</li>`);
+  const tail = stretches(segs,'tail').sort((a,b)=>(b.to-b.from)-(a.to-a.from))[0];
+  if(tail) lines.push(`<li>Tailwind km ${Math.round(tail.from)}–${Math.round(tail.to)} (about ${hhmm(tail.t0)}–${hhmm(tail.t1)})</li>`);
+  return `<div class="wind">
+    <div class="lbl">Wind on the road · leaving at
+      <select class="wstart">${[7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <div class="wbar">${bar}</div>
+    <div class="wscale"><span>0 km</span><span>${Math.round(total)} km</span></div>
+    <p class="wsum"><span class="key head"></span>Headwind ${km('head')} km · <span class="key tail"></span>tailwind ${km('tail')} km · <span class="key cross"></span>crosswind or calm ${km('cross')} km</p>
+    ${lines.length ? `<ul class="facts">${lines.join('')}</ul>` : ''}
+    <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
+  </div>`;
+}
+
+// ---------- trail reports ----------
+// PROTOTYPE: reports are saved only in this browser. The shared store (all guests of the product) is still to be decided.
+const TAGS = ['Muddy','Washed out','Closed','Detour signed','Busy traffic','Water point dry','Café closed','All good'];
+function reports(){ return store.get(RKEY, []); }
+function reportsHTML(stage, date){
+  const since = addDays(todayLocal(), -REPORT_DAYS);
+  const list = reports().filter(r => r.product === P.product && r.stage === stage.stage && r.date >= since)
+    .sort((a,b)=> b.date.localeCompare(a.date));
+  const rel = d => { const n = Math.round((Date.parse(date)-Date.parse(d))/864e5); return n>0 ? `${n} day${n>1?'s':''} before you` : n===0 ? 'the same day' : `${-n} day${n<-1?'s':''} after`; };
+  const items = list.map(r => `<li><span class="rtag">${r.tags.join(', ')}</span>${r.km!=null?` · km ${r.km}`:''}<br>${escapeHTML(r.text)}<br>
+      <span class="lbl">A guest on ${fmtDate(r.date)} · ${rel(r.date)}</span></li>`).join('');
+  return `<div class="reports">
+    <div class="lbl">On the trail: reports from guests (last ${REPORT_DAYS} days)</div>
+    ${items ? `<ul class="rlist">${items}</ul>` : `<p class="later">No reports for this stage in the last ${REPORT_DAYS} days.</p>`}
+    <details class="radd"><summary>Rode this stage today? Tell the next guests</summary>
+      <form data-stage="${stage.stage}">
+        <div class="rtags">${TAGS.map(t=>`<label><input type="checkbox" value="${t}"> ${t}</label>`).join('')}</div>
+        <input type="number" name="km" min="0" max="${Math.ceil(stage.km||200)}" placeholder="At km (optional)">
+        <textarea name="text" maxlength="280" rows="2" placeholder="What should the next guests know? (no names, please)"></textarea>
+        <button type="submit">Share</button>
+        <span class="lbl">Prototype: saved on this device only.</span>
+      </form>
+    </details>
+  </div>`;
+}
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+document.addEventListener('submit', e => {
+  const f = e.target.closest('.radd form'); if(!f) return;
+  e.preventDefault();
+  const tags = [...f.querySelectorAll('input[type=checkbox]:checked')].map(i=>i.value);
+  const text = f.text.value.trim();
+  if(!tags.length && !text) return;
+  const km = f.km.value === '' ? null : +f.km.value;
+  const all = reports();
+  all.push({product:P.product, stage:+f.dataset.stage, date:todayLocal(), tags: tags.length?tags:['Note'], km, text});
+  store.set(RKEY, all);
+  render();
+});
+document.addEventListener('change', e => {
+  if(e.target.classList && e.target.classList.contains('wstart')){ store.set('stage-weather:start-hour', +e.target.value); render(); }
+});
+
+// ---------- hook into the page ----------
+async function addons(){
+  const start = document.getElementById('start').value;
+  if(!start) return;
+  const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
+  for(const s of P.stages){
+    const sec = document.getElementById('s'+s.stage); if(!sec) continue;
+    sec.querySelectorAll('.wind,.reports').forEach(n=>n.remove());
+    const date = addDays(start, s.day-1);
+    if(date >= today && date <= lastDay){
+      try{ const w = await windFor(s, date); if(w) sec.insertAdjacentHTML('beforeend', windHTML(w, s)); }catch(e){}
+    }
+    // build_addons.py --no-reports switches them off (public page until reports have a shared, reviewed store)
+    if(window.STAGE_WEATHER_REPORTS !== false && (s.parts || []).length) sec.insertAdjacentHTML('beforeend', reportsHTML(s, date));
+  }
+}
+const base = render;
+// eslint-disable-next-line no-global-assign
+render = async function(){ await base(); await addons(); };
+addons();
+})();
+</script>
+</body>
+</html>

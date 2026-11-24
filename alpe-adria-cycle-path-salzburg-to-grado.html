@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stage Weather</title>
+<style>
+:root{
+  --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
+  --accent:#1f6f8b; --warn-bg:#fff4e0; --warn-ink:#8a4b00; --rain:#2f6db5;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#15191c; --card:#1e2428; --ink:#e8ecee; --muted:#9aa6ad; --line:#2e363b;
+         --accent:#6cc0dc; --warn-bg:#3a2a12; --warn-ink:#f3c27a; --rain:#7fb2ef; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.45rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 18px}
+.picker{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.picker input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.status{font-size:.9rem;color:var(--muted);margin:0 0 14px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.stage h2{font-size:1.08rem;margin:0}
+.meta{color:var(--muted);font-size:.9rem;margin:2px 0 10px}
+.pts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.pts{grid-template-columns:1fr}}
+.pt{border:1px solid var(--line);border-radius:10px;padding:10px}
+.pt .lbl{font-size:.82rem;color:var(--muted)}
+.big{display:flex;align-items:center;gap:10px;margin:4px 0}
+.sym{font-size:2rem;line-height:1}
+.temp{font-size:1.25rem;font-weight:600}
+.facts{font-size:.92rem;margin:0;padding:0;list-style:none}
+.facts li{margin:2px 0}
+.rain{color:var(--rain)}
+.planb{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.92rem}
+.planb summary{cursor:pointer;font-weight:600}
+.planb.rough{border-color:var(--warn-ink);background:var(--warn-bg)}
+.planb ul,.planb-all ul{margin:6px 0;padding-left:18px}
+.planb li{margin:6px 0}
+.planb-all{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
+.choice{margin:6px 0 2px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pick{font:inherit;font-size:.85rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink);cursor:pointer}
+.pick.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.flag{display:inline-block;background:var(--warn-bg);color:var(--warn-ink);border-radius:6px;
+  padding:1px 7px;font-size:.85rem;margin-top:6px}
+.later{color:var(--muted);font-size:.93rem}
+a{color:var(--accent)}
+.hours{display:flex;gap:4px;overflow-x:auto;margin-top:8px;padding-bottom:2px}
+.h{flex:0 0 auto;text-align:center;font-size:.75rem;color:var(--muted);min-width:34px}
+.h b{display:block;font-size:1rem;color:var(--ink);font-weight:400}
+footer{color:var(--muted);font-size:.82rem;margin-top:22px}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Weather for your stages</h1>
+  <p class="sub" id="subtitle"></p>
+  <div class="picker">
+    <label for="start">Arrival date (Day 1)</label>
+    <input type="date" id="start">
+  </div>
+  <p class="status" id="status"></p>
+  <div id="planb-all"></div>
+  <div id="stages"></div>
+  <footer>
+    <p>Forecast for the highest point and the finish of each stage (on days without a stage, for the town), for daytime hours (08:00–18:00 local time).
+      Mountain and coastal weather can change fast: check again in the morning before you set off.</p>
+    <p>Weather data: <a href="https://www.met.no/en" target="_blank" rel="noopener">MET Norway</a>
+      (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>);
+      in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
+      (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
+      in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+  </footer>
+</main>
+
+<script id="product-data" type="application/json">{"product": "Alpe-Adria Cycle Path: Salzburg to Grado", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Salzburg", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Salzburg", "lat": 47.8, "lon": 13.0453, "ele": null}]}, {"stage": 2, "day": 2, "title": "Salzburg — St. Johann", "kind": "route_day", "route_name": "Salzburg -> Sankt Johann im Pongau", "ops_route": 2738, "parts": [{"ops_route": 2738, "name": "Salzburg -> Sankt Johann im Pongau", "rwgps_id": "57469483"}], "km": 62.6, "gain_m": 712, "points": [{"role": "high", "label": "Highest point", "lat": 47.3499, "lon": 13.2047, "ele": 609}, {"role": "end", "label": "Finish · Sankt Johann im Pongau", "lat": 47.3493, "lon": 13.2033, "ele": 604}]}, {"stage": 3, "day": 3, "title": "St. Johann — Mölltal Valley", "kind": "route_day", "route_name": "Sankt Johann im Pongau -> Obervellach", "ops_route": 2769, "parts": [{"ops_route": 3216, "name": "Sankt Johann im Pongau -> Böckstein Train Station", "rwgps_id": "57469526"}, {"ops_route": 3218, "name": "Mallnitz-Obervellach Train Station -> Obervellach", "rwgps_id": "57469626"}], "km": 53.5, "gain_m": 933, "points": [{"role": "high", "label": "Highest point", "lat": 46.9732, "lon": 13.1799, "ele": 1184}, {"role": "end", "label": "Finish · Obervellach", "lat": 46.9323, "lon": 13.201, "ele": 686}]}, {"stage": 4, "day": 4, "title": "Mölltal Valley — Villach", "kind": "route_day", "route_name": "Obervellach -> Villach", "ops_route": 3095, "parts": [{"ops_route": 3095, "name": "Obervellach -> Villach", "rwgps_id": "57469698"}], "km": 73.9, "gain_m": 523, "points": [{"role": "high", "label": "Highest point", "lat": 46.9134, "lon": 13.2478, "ele": 733}, {"role": "end", "label": "Finish · Villach", "lat": 46.6153, "lon": 13.8478, "ele": 494}]}, {"stage": 5, "day": 5, "title": "Villach — Gemona", "kind": "route_day", "route_name": "Villach -> Gemona", "ops_route": 2863, "parts": [{"ops_route": 3219, "name": "Tarvisio Train Station -> Gemona", "rwgps_id": "57469742"}], "km": 67.4, "gain_m": 442, "points": [{"role": "high", "label": "Highest point", "lat": 46.5037, "lon": 13.5168, "ele": 833}, {"role": "end", "label": "Finish · Gemona", "lat": 46.2725, "lon": 13.1337, "ele": 192}]}, {"stage": 6, "day": 6, "title": "Gemona — Udine", "kind": "route_day", "route_name": "Gemona -> Udine", "ops_route": 2806, "parts": [{"ops_route": 2806, "name": "Gemona -> Udine", "rwgps_id": "57469842"}], "km": 44.4, "gain_m": 258, "points": [{"role": "high", "label": "Highest point", "lat": 46.1831, "lon": 13.1626, "ele": 204}, {"role": "end", "label": "Finish · Udine", "lat": 46.069, "lon": 13.246, "ele": 114}]}, {"stage": 7, "day": 7, "title": "Udine — Grado", "kind": "route_day", "route_name": "Udine -> Grado", "ops_route": 3075, "parts": [{"ops_route": 3075, "name": "Udine -> Grado", "rwgps_id": "57469866"}], "km": 53.2, "gain_m": 38, "points": [{"role": "high", "label": "Highest point", "lat": 46.0673, "lon": 13.2432, "ele": 117}, {"role": "end", "label": "Finish · Grado", "lat": 45.6798, "lon": 13.3903, "ele": -1}]}, {"stage": 8, "day": 8, "title": "Departure", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Grado", "lat": 45.6781, "lon": 13.3979, "ele": null}]}], "planb": {"all": [], "by_day": {"2": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": null, "must": null}], "3": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": null, "must": null}], "4": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": null, "must": null}], "5": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": null, "must": null}], "6": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": null, "must": null}], "7": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": null, "must": null}]}}}</script>
+<script>
+const P = JSON.parse(document.getElementById('product-data').textContent);
+const TZ = P.timezone || 'Europe/Zagreb';
+const DAY_FROM = 8, DAY_TO = 18;          // riding hours, local time
+const HORIZON_DAYS = 9;                    // met.no gives about 9-10 days
+const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
+const CACHE_KEY = 'stage-weather:v1:';
+
+document.getElementById('title').textContent = 'Weather for your stages';
+document.getElementById('subtitle').textContent = P.product;
+
+// ---------- small helpers ----------
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(CACHE_KEY+k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(CACHE_KEY+k, JSON.stringify(v)); }catch(e){} }
+};
+function addDays(iso, n){ const d = new Date(iso+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+function todayLocal(){ return new Intl.DateTimeFormat('en-CA',{timeZone:TZ}).format(new Date()); }
+function localParts(isoTime){
+  const f = new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'});
+  const o = Object.fromEntries(f.formatToParts(new Date(isoTime)).map(p=>[p.type,p.value]));
+  return {date:`${o.year}-${o.month}-${o.day}`, hour:+o.hour};
+}
+function fmtDate(iso){ return new Date(iso+'T12:00:00Z').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'}); }
+function fmtStamp(ms){ return new Date(ms).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
+function yrLink(pt){ return `https://www.yr.no/en/forecast/daily-table/${pt.lat},${pt.lon}`; }
+const ms2kmh = v => Math.round(v*3.6);
+
+const SYM = [ // first match wins, most severe first
+  ['thunder','⛈️'],['snow','🌨️'],['sleet','🌨️'],['heavyrain','🌧️'],['rainshowers','🌦️'],['rain','🌧️'],
+  ['fog','🌫️'],['cloudy','☁️'],['partlycloudy','⛅'],['fair','🌤️'],['clearsky','☀️']];
+const SEVERITY = ['clearsky','fair','partlycloudy','cloudy','fog','lightrainshowers','rainshowers','lightrain','rain','heavyrainshowers','heavyrain','sleet','snow','thunder'];
+function symIcon(code){ if(!code) return '·'; for(const [k,i] of SYM){ if(code.includes(k)) return i; } return '·'; }
+function sev(code){ if(!code) return -1; let s=-1; SEVERITY.forEach((k,i)=>{ if(code.replace(/_(day|night|polartwilight)$/,'').includes(k)) s=Math.max(s,i); }); return s; }
+function words(code){
+  if(!code) return '';
+  return code.replace(/_(day|night|polartwilight)$/,'')
+    .replace('andthunder',' and thunder').replace('heavy','heavy ').replace('light','light ')
+    .replace('showers',' showers').replace('partlycloudy','partly cloudy').replace('clearsky','clear sky')
+    .replace(/\s+/g,' ').trim().replace(/^./,c=>c.toUpperCase());
+}
+
+// ---------- met.no ----------
+// ---------- weather sources ----------
+// The finest free source with a point forecast a browser may read, chosen by where the point is (24 Nov 2026):
+//   GeoSphere Austria, AROME 1 km, box 43.0-51.5 N / 5.0-22.6 E (Alps, Switzerland, Dolomites, Slovenia, northern
+//   Croatia, Mont Blanc), about 60 hours ahead; NWS in the United States, about 7 days; MET Norway everywhere else
+//   and after those hours (in the Nordic countries met.no runs its own 2.5 km model).
+// Thunder always comes from met.no (its probability of thunder), so no source invents storms.
+const SRC = {
+  geosphere: {name: 'GeoSphere Austria (1 km)', box: [43.002, 5.0317, 51.498, 22.5682],
+    url: (pt) => `https://dataset.api.hub.geosphere.at/v1/timeseries/forecast/nwp-v2-1h-1km?parameters=2t,tp,sf,10u,10v,10fg,tcc&lat_lon=${pt.lat},${pt.lon}`},
+  nws: {name: 'US National Weather Service', box: [24, -125, 50, -66]},
+  metno: {name: 'MET Norway'}
+};
+const inBox = (pt, b) => pt.lat >= b[0] && pt.lat <= b[2] && pt.lon >= b[1] && pt.lon <= b[3];
+function regionalSource(pt){ for(const k of ['geosphere','nws']) if(inBox(pt, SRC[k].box)) return k; return null; }
+
+async function cached(key, ttlMs, load){
+  const c = store.get(key);
+  if(c && c.expires > Date.now()) return {...c, fromCache:false};
+  try{ const rec = await load(); rec.expires = rec.expires || Date.now() + ttlMs; store.set(key, rec); return {...rec, fromCache:false}; }
+  catch(e){ if(c) return {...c, fromCache:true}; throw e; }
+}
+
+function forecastMetno(pt){
+  // met.no asks clients not to re-ask before the data expires
+  return cached(`${pt.lat},${pt.lon}`, 30*60e3, async () => {
+    const r = await fetch(`${API}?lat=${pt.lat}&lon=${pt.lon}${pt.ele != null ? `&altitude=${pt.ele}` : ''}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    return {fetched: Date.now(), expires: Date.parse(r.headers.get('Expires')) || null,
+            series: data.properties.timeseries.map(x => ({...x, src: 'metno'}))};
+  });
+}
+
+function symbolFrom(precip, snow, cloudPct){
+  if(precip >= 0.1){
+    const k = snow > precip / 2 ? 'snow' : 'rain';
+    return (precip < 1 ? 'light' : precip >= 4 ? 'heavy' : '') + k;
+  }
+  return cloudPct < 15 ? 'clearsky_day' : cloudPct < 40 ? 'fair_day' : cloudPct < 75 ? 'partlycloudy_day' : 'cloudy';
+}
+// dir: degrees the wind comes FROM, as met.no's wind_from_direction (wind on the road needs it)
+function step(time, t, wind, gust, precip, symbol, src, dir){
+  return {time, src, data: {instant: {details: {air_temperature: t, wind_speed: wind, wind_speed_of_gust: gust, wind_from_direction: dir}},
+          next_1_hours: {summary: {symbol_code: symbol}, details: {precipitation_amount: precip}}}};
+}
+
+// GeoSphere allows 5 requests a second and 240 an hour per address, but answers many points in one request:
+// the page asks once for all its points (geoBatch), and a single point falls back to its own request.
+const GEO_PARAMS = '2t,tp,sf,10u,10v,10fg,tcc';
+function geoSeries(feature, ts){
+  const P = feature.properties.parameters, out = [];
+  // a value at hour t covers the hour that ENDS at t; met.no's next_1_hours covers the hour that STARTS at the step
+  for(let i = 0; i < ts.length - 1; i++){
+    const j = i + 1, u = P['10u'].data[i], v = P['10v'].data[i], wind = Math.hypot(u, v);
+    // u/v point where the air goes; the wind comes FROM the opposite direction
+    const dir = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360;
+    out.push(step(new Date(ts[i]).toISOString(), P['2t'].data[i], wind, P['10fg'].data[j],
+                  P.tp.data[j], symbolFrom(P.tp.data[j], P.sf.data[j], P.tcc.data[j]), 'geosphere', dir));
+  }
+  return out;
+}
+let GEO_BATCH = null;      // promise of {"lat,lon": series}
+let GEO_DUE = new Set();   // points whose days fall inside GeoSphere's ~60 hours
+function geoBatch(points){
+  const todo = points.filter(pt => inBox(pt, SRC.geosphere.box));
+  if(!todo.length) return null;
+  const q = todo.map(pt => `lat_lon=${pt.lat},${pt.lon}`).join('&');
+  return fetch(`https://dataset.api.hub.geosphere.at/v1/timeseries/forecast/nwp-v2-1h-1km?parameters=${GEO_PARAMS}&${q}`)
+    .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(d => Object.fromEntries(todo.map((pt, i) => [`${pt.lat},${pt.lon}`, geoSeries(d.features[i], d.timestamps)])));
+}
+function forecastGeosphere(pt){
+  return cached(`geo:${pt.lat},${pt.lon}`, 60*60e3, async () => {
+    const key = `${pt.lat},${pt.lon}`;
+    if(GEO_BATCH){ try{ const b = await GEO_BATCH; if(b[key]) return {fetched: Date.now(), series: b[key]}; }catch(e){} }
+    const r = await fetch(`https://dataset.api.hub.geosphere.at/v1/timeseries/forecast/nwp-v2-1h-1km?parameters=${GEO_PARAMS}&lat_lon=${key}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json();
+    return {fetched: Date.now(), series: geoSeries(d.features[0], d.timestamps)};
+  });
+}
+
+function hoursOf(validTime){      // "2026-11-24T04:00:00+00:00/PT2H" -> [start ms, hours]
+  const [a, dur] = validTime.split('/'), m = /P(?:(\d+)D)?(?:T(?:(\d+)H)?)?/.exec(dur) || [];
+  return [Date.parse(a), (+(m[1]||0))*24 + (+(m[2]||0)) || 1];
+}
+function forecastNws(pt){
+  return cached(`nws:${pt.lat},${pt.lon}`, 60*60e3, async () => {
+    const pr = await fetch(`https://api.weather.gov/points/${pt.lat},${pt.lon}`);
+    if(!pr.ok) throw new Error('HTTP '+pr.status);
+    const grid = await (await fetch((await pr.json()).properties.forecastGridData)).json(), G = grid.properties;
+    const per = (key, spread) => { const m = new Map();
+      for(const v of (G[key] || {}).values || []){ const [t0, h] = hoursOf(v.validTime);
+        for(let k = 0; k < h; k++) m.set(t0 + k*3600e3, spread ? (v.value || 0) / h : v.value); }
+      return m; };
+    const T = per('temperature'), W = per('windSpeed'), Gu = per('windGust'), R = per('quantitativePrecipitation', true),
+          C = per('skyCover'), TH = per('probabilityOfThunder'), D = per('windDirection');
+    const out = [];
+    for(const [t, temp] of [...T.entries()].sort((a, b) => a[0] - b[0])){
+      const p = R.get(t) || 0, sym = symbolFrom(p, 0, C.get(t) ?? 50);
+      const e = step(new Date(t).toISOString(), temp, (W.get(t) || 0) / 3.6, Gu.has(t) ? Gu.get(t) / 3.6 : undefined, p,
+                     (TH.get(t) || 0) >= 30 && p >= 0.1 ? 'rainandthunder' : sym, 'nws', D.get(t));
+      e.data.next_1_hours.details.probability_of_thunder = TH.get(t) || 0;
+      out.push(e);
+    }
+    return {fetched: Date.now(), series: out};
+  });
+}
+
+// all points of a page are asked for at once, each only once per render
+let FC = new Map();
+function forecastOnce(pt){ const k = `${pt.lat},${pt.lon}`; if(!FC.has(k)) FC.set(k, forecast(pt)); return FC.get(k); }
+
+// One series in met.no form: the regional source where it has data, met.no after it; thunder from met.no.
+async function forecast(pt){
+  const met = await forecastMetno(pt);
+  const k = regionalSource(pt);
+  if(!k) return met;
+  if(k === 'geosphere' && !GEO_DUE.has(`${pt.lat},${pt.lon}`)) return met;   // its days are past GeoSphere's hours
+  let reg;
+  try{ reg = await (k === 'geosphere' ? forecastGeosphere(pt) : forecastNws(pt)); }catch(e){ return met; }
+  if(!reg.series.length) return met;
+  const byTime = new Map(met.series.map(x => [Date.parse(x.time), x]));
+  for(const e of reg.series){
+    const m = byTime.get(Date.parse(e.time));
+    const thunderP = m?.data?.next_1_hours?.details?.probability_of_thunder;
+    const metSym = (m?.data?.next_1_hours || m?.data?.next_6_hours)?.summary?.symbol_code || '';
+    if(k === 'geosphere'){
+      if(thunderP != null) e.data.next_1_hours.details.probability_of_thunder = thunderP;
+      if(metSym.includes('thunder') && e.data.next_1_hours.details.precipitation_amount >= 0.1)
+        e.data.next_1_hours.summary.symbol_code = 'rainandthunder';
+    }
+  }
+  const last = Date.parse(reg.series[reg.series.length - 1].time);
+  return {fetched: Math.min(met.fetched, reg.fetched), expires: Math.min(met.expires, reg.expires),
+          fromCache: met.fromCache || reg.fromCache,
+          series: [...reg.series, ...met.series.filter(x => Date.parse(x.time) > last)]};
+}
+
+function dayView(series, date){
+  // hourly steps where met.no has them, else 6-hour blocks overlapping riding hours
+  const hours = [];
+  let precip = 0, tmin = Infinity, tmax = -Infinity, wind = 0, gust = 0, thunderP = 0, worst = null, any = false;
+  const srcs = new Set();
+  const six = [];
+  for(const s of series){
+    const {date:d, hour:h} = localParts(s.time);
+    if(d !== date) continue;
+    const inst = s.data.instant.details;
+    const n1 = s.data.next_1_hours, n6 = s.data.next_6_hours;
+    if(h >= DAY_FROM && h <= DAY_TO){
+      any = true; srcs.add(s.src || 'metno');
+      tmin = Math.min(tmin, inst.air_temperature); tmax = Math.max(tmax, inst.air_temperature);
+      wind = Math.max(wind, inst.wind_speed || 0);
+      gust = Math.max(gust, inst.wind_speed_of_gust || 0);
+    }
+    if(n1 && h >= DAY_FROM && h < DAY_TO){
+      precip += n1.details.precipitation_amount || 0;
+      thunderP = Math.max(thunderP, n1.details.probability_of_thunder || 0);
+      hours.push({h, sym:n1.summary.symbol_code, t:inst.air_temperature, p:n1.details.precipitation_amount||0});
+      if(sev(n1.summary.symbol_code) > sev(worst)) worst = n1.summary.symbol_code;
+    } else if(!n1 && n6 && h + 6 > DAY_FROM && h < DAY_TO){
+      six.push(n6);
+      if(sev(n6.summary.symbol_code) > sev(worst)) worst = n6.summary.symbol_code;
+    }
+  }
+  if(!hours.length && six.length){
+    precip = six.reduce((a,b)=>a+(b.details.precipitation_amount||0),0);
+    // 6-hour blocks carry their own min/max temperature
+    for(const b of six){
+      if(b.details.air_temperature_min!=null) tmin=Math.min(tmin,b.details.air_temperature_min);
+      if(b.details.air_temperature_max!=null) tmax=Math.max(tmax,b.details.air_temperature_max);
+    }
+    any = true;
+  }
+  if(!any) return null;
+  return {precip:Math.round(precip*10)/10, tmin:Math.round(tmin), tmax:Math.round(tmax),
+          wind:ms2kmh(wind), gust:gust?ms2kmh(gust):null, thunderP, worst, hours, coarse: !hours.length,
+          srcs: [...srcs].map(k => SRC[k].name)};
+}
+
+// ---------- render ----------
+function pointHTML(pt, v){
+  const head = `<div class="lbl">${pt.label}${pt.ele != null ? ` · ${pt.ele} m` : ''}</div>`;
+  if(!v) return `<div class="pt">${head}<p class="later">No forecast for this day yet. <a href="${yrLink(pt)}" target="_blank" rel="noopener">Forecast for this point on yr.no</a></p></div>`;
+  const thunder = (v.worst && v.worst.includes('thunder')) || v.thunderP >= 20;
+  const hrs = v.hours.length ? `<div class="hours">${v.hours.map(x=>`<div class="h">${String(x.h).padStart(2,'0')}<b>${symIcon(x.sym)}</b>${Math.round(x.t)}°${x.p?`<br><span class="rain">${x.p}</span>`:''}</div>`).join('')}</div>` : '';
+  return `<div class="pt">${head}
+    <div class="big"><span class="sym">${symIcon(v.worst)}</span>
+      <span><span class="temp">${v.tmin}–${v.tmax} °C</span><br><span class="lbl">${words(v.worst)}</span></span></div>
+    <ul class="facts">
+      <li class="rain">Rain 08–18: ${v.precip} mm</li>
+      <li>Wind up to ${v.wind} km/h${v.gust?`, gusts ${v.gust} km/h`:''}</li>
+      ${v.coarse?'<li class="lbl">Rough forecast (6-hour steps); details come closer to the day.</li>':''}
+    </ul>
+    ${thunder?`<span class="flag">Thunderstorms possible${v.thunderP?` (${Math.round(v.thunderP)} %)`:''}</span>`:''}
+    ${hrs}
+    <p class="lbl" style="margin:8px 0 0">Forecast: ${v.srcs.join(' and ')} · <a href="${yrLink(pt)}" target="_blank" rel="noopener">Full forecast on yr.no</a></p>
+  </div>`;
+}
+
+// ---------- route choice (days with more than one route) ----------
+// order: link (?r=4:7366,5:7368, made per tour from OPS) > the guest's own pick > the product default
+const OPTION_FIELDS = ['route_name','ops_route','parts','km','gain_m','points'];
+const URL_CHOICES = Object.fromEntries((new URLSearchParams(location.search).get('r') || '')
+  .split(',').filter(Boolean).map(x => x.split(':')));
+function chosenKey(s){
+  const keys = s.options.map(o => o.key);
+  const pick = [URL_CHOICES[String(s.day)], store.get(`route:${P.product}:${s.day}`)].find(k => keys.includes(k));
+  return pick || keys[0];
+}
+function applyChoices(){
+  for(const s of P.stages){
+    if(!s.options) continue;
+    const key = chosenKey(s), o = s.options.find(x => x.key === key);
+    for(const f of OPTION_FIELDS) s[f] = o[f];
+    s.chosen = key;
+    s.wind_key = key === s.options[0].key ? String(s.stage) : `${s.stage}:${key}`;
+  }
+}
+function choicesParam(){
+  const r = P.stages.filter(s => s.options && s.chosen !== s.options[0].key).map(s => `${s.day}:${s.chosen}`);
+  return r.length ? `&r=${r.join(',')}` : '';
+}
+function choiceHTML(s){
+  if(!s.options) return '';
+  return `<div class="choice"><span class="lbl">Your route:</span> ${s.options.map(o =>
+    `<button type="button" class="pick${o.key === s.chosen ? ' on' : ''}" data-day="${s.day}" data-key="${o.key}" aria-pressed="${o.key === s.chosen}">${o.label}</button>`).join('')}</div>`;
+}
+document.getElementById('stages').addEventListener('click', e => {
+  const b = e.target.closest('.pick'); if(!b) return;
+  store.set(`route:${P.product}:${b.dataset.day}`, b.dataset.key);
+  delete URL_CHOICES[b.dataset.day];   // the guest's own pick wins over the link from now on
+  render();
+});
+
+// ---------- Plan B (from the product's dossier in Prodigy, checked by a PD; guest wording approved) ----------
+// a day is "rough" when the forecast has thunder, heavy rain or strong wind: then the day's options open by themselves
+function isRough(v){ return !!v && ((v.worst||'').includes('thunder') || v.thunderP >= 20 || v.precip >= 10 || v.wind >= 40); }
+function esc(t){ return String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function legHTML(l){
+  const meta = [l.operator, l.freq, l.months, l.booking && l.booking !== 'Not needed' ? `booking: ${l.booking}` : ''].filter(Boolean).map(esc).join(' · ');
+  return `<li><strong>${esc(l.how)}</strong> ${esc(l.from)} → ${esc(l.to)}
+    ${meta ? `<br><span class="lbl">${meta}</span>` : ''}
+    ${l.runs ? `<br>${esc(l.runs)}` : ''}
+    ${l.link ? `<br><a href="${esc(l.link)}" target="_blank" rel="noopener">Timetable and prices</a>` : ''}${l.checked ? ` <span class="lbl">(checked ${esc(l.checked)})</span>` : ''}</li>`;
+}
+function fallbackHTML(e){
+  const t = e.taxi;
+  const taxi = t ? `<br><strong>${esc(t.name)}</strong>${t.area ? ` · ${esc(t.area)}` : ''}
+    ${t.phone ? `<br><a href="tel:${esc(t.phone.replace(/[^+\d]/g,''))}">${esc(t.phone)}</a>` : ''}${t.website ? ` · <a href="${esc(t.website)}" target="_blank" rel="noopener">website</a>` : ''}
+    ${t.note ? `<br><span class="lbl">${esc(t.note)}</span>` : ''}
+    ${e.must ? `<br><strong>${esc(e.must)}</strong>` : ''}` : '';
+  return `<li>${esc(e.text)}${taxi}</li>`;
+}
+function planbHTML(s, rough){
+  const items = ((P.planb || {}).by_day || {})[String(s.day)] || [];
+  if(!items.length) return '';
+  const body = items.map(e => e.kind === 'leg' ? legHTML(e) : e.kind === 'fallback' ? fallbackHTML(e) : `<li>${esc(e.text)}</li>`).join('');
+  return `<details class="planb${rough ? ' rough' : ''}"${rough ? ' open' : ''}>
+    <summary>${rough ? 'Rough weather forecast: your options on this day' : 'If the weather turns: options on this day'}</summary>
+    <ul>${body}</ul><p class="lbl">You decide whether to go; these are the options, with their sources.</p></details>`;
+}
+function planbAllHTML(){
+  const all = (P.planb || {}).all || [];
+  if(!all.length) return '';
+  return `<div class="planb-all"><strong>If the weather turns</strong><ul>${all.map(e => `<li>${esc(e.text)}</li>`).join('')}</ul></div>`;
+}
+
+async function render(){
+  const start = document.getElementById('start').value;
+  const box = document.getElementById('stages'), status = document.getElementById('status');
+  if(!start){ box.innerHTML=''; status.textContent='Choose your arrival date to see the weather for each stage.'; return; }
+  const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
+  applyChoices();
+  FC = new Map();
+  const due = P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+                      .flatMap(s => s.points).filter(pt => !(store.get(`geo:${pt.lat},${pt.lon}`)?.expires > Date.now()));
+  GEO_BATCH = due.length ? geoBatch(due) : null;
+  GEO_DUE = new Set(P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+                            .flatMap(s => s.points).map(pt => `${pt.lat},${pt.lon}`));
+  for(const s of P.stages){ const dt = addDays(start, s.day-1); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
+  box.innerHTML = P.stages.map(s=>{
+    const date = addDays(start, s.day-1);
+    return `<section class="stage" id="s${s.stage}">
+      <h2>Day ${s.day} · ${s.title}</h2>${choiceHTML(s)}
+      <div class="meta">${fmtDate(date)}${s.km != null ? ` · ${s.km} km · ${s.gain_m} m ascent` : ''}</div>
+      <div class="pts"><p class="later">Loading…</p></div><div class="planb-slot">${planbHTML(s, false)}</div></section>`;
+  }).join('');
+  document.getElementById('planb-all').innerHTML = planbAllHTML();
+  let stamps = [], offline = false, failed = 0;
+  for(const s of P.stages){
+    const date = addDays(start, s.day-1);
+    const el = document.querySelector(`#s${s.stage} .pts`);
+    let notable = false;
+    if(date < today){ el.innerHTML = `<p class="later">This day is in the past.</p>`; continue; }
+    if(date > lastDay){
+      el.innerHTML = s.points.map(pt=>pointHTML(pt,null)).join('') ;
+      el.insertAdjacentHTML('beforeend', `<p class="later" style="grid-column:1/-1;margin:0">The forecast for this day appears here from ${fmtDate(addDays(date,-HORIZON_DAYS))}.</p>`);
+      continue;
+    }
+    const parts = [];
+    for(const pt of s.points){
+      try{
+        const f = await forecastOnce(pt); stamps.push(f.fetched); offline = offline || f.fromCache;
+        const v = dayView(f.series, date);
+        if(isRough(v)) notable = true;
+        parts.push(pointHTML(pt, v));
+      }
+      catch(e){ failed++; parts.push(`<div class="pt"><div class="lbl">${pt.label}</div><p class="later">The forecast could not be loaded (no connection?). <a href="${yrLink(pt)}">yr.no</a></p></div>`); }
+    }
+    el.innerHTML = parts.join('');
+    if(notable) document.querySelector(`#s${s.stage} .planb-slot`).innerHTML = planbHTML(s, true);
+  }
+  const oldest = stamps.length ? Math.min(...stamps) : null;
+  status.textContent = oldest
+    ? (offline ? `No connection: showing the forecast saved on ${fmtStamp(oldest)}.` : `Forecast updated ${fmtStamp(oldest)}.`)
+    : (failed ? 'The forecast could not be loaded.' : 'None of your stages is within the next 9 days yet.');
+  try{ history.replaceState(null,'',`?start=${start}${choicesParam()}`); }catch(e){}
+}
+
+const qs = new URLSearchParams(location.search);
+const inp = document.getElementById('start');
+inp.value = qs.get('start') || store.get('start') || '';
+inp.addEventListener('change', ()=>{ store.set('start', inp.value); render(); });
+render();
+</script>
+<script>
+// keep this page on the phone for days without signal (needs https or localhost)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(() => {
+    // the first visit loads before the worker runs, so save this page once by hand
+    if ('caches' in window) caches.open('stage-weather-pages-v1').then(c => c.add(location.pathname)).catch(() => {});
+  }).catch(() => {});
+}
+</script>
+<script>window.STAGE_WEATHER_REPORTS = false;</script>
+<style>:root{ --head:#c2552d; --tail:#2e8b57; --cross:#c9c5bb; }
+@media (prefers-color-scheme: dark){ :root{ --head:#e07a55; --tail:#5cc08a; --cross:#4a5257; } }
+.wind,.reports{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.wind select{font:inherit;font-size:.85rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px}
+.wbar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:8px 0 2px;gap:1px}
+.wseg.head,.key.head{background:var(--head)} .wseg.tail,.key.tail{background:var(--tail)} .wseg.cross,.key.cross{background:var(--cross)}
+.wscale{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
+.wsum{font-size:.88rem;margin:6px 0}
+.key{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 2px;vertical-align:-1px}
+.rlist{list-style:none;padding:0;margin:6px 0;font-size:.92rem}
+.rlist li{border-left:3px solid var(--accent);padding:2px 0 2px 8px;margin:6px 0}
+.rtag{font-weight:600}
+.radd summary{cursor:pointer;color:var(--accent);font-size:.92rem}
+.radd form{display:grid;gap:8px;margin-top:8px}
+.rtags{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem}
+.radd input[type=number],.radd textarea{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.radd button{justify-self:start;font:inherit;padding:6px 14px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
+</style>
+<script id="wind-data" type="application/json">{"2": [{"km_from": 0.0, "km_to": 1.02, "bearing": 123, "lat": 47.7992, "lon": 13.0499, "climb_m": 14, "climb_total": 14}, {"km_from": 1.02, "km_to": 2.03, "bearing": 129, "lat": 47.7942, "lon": 13.0601, "climb_m": 8, "climb_total": 21}, {"km_from": 2.03, "km_to": 3.05, "bearing": 138, "lat": 47.788, "lon": 13.0699, "climb_m": 6, "climb_total": 27}, {"km_from": 3.05, "km_to": 4.11, "bearing": 179, "lat": 47.78, "lon": 13.0746, "climb_m": 8, "climb_total": 36}, {"km_from": 4.11, "km_to": 5.16, "bearing": 181, "lat": 47.7707, "lon": 13.0746, "climb_m": 8, "climb_total": 44}, {"km_from": 5.16, "km_to": 6.18, "bearing": 166, "lat": 47.7616, "lon": 13.0761, "climb_m": 8, "climb_total": 51}, {"km_from": 6.18, "km_to": 7.25, "bearing": 171, "lat": 47.7524, "lon": 13.0788, "climb_m": 8, "climb_total": 60}, {"km_from": 7.25, "km_to": 8.28, "bearing": 174, "lat": 47.7431, "lon": 13.0805, "climb_m": 8, "climb_total": 68}, {"km_from": 8.28, "km_to": 9.28, "bearing": 175, "lat": 47.7344, "lon": 13.0817, "climb_m": 12, "climb_total": 80}, {"km_from": 9.28, "km_to": 10.31, "bearing": 179, "lat": 47.7258, "lon": 13.0823, "climb_m": 9, "climb_total": 90}, {"km_from": 10.31, "km_to": 11.4, "bearing": 194, "lat": 47.7165, "lon": 13.0806, "climb_m": 9, "climb_total": 99}, {"km_from": 11.4, "km_to": 12.4, "bearing": 192, "lat": 47.7073, "lon": 13.0775, "climb_m": 4, "climb_total": 103}, {"km_from": 12.4, "km_to": 13.49, "bearing": 156, "lat": 47.6985, "lon": 13.079, "climb_m": 11, "climb_total": 114}, {"km_from": 13.49, "km_to": 14.5, "bearing": 152, "lat": 47.6901, "lon": 13.085, "climb_m": 23, "climb_total": 137}, {"km_from": 14.5, "km_to": 15.51, "bearing": 131, "lat": 47.6835, "lon": 13.0926, "climb_m": 12, "climb_total": 149}, {"km_from": 15.51, "km_to": 16.51, "bearing": 159, "lat": 47.6769, "lon": 13.0994, "climb_m": 21, "climb_total": 170}, {"km_from": 16.51, "km_to": 17.52, "bearing": 140, "lat": 47.6694, "lon": 13.1059, "climb_m": 40, "climb_total": 210}, {"km_from": 17.52, "km_to": 18.52, "bearing": 156, "lat": 47.6625, "lon": 13.1125, "climb_m": 59, "climb_total": 270}, {"km_from": 18.52, "km_to": 19.55, "bearing": 152, "lat": 47.655, "lon": 13.1179, "climb_m": 9, "climb_total": 279}, {"km_from": 19.55, "km_to": 20.56, "bearing": 175, "lat": 47.6468, "lon": 13.1216, "climb_m": 43, "climb_total": 322}, {"km_from": 20.56, "km_to": 21.58, "bearing": 148, "lat": 47.6391, "lon": 13.1254, "climb_m": 29, "climb_total": 351}, {"km_from": 21.58, "km_to": 22.59, "bearing": 143, "lat": 47.6325, "lon": 13.1322, "climb_m": 2, "climb_total": 352}, {"km_from": 22.59, "km_to": 23.6, "bearing": 166, "lat": 47.6251, "lon": 13.1374, "climb_m": 12, "climb_total": 365}, {"km_from": 23.6, "km_to": 24.67, "bearing": 166, "lat": 47.6165, "lon": 13.1406, "climb_m": 14, "climb_total": 379}, {"km_from": 24.67, "km_to": 25.68, "bearing": 179, "lat": 47.6081, "lon": 13.1422, "climb_m": 20, "climb_total": 400}, {"km_from": 25.68, "km_to": 26.69, "bearing": 133, "lat": 47.6015, "lon": 13.1464, "climb_m": 4, "climb_total": 404}, {"km_from": 26.69, "km_to": 27.72, "bearing": 107, "lat": 47.5978, "lon": 13.1563, "climb_m": 6, "climb_total": 410}, {"km_from": 27.72, "km_to": 28.73, "bearing": 135, "lat": 47.5944, "lon": 13.1653, "climb_m": 5, "climb_total": 415}, {"km_from": 28.73, "km_to": 29.75, "bearing": 138, "lat": 47.5892, "lon": 13.1724, "climb_m": 11, "climb_total": 426}, {"km_from": 29.75, "km_to": 30.77, "bearing": 136, "lat": 47.5837, "lon": 13.1801, "climb_m": 20, "climb_total": 446}, {"km_from": 30.77, "km_to": 31.78, "bearing": 121, "lat": 47.5788, "lon": 13.1894, "climb_m": 96, "climb_total": 542}, {"km_from": 31.78, "km_to": 32.82, "bearing": 216, "lat": 47.5731, "lon": 13.1914, "climb_m": 24, "climb_total": 566}, {"km_from": 32.82, "km_to": 33.82, "bearing": 243, "lat": 47.5677, "lon": 13.1819, "climb_m": 36, "climb_total": 602}, {"km_from": 33.82, "km_to": 34.88, "bearing": 231, "lat": 47.563, "lon": 13.1712, "climb_m": 45, "climb_total": 647}, {"km_from": 34.88, "km_to": 35.89, "bearing": 163, "lat": 47.5562, "lon": 13.1682, "climb_m": 23, "climb_total": 669}, {"km_from": 35.89, "km_to": 36.95, "bearing": 175, "lat": 47.5472, "lon": 13.1708, "climb_m": 15, "climb_total": 684}, {"km_from": 36.95, "km_to": 37.99, "bearing": 197, "lat": 47.5381, "lon": 13.1694, "climb_m": 13, "climb_total": 697}, {"km_from": 37.99, "km_to": 38.99, "bearing": 178, "lat": 47.5293, "lon": 13.1676, "climb_m": 17, "climb_total": 715}, {"km_from": 38.99, "km_to": 40.03, "bearing": 196, "lat": 47.5206, "lon": 13.166, "climb_m": 25, "climb_total": 740}, {"km_from": 40.03, "km_to": 41.04, "bearing": 170, "lat": 47.5119, "lon": 13.1653, "climb_m": 7, "climb_total": 747}, {"km_from": 41.04, "km_to": 42.08, "bearing": 156, "lat": 47.5033, "lon": 13.1692, "climb_m": 9, "climb_total": 756}, {"km_from": 42.08, "km_to": 43.09, "bearing": 158, "lat": 47.4952, "lon": 13.1743, "climb_m": 13, "climb_total": 769}, {"km_from": 43.09, "km_to": 44.12, "bearing": 137, "lat": 47.4882, "lon": 13.181, "climb_m": 67, "climb_total": 836}, {"km_from": 44.12, "km_to": 45.14, "bearing": 164, "lat": 47.4809, "lon": 13.1872, "climb_m": 18, "climb_total": 854}, {"km_from": 45.14, "km_to": 46.14, "bearing": 154, "lat": 47.4731, "lon": 13.1917, "climb_m": 12, "climb_total": 866}, {"km_from": 46.14, "km_to": 47.14, "bearing": 160, "lat": 47.4658, "lon": 13.1963, "climb_m": 15, "climb_total": 881}, {"km_from": 47.14, "km_to": 48.15, "bearing": 154, "lat": 47.4585, "lon": 13.2009, "climb_m": 9, "climb_total": 890}, {"km_from": 48.15, "km_to": 49.16, "bearing": 125, "lat": 47.4524, "lon": 13.2085, "climb_m": 17, "climb_total": 906}, {"km_from": 49.16, "km_to": 50.22, "bearing": 183, "lat": 47.4453, "lon": 13.2131, "climb_m": 14, "climb_total": 920}, {"km_from": 50.22, "km_to": 51.26, "bearing": 174, "lat": 47.4368, "lon": 13.2134, "climb_m": 22, "climb_total": 943}, {"km_from": 51.26, "km_to": 52.28, "bearing": 144, "lat": 47.4296, "lon": 13.2175, "climb_m": 9, "climb_total": 952}, {"km_from": 52.28, "km_to": 53.33, "bearing": 182, "lat": 47.4225, "lon": 13.2208, "climb_m": 9, "climb_total": 960}, {"km_from": 53.33, "km_to": 54.35, "bearing": 182, "lat": 47.4144, "lon": 13.2203, "climb_m": 8, "climb_total": 969}, {"km_from": 54.35, "km_to": 55.42, "bearing": 154, "lat": 47.4062, "lon": 13.2229, "climb_m": 22, "climb_total": 991}, {"km_from": 55.42, "km_to": 56.43, "bearing": 192, "lat": 47.3982, "lon": 13.2245, "climb_m": 7, "climb_total": 998}, {"km_from": 56.43, "km_to": 57.43, "bearing": 221, "lat": 47.3911, "lon": 13.2193, "climb_m": 7, "climb_total": 1005}, {"km_from": 57.43, "km_to": 58.44, "bearing": 183, "lat": 47.3842, "lon": 13.2151, "climb_m": 11, "climb_total": 1016}, {"km_from": 58.44, "km_to": 59.47, "bearing": 202, "lat": 47.3766, "lon": 13.2126, "climb_m": 16, "climb_total": 1032}, {"km_from": 59.47, "km_to": 60.5, "bearing": 189, "lat": 47.3683, "lon": 13.2093, "climb_m": 6, "climb_total": 1038}, {"km_from": 60.5, "km_to": 61.51, "bearing": 206, "lat": 47.36, "lon": 13.2055, "climb_m": 6, "climb_total": 1045}, {"km_from": 61.51, "km_to": 62.52, "bearing": 173, "lat": 47.3527, "lon": 13.2033, "climb_m": 53, "climb_total": 1098}, {"km_from": 62.52, "km_to": 62.57, "bearing": 271, "lat": 47.3493, "lon": 13.2036, "climb_m": 0, "climb_total": 1098}], "3": [{"km_from": 0.0, "km_to": 1.02, "bearing": 195, "lat": 47.3443, "lon": 13.1955, "climb_m": 16, "climb_total": 16}, {"km_from": 1.02, "km_to": 2.08, "bearing": 223, "lat": 47.3392, "lon": 13.1907, "climb_m": 22, "climb_total": 39}, {"km_from": 2.08, "km_to": 3.1, "bearing": 196, "lat": 47.3326, "lon": 13.1851, "climb_m": 31, "climb_total": 70}, {"km_from": 3.1, "km_to": 4.14, "bearing": 242, "lat": 47.3267, "lon": 13.1779, "climb_m": 42, "climb_total": 111}, {"km_from": 4.14, "km_to": 5.15, "bearing": 255, "lat": 47.3236, "lon": 13.1663, "climb_m": 17, "climb_total": 128}, {"km_from": 5.15, "km_to": 6.16, "bearing": 244, "lat": 47.3208, "lon": 13.1552, "climb_m": 10, "climb_total": 138}, {"km_from": 6.16, "km_to": 7.17, "bearing": 219, "lat": 47.3161, "lon": 13.1465, "climb_m": 93, "climb_total": 231}, {"km_from": 7.17, "km_to": 8.21, "bearing": 238, "lat": 47.3113, "lon": 13.1386, "climb_m": 51, "climb_total": 281}, {"km_from": 8.21, "km_to": 9.22, "bearing": 231, "lat": 47.3077, "lon": 13.1309, "climb_m": 33, "climb_total": 315}, {"km_from": 9.22, "km_to": 10.24, "bearing": 250, "lat": 47.3044, "lon": 13.1215, "climb_m": 24, "climb_total": 338}, {"km_from": 10.24, "km_to": 11.31, "bearing": 243, "lat": 47.3009, "lon": 13.1097, "climb_m": 63, "climb_total": 401}, {"km_from": 11.31, "km_to": 12.32, "bearing": 262, "lat": 47.2983, "lon": 13.0976, "climb_m": 34, "climb_total": 435}, {"km_from": 12.32, "km_to": 13.33, "bearing": 267, "lat": 47.2974, "lon": 13.0848, "climb_m": 44, "climb_total": 479}, {"km_from": 13.33, "km_to": 14.34, "bearing": 255, "lat": 47.296, "lon": 13.0723, "climb_m": 54, "climb_total": 533}, {"km_from": 14.34, "km_to": 15.42, "bearing": 231, "lat": 47.2929, "lon": 13.0626, "climb_m": 32, "climb_total": 564}, {"km_from": 15.42, "km_to": 16.47, "bearing": 137, "lat": 47.2876, "lon": 13.0636, "climb_m": 37, "climb_total": 601}, {"km_from": 16.47, "km_to": 17.48, "bearing": 137, "lat": 47.2811, "lon": 13.0725, "climb_m": 11, "climb_total": 613}, {"km_from": 17.48, "km_to": 18.49, "bearing": 164, "lat": 47.2739, "lon": 13.0786, "climb_m": 40, "climb_total": 652}, {"km_from": 18.49, "km_to": 19.5, "bearing": 154, "lat": 47.2659, "lon": 13.0831, "climb_m": 26, "climb_total": 678}, {"km_from": 19.5, "km_to": 20.53, "bearing": 135, "lat": 47.2587, "lon": 13.0907, "climb_m": 10, "climb_total": 689}, {"km_from": 20.53, "km_to": 21.57, "bearing": 155, "lat": 47.2518, "lon": 13.0979, "climb_m": 10, "climb_total": 699}, {"km_from": 21.57, "km_to": 22.62, "bearing": 151, "lat": 47.2443, "lon": 13.1037, "climb_m": 12, "climb_total": 711}, {"km_from": 22.62, "km_to": 23.63, "bearing": 167, "lat": 47.2362, "lon": 13.1083, "climb_m": 16, "climb_total": 726}, {"km_from": 23.63, "km_to": 24.7, "bearing": 176, "lat": 47.2276, "lon": 13.1103, "climb_m": 23, "climb_total": 749}, {"km_from": 24.7, "km_to": 25.75, "bearing": 181, "lat": 47.2185, "lon": 13.1106, "climb_m": 18, "climb_total": 768}, {"km_from": 25.75, "km_to": 26.79, "bearing": 193, "lat": 47.21, "lon": 13.1091, "climb_m": 8, "climb_total": 776}, {"km_from": 26.79, "km_to": 27.8, "bearing": 189, "lat": 47.2017, "lon": 13.1068, "climb_m": 10, "climb_total": 786}, {"km_from": 27.8, "km_to": 28.85, "bearing": 199, "lat": 47.1929, "lon": 13.1036, "climb_m": 24, "climb_total": 810}, {"km_from": 28.85, "km_to": 29.86, "bearing": 174, "lat": 47.1843, "lon": 13.1021, "climb_m": 13, "climb_total": 824}, {"km_from": 29.86, "km_to": 30.88, "bearing": 166, "lat": 47.1758, "lon": 13.1044, "climb_m": 27, "climb_total": 850}, {"km_from": 30.88, "km_to": 31.89, "bearing": 161, "lat": 47.1679, "lon": 13.1079, "climb_m": 5, "climb_total": 855}, {"km_from": 31.89, "km_to": 32.93, "bearing": 181, "lat": 47.1601, "lon": 13.1097, "climb_m": 7, "climb_total": 862}, {"km_from": 32.93, "km_to": 33.93, "bearing": 147, "lat": 47.1524, "lon": 13.1131, "climb_m": 4, "climb_total": 866}, {"km_from": 33.93, "km_to": 34.95, "bearing": 145, "lat": 47.145, "lon": 13.1205, "climb_m": 12, "climb_total": 878}, {"km_from": 34.95, "km_to": 35.97, "bearing": 141, "lat": 47.1378, "lon": 13.1284, "climb_m": 9, "climb_total": 888}, {"km_from": 35.97, "km_to": 36.97, "bearing": 145, "lat": 47.1311, "lon": 13.1359, "climb_m": 12, "climb_total": 899}, {"km_from": 36.97, "km_to": 37.97, "bearing": 178, "lat": 47.1244, "lon": 13.1394, "climb_m": 94, "climb_total": 994}, {"km_from": 37.97, "km_to": 39.01, "bearing": 203, "lat": 47.1177, "lon": 13.1376, "climb_m": 91, "climb_total": 1084}, {"km_from": 39.01, "km_to": 40.06, "bearing": 276, "lat": 47.1145, "lon": 13.1342, "climb_m": 54, "climb_total": 1138}, {"km_from": 40.06, "km_to": 41.11, "bearing": 171, "lat": 47.1109, "lon": 13.1338, "climb_m": 55, "climb_total": 1193}, {"km_from": 41.11, "km_to": 42.12, "bearing": 219, "lat": 47.1043, "lon": 13.1313, "climb_m": 12, "climb_total": 1205}, {"km_from": 42.12, "km_to": 43.14, "bearing": 225, "lat": 47.0986, "lon": 13.1236, "climb_m": 13, "climb_total": 1219}, {"km_from": 43.14, "km_to": 44.15, "bearing": 177, "lat": 47.0916, "lon": 13.1196, "climb_m": 28, "climb_total": 1246}, {"km_from": 44.15, "km_to": 45.16, "bearing": 133, "lat": 47.0847, "lon": 13.1244, "climb_m": 57, "climb_total": 1303}, {"km_from": 45.16, "km_to": 45.7, "bearing": 134, "lat": 47.0809, "lon": 13.1304, "climb_m": 7, "climb_total": 1311}, {"km_from": 45.7, "km_to": 46.71, "bearing": 170, "lat": 46.9776, "lon": 13.1768, "climb_m": 11, "climb_total": 1322}, {"km_from": 46.71, "km_to": 47.71, "bearing": 158, "lat": 46.9705, "lon": 13.1797, "climb_m": 28, "climb_total": 1349}, {"km_from": 47.71, "km_to": 48.74, "bearing": 183, "lat": 46.966, "lon": 13.1814, "climb_m": 26, "climb_total": 1375}, {"km_from": 48.74, "km_to": 49.79, "bearing": 160, "lat": 46.9613, "lon": 13.183, "climb_m": 0, "climb_total": 1375}, {"km_from": 49.79, "km_to": 50.83, "bearing": 191, "lat": 46.9537, "lon": 13.1834, "climb_m": 1, "climb_total": 1377}, {"km_from": 50.83, "km_to": 51.83, "bearing": 147, "lat": 46.9457, "lon": 13.1857, "climb_m": 2, "climb_total": 1378}, {"km_from": 51.83, "km_to": 52.84, "bearing": 133, "lat": 46.9391, "lon": 13.1939, "climb_m": 0, "climb_total": 1378}, {"km_from": 52.84, "km_to": 53.48, "bearing": 157, "lat": 46.9342, "lon": 13.1998, "climb_m": 1, "climb_total": 1379}], "4": [{"km_from": 0.0, "km_to": 1.04, "bearing": 113, "lat": 46.9305, "lon": 13.2075, "climb_m": 3, "climb_total": 3}, {"km_from": 1.04, "km_to": 2.11, "bearing": 116, "lat": 46.9268, "lon": 13.2195, "climb_m": 27, "climb_total": 30}, {"km_from": 2.11, "km_to": 3.16, "bearing": 132, "lat": 46.9219, "lon": 13.2303, "climb_m": 35, "climb_total": 65}, {"km_from": 3.16, "km_to": 4.17, "bearing": 116, "lat": 46.9172, "lon": 13.24, "climb_m": 32, "climb_total": 98}, {"km_from": 4.17, "km_to": 5.19, "bearing": 138, "lat": 46.9123, "lon": 13.2492, "climb_m": 19, "climb_total": 117}, {"km_from": 5.19, "km_to": 6.21, "bearing": 135, "lat": 46.9061, "lon": 13.2578, "climb_m": 46, "climb_total": 162}, {"km_from": 6.21, "km_to": 7.24, "bearing": 201, "lat": 46.8996, "lon": 13.2604, "climb_m": 27, "climb_total": 189}, {"km_from": 7.24, "km_to": 8.32, "bearing": 160, "lat": 46.8922, "lon": 13.2607, "climb_m": 36, "climb_total": 225}, {"km_from": 8.32, "km_to": 9.34, "bearing": 132, "lat": 46.8852, "lon": 13.2675, "climb_m": 35, "climb_total": 260}, {"km_from": 9.34, "km_to": 10.37, "bearing": 109, "lat": 46.8808, "lon": 13.2783, "climb_m": 7, "climb_total": 267}, {"km_from": 10.37, "km_to": 11.38, "bearing": 102, "lat": 46.8784, "lon": 13.2904, "climb_m": 9, "climb_total": 276}, {"km_from": 11.38, "km_to": 12.4, "bearing": 121, "lat": 46.8754, "lon": 13.3016, "climb_m": 6, "climb_total": 282}, {"km_from": 12.4, "km_to": 13.42, "bearing": 112, "lat": 46.8717, "lon": 13.3123, "climb_m": 3, "climb_total": 286}, {"km_from": 13.42, "km_to": 14.47, "bearing": 109, "lat": 46.8688, "lon": 13.3237, "climb_m": 16, "climb_total": 301}, {"km_from": 14.47, "km_to": 15.47, "bearing": 157, "lat": 46.8637, "lon": 13.332, "climb_m": 24, "climb_total": 325}, {"km_from": 15.47, "km_to": 16.47, "bearing": 124, "lat": 46.8579, "lon": 13.3389, "climb_m": 6, "climb_total": 331}, {"km_from": 16.47, "km_to": 17.51, "bearing": 111, "lat": 46.8546, "lon": 13.3482, "climb_m": 11, "climb_total": 342}, {"km_from": 17.51, "km_to": 18.52, "bearing": 139, "lat": 46.851, "lon": 13.356, "climb_m": 3, "climb_total": 345}, {"km_from": 18.52, "km_to": 19.53, "bearing": 146, "lat": 46.8456, "lon": 13.362, "climb_m": 1, "climb_total": 346}, {"km_from": 19.53, "km_to": 20.53, "bearing": 134, "lat": 46.8398, "lon": 13.3692, "climb_m": 2, "climb_total": 349}, {"km_from": 20.53, "km_to": 21.53, "bearing": 140, "lat": 46.8341, "lon": 13.3769, "climb_m": 2, "climb_total": 351}, {"km_from": 21.53, "km_to": 22.59, "bearing": 115, "lat": 46.8294, "lon": 13.3863, "climb_m": 6, "climb_total": 357}, {"km_from": 22.59, "km_to": 23.63, "bearing": 112, "lat": 46.8258, "lon": 13.3982, "climb_m": 3, "climb_total": 361}, {"km_from": 23.63, "km_to": 24.63, "bearing": 72, "lat": 46.8251, "lon": 13.4087, "climb_m": 7, "climb_total": 367}, {"km_from": 24.63, "km_to": 25.67, "bearing": 71, "lat": 46.827, "lon": 13.4173, "climb_m": 6, "climb_total": 373}, {"km_from": 25.67, "km_to": 26.67, "bearing": 73, "lat": 46.829, "lon": 13.4266, "climb_m": 28, "climb_total": 402}, {"km_from": 26.67, "km_to": 27.7, "bearing": 85, "lat": 46.8305, "lon": 13.4384, "climb_m": 12, "climb_total": 413}, {"km_from": 27.7, "km_to": 28.71, "bearing": 180, "lat": 46.827, "lon": 13.445, "climb_m": 5, "climb_total": 418}, {"km_from": 28.71, "km_to": 29.74, "bearing": 126, "lat": 46.8207, "lon": 13.4496, "climb_m": 23, "climb_total": 441}, {"km_from": 29.74, "km_to": 30.81, "bearing": 124, "lat": 46.8158, "lon": 13.4598, "climb_m": 26, "climb_total": 467}, {"km_from": 30.81, "km_to": 31.84, "bearing": 124, "lat": 46.8107, "lon": 13.4709, "climb_m": 15, "climb_total": 482}, {"km_from": 31.84, "km_to": 32.92, "bearing": 142, "lat": 46.8045, "lon": 13.4806, "climb_m": 4, "climb_total": 487}, {"km_from": 32.92, "km_to": 33.93, "bearing": 105, "lat": 46.8, "lon": 13.489, "climb_m": 24, "climb_total": 511}, {"km_from": 33.93, "km_to": 34.94, "bearing": 136, "lat": 46.7966, "lon": 13.497, "climb_m": 11, "climb_total": 521}, {"km_from": 34.94, "km_to": 35.94, "bearing": 139, "lat": 46.7912, "lon": 13.5042, "climb_m": 3, "climb_total": 524}, {"km_from": 35.94, "km_to": 36.95, "bearing": 126, "lat": 46.7859, "lon": 13.5129, "climb_m": 3, "climb_total": 527}, {"km_from": 36.95, "km_to": 37.99, "bearing": 121, "lat": 46.781, "lon": 13.5236, "climb_m": 3, "climb_total": 529}, {"km_from": 37.99, "km_to": 38.99, "bearing": 122, "lat": 46.7767, "lon": 13.5338, "climb_m": 5, "climb_total": 534}, {"km_from": 38.99, "km_to": 40.03, "bearing": 108, "lat": 46.7734, "lon": 13.5445, "climb_m": 5, "climb_total": 539}, {"km_from": 40.03, "km_to": 41.05, "bearing": 121, "lat": 46.7697, "lon": 13.5563, "climb_m": 5, "climb_total": 544}, {"km_from": 41.05, "km_to": 42.07, "bearing": 119, "lat": 46.7651, "lon": 13.5679, "climb_m": 4, "climb_total": 548}, {"km_from": 42.07, "km_to": 43.07, "bearing": 121, "lat": 46.7606, "lon": 13.5792, "climb_m": 4, "climb_total": 553}, {"km_from": 43.07, "km_to": 44.07, "bearing": 145, "lat": 46.7554, "lon": 13.5879, "climb_m": 5, "climb_total": 558}, {"km_from": 44.07, "km_to": 45.07, "bearing": 114, "lat": 46.7507, "lon": 13.5967, "climb_m": 4, "climb_total": 562}, {"km_from": 45.07, "km_to": 46.09, "bearing": 191, "lat": 46.7464, "lon": 13.6018, "climb_m": 3, "climb_total": 565}, {"km_from": 46.09, "km_to": 47.12, "bearing": 118, "lat": 46.742, "lon": 13.6062, "climb_m": 6, "climb_total": 571}, {"km_from": 47.12, "km_to": 48.14, "bearing": 129, "lat": 46.7373, "lon": 13.6164, "climb_m": 4, "climb_total": 575}, {"km_from": 48.14, "km_to": 49.15, "bearing": 140, "lat": 46.731, "lon": 13.6256, "climb_m": 4, "climb_total": 580}, {"km_from": 49.15, "km_to": 50.15, "bearing": 126, "lat": 46.7249, "lon": 13.6351, "climb_m": 4, "climb_total": 584}, {"km_from": 50.15, "km_to": 51.17, "bearing": 84, "lat": 46.7225, "lon": 13.6441, "climb_m": 24, "climb_total": 607}, {"km_from": 51.17, "km_to": 52.18, "bearing": 127, "lat": 46.7201, "lon": 13.6532, "climb_m": 25, "climb_total": 632}, {"km_from": 52.18, "km_to": 53.23, "bearing": 127, "lat": 46.7146, "lon": 13.6637, "climb_m": 32, "climb_total": 664}, {"km_from": 53.23, "km_to": 54.26, "bearing": 140, "lat": 46.7084, "lon": 13.6732, "climb_m": 35, "climb_total": 700}, {"km_from": 54.26, "km_to": 55.31, "bearing": 132, "lat": 46.7018, "lon": 13.6824, "climb_m": 10, "climb_total": 710}, {"km_from": 55.31, "km_to": 56.34, "bearing": 111, "lat": 46.6971, "lon": 13.6936, "climb_m": 22, "climb_total": 731}, {"km_from": 56.34, "km_to": 57.35, "bearing": 141, "lat": 46.6921, "lon": 13.7037, "climb_m": 8, "climb_total": 739}, {"km_from": 57.35, "km_to": 58.39, "bearing": 150, "lat": 46.6852, "lon": 13.7106, "climb_m": 2, "climb_total": 741}, {"km_from": 58.39, "km_to": 59.39, "bearing": 117, "lat": 46.6798, "lon": 13.7193, "climb_m": 6, "climb_total": 747}, {"km_from": 59.39, "km_to": 60.51, "bearing": 123, "lat": 46.6751, "lon": 13.7311, "climb_m": 3, "climb_total": 750}, {"km_from": 60.51, "km_to": 61.52, "bearing": 113, "lat": 46.6708, "lon": 13.7431, "climb_m": 5, "climb_total": 755}, {"km_from": 61.52, "km_to": 62.53, "bearing": 129, "lat": 46.6663, "lon": 13.754, "climb_m": 9, "climb_total": 764}, {"km_from": 62.53, "km_to": 63.56, "bearing": 151, "lat": 46.6604, "lon": 13.7615, "climb_m": 4, "climb_total": 767}, {"km_from": 63.56, "km_to": 64.61, "bearing": 151, "lat": 46.655, "lon": 13.7658, "climb_m": 9, "climb_total": 776}, {"km_from": 64.61, "km_to": 65.65, "bearing": 97, "lat": 46.6522, "lon": 13.7735, "climb_m": 11, "climb_total": 787}, {"km_from": 65.65, "km_to": 66.65, "bearing": 93, "lat": 46.6515, "lon": 13.7854, "climb_m": 22, "climb_total": 809}, {"km_from": 66.65, "km_to": 67.68, "bearing": 135, "lat": 46.6484, "lon": 13.7957, "climb_m": 10, "climb_total": 819}, {"km_from": 67.68, "km_to": 68.69, "bearing": 130, "lat": 46.6427, "lon": 13.8049, "climb_m": 15, "climb_total": 833}, {"km_from": 68.69, "km_to": 69.73, "bearing": 114, "lat": 46.6379, "lon": 13.8161, "climb_m": 9, "climb_total": 842}, {"km_from": 69.73, "km_to": 70.73, "bearing": 123, "lat": 46.6337, "lon": 13.8273, "climb_m": 9, "climb_total": 851}, {"km_from": 70.73, "km_to": 71.73, "bearing": 169, "lat": 46.6271, "lon": 13.8335, "climb_m": 16, "climb_total": 867}, {"km_from": 71.73, "km_to": 72.74, "bearing": 173, "lat": 46.6199, "lon": 13.8352, "climb_m": 18, "climb_total": 885}, {"km_from": 72.74, "km_to": 73.74, "bearing": 101, "lat": 46.6162, "lon": 13.8415, "climb_m": 16, "climb_total": 901}, {"km_from": 73.74, "km_to": 73.79, "bearing": 120, "lat": 46.6154, "lon": 13.8475, "climb_m": 0, "climb_total": 901}], "5": [{"km_from": 0.0, "km_to": 1.03, "bearing": 266, "lat": 46.5066, "lon": 13.6007, "climb_m": 20, "climb_total": 20}, {"km_from": 1.03, "km_to": 2.07, "bearing": 260, "lat": 46.5055, "lon": 13.5887, "climb_m": 28, "climb_total": 48}, {"km_from": 2.07, "km_to": 3.16, "bearing": 285, "lat": 46.5059, "lon": 13.5757, "climb_m": 32, "climb_total": 80}, {"km_from": 3.16, "km_to": 4.18, "bearing": 284, "lat": 46.5083, "lon": 13.5628, "climb_m": 25, "climb_total": 105}, {"km_from": 4.18, "km_to": 5.18, "bearing": 278, "lat": 46.51, "lon": 13.5499, "climb_m": 20, "climb_total": 125}, {"km_from": 5.18, "km_to": 6.21, "bearing": 242, "lat": 46.5086, "lon": 13.5379, "climb_m": 9, "climb_total": 134}, {"km_from": 6.21, "km_to": 7.27, "bearing": 254, "lat": 46.5053, "lon": 13.5259, "climb_m": 35, "climb_total": 169}, {"km_from": 7.27, "km_to": 8.33, "bearing": 262, "lat": 46.5034, "lon": 13.5126, "climb_m": 8, "climb_total": 177}, {"km_from": 8.33, "km_to": 9.36, "bearing": 279, "lat": 46.5033, "lon": 13.5004, "climb_m": 14, "climb_total": 191}, {"km_from": 9.36, "km_to": 10.4, "bearing": 301, "lat": 46.5062, "lon": 13.4894, "climb_m": 13, "climb_total": 203}, {"km_from": 10.4, "km_to": 11.42, "bearing": 278, "lat": 46.5091, "lon": 13.4773, "climb_m": 5, "climb_total": 208}, {"km_from": 11.42, "km_to": 12.42, "bearing": 258, "lat": 46.5089, "lon": 13.4644, "climb_m": 5, "climb_total": 213}, {"km_from": 12.42, "km_to": 13.48, "bearing": 245, "lat": 46.506, "lon": 13.452, "climb_m": 17, "climb_total": 231}, {"km_from": 13.48, "km_to": 14.54, "bearing": 259, "lat": 46.5032, "lon": 13.4392, "climb_m": 5, "climb_total": 235}, {"km_from": 14.54, "km_to": 15.55, "bearing": 266, "lat": 46.502, "lon": 13.4265, "climb_m": 15, "climb_total": 250}, {"km_from": 15.55, "km_to": 16.58, "bearing": 261, "lat": 46.501, "lon": 13.4142, "climb_m": 13, "climb_total": 263}, {"km_from": 16.58, "km_to": 17.66, "bearing": 271, "lat": 46.5004, "lon": 13.4014, "climb_m": 14, "climb_total": 278}, {"km_from": 17.66, "km_to": 18.69, "bearing": 282, "lat": 46.5014, "lon": 13.3884, "climb_m": 6, "climb_total": 284}, {"km_from": 18.69, "km_to": 19.71, "bearing": 285, "lat": 46.5036, "lon": 13.3757, "climb_m": 16, "climb_total": 300}, {"km_from": 19.71, "km_to": 20.72, "bearing": 302, "lat": 46.5071, "lon": 13.3639, "climb_m": 16, "climb_total": 316}, {"km_from": 20.72, "km_to": 21.76, "bearing": 283, "lat": 46.5106, "lon": 13.3519, "climb_m": 15, "climb_total": 331}, {"km_from": 21.76, "km_to": 22.76, "bearing": 273, "lat": 46.5119, "lon": 13.3388, "climb_m": 2, "climb_total": 333}, {"km_from": 22.76, "km_to": 23.77, "bearing": 248, "lat": 46.5105, "lon": 13.3266, "climb_m": 7, "climb_total": 339}, {"km_from": 23.77, "km_to": 24.81, "bearing": 259, "lat": 46.508, "lon": 13.3142, "climb_m": 1, "climb_total": 340}, {"km_from": 24.81, "km_to": 25.87, "bearing": 213, "lat": 46.5034, "lon": 13.3041, "climb_m": 10, "climb_total": 350}, {"km_from": 25.87, "km_to": 26.88, "bearing": 190, "lat": 46.4952, "lon": 13.2995, "climb_m": 10, "climb_total": 360}, {"km_from": 26.88, "km_to": 27.93, "bearing": 179, "lat": 46.4862, "lon": 13.2985, "climb_m": 13, "climb_total": 373}, {"km_from": 27.93, "km_to": 28.96, "bearing": 209, "lat": 46.4776, "lon": 13.2955, "climb_m": 20, "climb_total": 393}, {"km_from": 28.96, "km_to": 29.98, "bearing": 166, "lat": 46.4693, "lon": 13.2938, "climb_m": 39, "climb_total": 432}, {"km_from": 29.98, "km_to": 31.02, "bearing": 132, "lat": 46.462, "lon": 13.3001, "climb_m": 12, "climb_total": 445}, {"km_from": 31.02, "km_to": 32.09, "bearing": 126, "lat": 46.4563, "lon": 13.3103, "climb_m": 11, "climb_total": 456}, {"km_from": 32.09, "km_to": 33.1, "bearing": 176, "lat": 46.4493, "lon": 13.3162, "climb_m": 9, "climb_total": 465}, {"km_from": 33.1, "km_to": 34.14, "bearing": 200, "lat": 46.4411, "lon": 13.3145, "climb_m": 15, "climb_total": 480}, {"km_from": 34.14, "km_to": 35.15, "bearing": 159, "lat": 46.4329, "lon": 13.3148, "climb_m": 3, "climb_total": 483}, {"km_from": 35.15, "km_to": 36.18, "bearing": 167, "lat": 46.4242, "lon": 13.3187, "climb_m": 16, "climb_total": 499}, {"km_from": 36.18, "km_to": 37.19, "bearing": 210, "lat": 46.4159, "lon": 13.317, "climb_m": 31, "climb_total": 530}, {"km_from": 37.19, "km_to": 38.23, "bearing": 236, "lat": 46.4096, "lon": 13.3083, "climb_m": 19, "climb_total": 550}, {"km_from": 38.23, "km_to": 39.27, "bearing": 251, "lat": 46.4056, "lon": 13.2967, "climb_m": 10, "climb_total": 559}, {"km_from": 39.27, "km_to": 40.27, "bearing": 224, "lat": 46.401, "lon": 13.2859, "climb_m": 15, "climb_total": 575}, {"km_from": 40.27, "km_to": 41.28, "bearing": 262, "lat": 46.3972, "lon": 13.2754, "climb_m": 14, "climb_total": 589}, {"km_from": 41.28, "km_to": 42.3, "bearing": 251, "lat": 46.3952, "lon": 13.2633, "climb_m": 17, "climb_total": 606}, {"km_from": 42.3, "km_to": 43.36, "bearing": 271, "lat": 46.3937, "lon": 13.2504, "climb_m": 13, "climb_total": 618}, {"km_from": 43.36, "km_to": 44.36, "bearing": 264, "lat": 46.3933, "lon": 13.2373, "climb_m": 4, "climb_total": 623}, {"km_from": 44.36, "km_to": 45.4, "bearing": 277, "lat": 46.3935, "lon": 13.2242, "climb_m": 7, "climb_total": 630}, {"km_from": 45.4, "km_to": 46.48, "bearing": 278, "lat": 46.3948, "lon": 13.2106, "climb_m": 34, "climb_total": 664}, {"km_from": 46.48, "km_to": 47.56, "bearing": 285, "lat": 46.3967, "lon": 13.197, "climb_m": 4, "climb_total": 668}, {"km_from": 47.56, "km_to": 48.62, "bearing": 266, "lat": 46.3976, "lon": 13.1837, "climb_m": 10, "climb_total": 678}, {"km_from": 48.62, "km_to": 49.66, "bearing": 240, "lat": 46.3951, "lon": 13.1714, "climb_m": 28, "climb_total": 706}, {"km_from": 49.66, "km_to": 50.67, "bearing": 224, "lat": 46.3898, "lon": 13.1614, "climb_m": 22, "climb_total": 729}, {"km_from": 50.67, "km_to": 51.67, "bearing": 274, "lat": 46.3871, "lon": 13.1506, "climb_m": 9, "climb_total": 738}, {"km_from": 51.67, "km_to": 52.7, "bearing": 224, "lat": 46.3843, "lon": 13.1398, "climb_m": 2, "climb_total": 740}, {"km_from": 52.7, "km_to": 53.78, "bearing": 183, "lat": 46.3775, "lon": 13.1351, "climb_m": 8, "climb_total": 748}, {"km_from": 53.78, "km_to": 54.84, "bearing": 179, "lat": 46.3692, "lon": 13.135, "climb_m": 7, "climb_total": 755}, {"km_from": 54.84, "km_to": 55.85, "bearing": 164, "lat": 46.3602, "lon": 13.1369, "climb_m": 3, "climb_total": 758}, {"km_from": 55.85, "km_to": 56.86, "bearing": 169, "lat": 46.3515, "lon": 13.1399, "climb_m": 5, "climb_total": 763}, {"km_from": 56.86, "km_to": 57.9, "bearing": 187, "lat": 46.3426, "lon": 13.1403, "climb_m": 4, "climb_total": 768}, {"km_from": 57.9, "km_to": 58.94, "bearing": 194, "lat": 46.3337, "lon": 13.1379, "climb_m": 3, "climb_total": 771}, {"km_from": 58.94, "km_to": 59.98, "bearing": 205, "lat": 46.3253, "lon": 13.1335, "climb_m": 4, "climb_total": 775}, {"km_from": 59.98, "km_to": 61.05, "bearing": 193, "lat": 46.3165, "lon": 13.1291, "climb_m": 10, "climb_total": 785}, {"km_from": 61.05, "km_to": 62.06, "bearing": 206, "lat": 46.3082, "lon": 13.1249, "climb_m": 10, "climb_total": 794}, {"km_from": 62.06, "km_to": 63.1, "bearing": 195, "lat": 46.3008, "lon": 13.1209, "climb_m": 8, "climb_total": 802}, {"km_from": 63.1, "km_to": 64.14, "bearing": 139, "lat": 46.2939, "lon": 13.1235, "climb_m": 14, "climb_total": 816}, {"km_from": 64.14, "km_to": 65.18, "bearing": 150, "lat": 46.2871, "lon": 13.1306, "climb_m": 40, "climb_total": 857}, {"km_from": 65.18, "km_to": 66.22, "bearing": 160, "lat": 46.2801, "lon": 13.1355, "climb_m": 27, "climb_total": 884}, {"km_from": 66.22, "km_to": 67.23, "bearing": 206, "lat": 46.2749, "lon": 13.1358, "climb_m": 0, "climb_total": 884}, {"km_from": 67.23, "km_to": 67.29, "bearing": 237, "lat": 46.2727, "lon": 13.134, "climb_m": 0, "climb_total": 884}], "6": [{"km_from": 0.0, "km_to": 1.05, "bearing": 321, "lat": 46.2758, "lon": 13.1301, "climb_m": 7, "climb_total": 7}, {"km_from": 1.05, "km_to": 2.11, "bearing": 281, "lat": 46.2799, "lon": 13.1197, "climb_m": 5, "climb_total": 12}, {"km_from": 2.11, "km_to": 3.12, "bearing": 280, "lat": 46.2816, "lon": 13.1066, "climb_m": 5, "climb_total": 17}, {"km_from": 3.12, "km_to": 4.12, "bearing": 224, "lat": 46.2796, "lon": 13.0962, "climb_m": 8, "climb_total": 25}, {"km_from": 4.12, "km_to": 5.14, "bearing": 167, "lat": 46.2739, "lon": 13.0932, "climb_m": 3, "climb_total": 28}, {"km_from": 5.14, "km_to": 6.15, "bearing": 241, "lat": 46.2692, "lon": 13.0893, "climb_m": 6, "climb_total": 34}, {"km_from": 6.15, "km_to": 7.18, "bearing": 220, "lat": 46.2642, "lon": 13.0805, "climb_m": 21, "climb_total": 56}, {"km_from": 7.18, "km_to": 8.21, "bearing": 180, "lat": 46.2569, "lon": 13.0765, "climb_m": 3, "climb_total": 58}, {"km_from": 8.21, "km_to": 9.28, "bearing": 261, "lat": 46.2522, "lon": 13.0698, "climb_m": 16, "climb_total": 74}, {"km_from": 9.28, "km_to": 10.32, "bearing": 211, "lat": 46.2476, "lon": 13.0598, "climb_m": 6, "climb_total": 81}, {"km_from": 10.32, "km_to": 11.4, "bearing": 202, "lat": 46.2392, "lon": 13.0537, "climb_m": 4, "climb_total": 84}, {"km_from": 11.4, "km_to": 12.45, "bearing": 178, "lat": 46.2311, "lon": 13.0513, "climb_m": 2, "climb_total": 86}, {"km_from": 12.45, "km_to": 13.51, "bearing": 186, "lat": 46.2248, "lon": 13.0511, "climb_m": 5, "climb_total": 92}, {"km_from": 13.51, "km_to": 14.57, "bearing": 90, "lat": 46.222, "lon": 13.0572, "climb_m": 9, "climb_total": 101}, {"km_from": 14.57, "km_to": 15.63, "bearing": 103, "lat": 46.2211, "lon": 13.0696, "climb_m": 6, "climb_total": 107}, {"km_from": 15.63, "km_to": 16.66, "bearing": 126, "lat": 46.2183, "lon": 13.0791, "climb_m": 4, "climb_total": 112}, {"km_from": 16.66, "km_to": 17.67, "bearing": 101, "lat": 46.2157, "lon": 13.0878, "climb_m": 8, "climb_total": 120}, {"km_from": 17.67, "km_to": 18.7, "bearing": 112, "lat": 46.2138, "lon": 13.0975, "climb_m": 10, "climb_total": 130}, {"km_from": 18.7, "km_to": 19.7, "bearing": 145, "lat": 46.2098, "lon": 13.1047, "climb_m": 14, "climb_total": 144}, {"km_from": 19.7, "km_to": 20.7, "bearing": 120, "lat": 46.2053, "lon": 13.112, "climb_m": 9, "climb_total": 152}, {"km_from": 20.7, "km_to": 21.73, "bearing": 91, "lat": 46.2035, "lon": 13.121, "climb_m": 14, "climb_total": 166}, {"km_from": 21.73, "km_to": 22.75, "bearing": 142, "lat": 46.2001, "lon": 13.1291, "climb_m": 2, "climb_total": 168}, {"km_from": 22.75, "km_to": 23.75, "bearing": 149, "lat": 46.1929, "lon": 13.1361, "climb_m": 12, "climb_total": 180}, {"km_from": 23.75, "km_to": 24.76, "bearing": 148, "lat": 46.1858, "lon": 13.1424, "climb_m": 8, "climb_total": 188}, {"km_from": 24.76, "km_to": 25.77, "bearing": 88, "lat": 46.1826, "lon": 13.1502, "climb_m": 35, "climb_total": 223}, {"km_from": 25.77, "km_to": 26.79, "bearing": 116, "lat": 46.1813, "lon": 13.1592, "climb_m": 19, "climb_total": 243}, {"km_from": 26.79, "km_to": 27.79, "bearing": 170, "lat": 46.176, "lon": 13.1642, "climb_m": 2, "climb_total": 244}, {"km_from": 27.79, "km_to": 28.81, "bearing": 107, "lat": 46.1708, "lon": 13.1706, "climb_m": 5, "climb_total": 250}, {"km_from": 28.81, "km_to": 29.82, "bearing": 175, "lat": 46.1657, "lon": 13.1763, "climb_m": 33, "climb_total": 282}, {"km_from": 29.82, "km_to": 30.83, "bearing": 132, "lat": 46.1591, "lon": 13.181, "climb_m": 13, "climb_total": 296}, {"km_from": 30.83, "km_to": 31.83, "bearing": 141, "lat": 46.1534, "lon": 13.1887, "climb_m": 12, "climb_total": 308}, {"km_from": 31.83, "km_to": 32.85, "bearing": 144, "lat": 46.1469, "lon": 13.1958, "climb_m": 18, "climb_total": 326}, {"km_from": 32.85, "km_to": 33.88, "bearing": 161, "lat": 46.1406, "lon": 13.2009, "climb_m": 1, "climb_total": 327}, {"km_from": 33.88, "km_to": 34.9, "bearing": 143, "lat": 46.1341, "lon": 13.2062, "climb_m": 6, "climb_total": 333}, {"km_from": 34.9, "km_to": 35.91, "bearing": 181, "lat": 46.1268, "lon": 13.21, "climb_m": 8, "climb_total": 341}, {"km_from": 35.91, "km_to": 36.95, "bearing": 174, "lat": 46.1185, "lon": 13.2106, "climb_m": 3, "climb_total": 344}, {"km_from": 36.95, "km_to": 37.98, "bearing": 162, "lat": 46.1099, "lon": 13.2132, "climb_m": 4, "climb_total": 348}, {"km_from": 37.98, "km_to": 38.99, "bearing": 137, "lat": 46.1027, "lon": 13.2193, "climb_m": 2, "climb_total": 351}, {"km_from": 38.99, "km_to": 40.04, "bearing": 154, "lat": 46.096, "lon": 13.2259, "climb_m": 3, "climb_total": 354}, {"km_from": 40.04, "km_to": 41.08, "bearing": 163, "lat": 46.088, "lon": 13.2304, "climb_m": 3, "climb_total": 357}, {"km_from": 41.08, "km_to": 42.13, "bearing": 170, "lat": 46.079, "lon": 13.2336, "climb_m": 4, "climb_total": 361}, {"km_from": 42.13, "km_to": 43.14, "bearing": 171, "lat": 46.07, "lon": 13.2357, "climb_m": 5, "climb_total": 366}, {"km_from": 43.14, "km_to": 44.15, "bearing": 62, "lat": 46.0671, "lon": 13.2403, "climb_m": 9, "climb_total": 375}, {"km_from": 44.15, "km_to": 44.37, "bearing": 67, "lat": 46.0687, "lon": 13.245, "climb_m": 0, "climb_total": 375}], "7": [{"km_from": 0.0, "km_to": 1.03, "bearing": 225, "lat": 46.0667, "lon": 13.2424, "climb_m": 4, "climb_total": 4}, {"km_from": 1.03, "km_to": 2.03, "bearing": 148, "lat": 46.0609, "lon": 13.242, "climb_m": 4, "climb_total": 8}, {"km_from": 2.03, "km_to": 3.08, "bearing": 127, "lat": 46.055, "lon": 13.2498, "climb_m": 2, "climb_total": 9}, {"km_from": 3.08, "km_to": 4.09, "bearing": 106, "lat": 46.0513, "lon": 13.2607, "climb_m": 2, "climb_total": 12}, {"km_from": 4.09, "km_to": 5.12, "bearing": 120, "lat": 46.0478, "lon": 13.2725, "climb_m": 5, "climb_total": 17}, {"km_from": 5.12, "km_to": 6.2, "bearing": 125, "lat": 46.0427, "lon": 13.2839, "climb_m": 0, "climb_total": 17}, {"km_from": 6.2, "km_to": 7.21, "bearing": 147, "lat": 46.0366, "lon": 13.2926, "climb_m": 1, "climb_total": 18}, {"km_from": 7.21, "km_to": 8.23, "bearing": 156, "lat": 46.0293, "lon": 13.2982, "climb_m": 0, "climb_total": 18}, {"km_from": 8.23, "km_to": 9.23, "bearing": 154, "lat": 46.0219, "lon": 13.3031, "climb_m": 0, "climb_total": 18}, {"km_from": 9.23, "km_to": 10.25, "bearing": 159, "lat": 46.015, "lon": 13.3074, "climb_m": 2, "climb_total": 20}, {"km_from": 10.25, "km_to": 11.27, "bearing": 173, "lat": 46.0071, "lon": 13.31, "climb_m": 0, "climb_total": 20}, {"km_from": 11.27, "km_to": 12.32, "bearing": 185, "lat": 45.9984, "lon": 13.3103, "climb_m": 0, "climb_total": 20}, {"km_from": 12.32, "km_to": 13.33, "bearing": 225, "lat": 45.9912, "lon": 13.3056, "climb_m": 1, "climb_total": 21}, {"km_from": 13.33, "km_to": 14.33, "bearing": 193, "lat": 45.9854, "lon": 13.3005, "climb_m": 0, "climb_total": 22}, {"km_from": 14.33, "km_to": 15.37, "bearing": 239, "lat": 45.9803, "lon": 13.2944, "climb_m": 0, "climb_total": 22}, {"km_from": 15.37, "km_to": 16.39, "bearing": 158, "lat": 45.9741, "lon": 13.2916, "climb_m": 0, "climb_total": 22}, {"km_from": 16.39, "km_to": 17.41, "bearing": 186, "lat": 45.9662, "lon": 13.2934, "climb_m": 0, "climb_total": 23}, {"km_from": 17.41, "km_to": 18.49, "bearing": 228, "lat": 45.9593, "lon": 13.2879, "climb_m": 0, "climb_total": 23}, {"km_from": 18.49, "km_to": 19.56, "bearing": 175, "lat": 45.9515, "lon": 13.2836, "climb_m": 0, "climb_total": 23}, {"km_from": 19.56, "km_to": 20.61, "bearing": 162, "lat": 45.9422, "lon": 13.2862, "climb_m": 0, "climb_total": 23}, {"km_from": 20.61, "km_to": 21.67, "bearing": 160, "lat": 45.9333, "lon": 13.2905, "climb_m": 0, "climb_total": 23}, {"km_from": 21.67, "km_to": 22.72, "bearing": 173, "lat": 45.9243, "lon": 13.2936, "climb_m": 0, "climb_total": 23}, {"km_from": 22.72, "km_to": 23.77, "bearing": 166, "lat": 45.9154, "lon": 13.2961, "climb_m": 0, "climb_total": 23}, {"km_from": 23.77, "km_to": 24.85, "bearing": 124, "lat": 45.9084, "lon": 13.3034, "climb_m": 3, "climb_total": 26}, {"km_from": 24.85, "km_to": 25.88, "bearing": 175, "lat": 45.9017, "lon": 13.3097, "climb_m": 3, "climb_total": 29}, {"km_from": 25.88, "km_to": 26.96, "bearing": 155, "lat": 45.8943, "lon": 13.3125, "climb_m": 1, "climb_total": 30}, {"km_from": 26.96, "km_to": 27.97, "bearing": 141, "lat": 45.8877, "lon": 13.3185, "climb_m": 0, "climb_total": 30}, {"km_from": 27.97, "km_to": 29.04, "bearing": 178, "lat": 45.8799, "lon": 13.3223, "climb_m": 0, "climb_total": 31}, {"km_from": 29.04, "km_to": 30.04, "bearing": 178, "lat": 45.8707, "lon": 13.3228, "climb_m": 0, "climb_total": 31}, {"km_from": 30.04, "km_to": 31.1, "bearing": 185, "lat": 45.8618, "lon": 13.3225, "climb_m": 1, "climb_total": 32}, {"km_from": 31.1, "km_to": 32.11, "bearing": 174, "lat": 45.853, "lon": 13.3226, "climb_m": 1, "climb_total": 33}, {"km_from": 32.11, "km_to": 33.13, "bearing": 159, "lat": 45.8444, "lon": 13.3256, "climb_m": 0, "climb_total": 33}, {"km_from": 33.13, "km_to": 34.19, "bearing": 158, "lat": 45.836, "lon": 13.3304, "climb_m": 2, "climb_total": 35}, {"km_from": 34.19, "km_to": 35.21, "bearing": 178, "lat": 45.8274, "lon": 13.3331, "climb_m": 0, "climb_total": 36}, {"km_from": 35.21, "km_to": 36.25, "bearing": 150, "lat": 45.8195, "lon": 13.3364, "climb_m": 1, "climb_total": 37}, {"km_from": 36.25, "km_to": 37.3, "bearing": 161, "lat": 45.8116, "lon": 13.3415, "climb_m": 1, "climb_total": 38}, {"km_from": 37.3, "km_to": 38.35, "bearing": 150, "lat": 45.8032, "lon": 13.3469, "climb_m": 1, "climb_total": 40}, {"km_from": 38.35, "km_to": 39.38, "bearing": 152, "lat": 45.7954, "lon": 13.3531, "climb_m": 1, "climb_total": 40}, {"km_from": 39.38, "km_to": 40.38, "bearing": 159, "lat": 45.7874, "lon": 13.3583, "climb_m": 1, "climb_total": 41}, {"km_from": 40.38, "km_to": 41.39, "bearing": 156, "lat": 45.7791, "lon": 13.3633, "climb_m": 2, "climb_total": 43}, {"km_from": 41.39, "km_to": 42.49, "bearing": 153, "lat": 45.7711, "lon": 13.3687, "climb_m": 1, "climb_total": 44}, {"km_from": 42.49, "km_to": 43.5, "bearing": 166, "lat": 45.7631, "lon": 13.373, "climb_m": 1, "climb_total": 45}, {"km_from": 43.5, "km_to": 44.54, "bearing": 159, "lat": 45.7544, "lon": 13.377, "climb_m": 2, "climb_total": 47}, {"km_from": 44.54, "km_to": 45.55, "bearing": 160, "lat": 45.7458, "lon": 13.3816, "climb_m": 1, "climb_total": 47}, {"km_from": 45.55, "km_to": 46.62, "bearing": 160, "lat": 45.737, "lon": 13.3862, "climb_m": 0, "climb_total": 48}, {"km_from": 46.62, "km_to": 47.69, "bearing": 190, "lat": 45.7278, "lon": 13.3873, "climb_m": 1, "climb_total": 49}, {"km_from": 47.69, "km_to": 48.73, "bearing": 187, "lat": 45.7186, "lon": 13.3852, "climb_m": 1, "climb_total": 50}, {"km_from": 48.73, "km_to": 49.74, "bearing": 187, "lat": 45.7095, "lon": 13.3835, "climb_m": 1, "climb_total": 51}, {"km_from": 49.74, "km_to": 50.76, "bearing": 175, "lat": 45.7004, "lon": 13.3833, "climb_m": 0, "climb_total": 51}, {"km_from": 50.76, "km_to": 51.78, "bearing": 174, "lat": 45.6913, "lon": 13.3845, "climb_m": 1, "climb_total": 52}, {"km_from": 51.78, "km_to": 52.78, "bearing": 166, "lat": 45.6829, "lon": 13.3865, "climb_m": 5, "climb_total": 57}, {"km_from": 52.78, "km_to": 53.1, "bearing": 70, "lat": 45.6795, "lon": 13.3891, "climb_m": 3, "climb_total": 60}]}</script>
+<script>// Addons for the stage weather page: wind relative to the riding direction, and trail reports from guests.
+// Loaded after the main script; uses its globals (P, forecast, addDays, localParts, todayLocal, fmtDate, HORIZON_DAYS).
+(function(){
+const W = JSON.parse(document.getElementById('wind-data').textContent || '{}');
+const FLAT_KMH = 16, CLIMB_MH = 600;            // riding model: 16 km/h on the flat, 600 m of climbing per hour
+const SIG_KMH = 8;                              // wind component that counts as head- or tailwind
+const REPORT_DAYS = 14;                         // reports older than this are not shown
+const RKEY = 'stage-weather:reports:v1';
+
+const store = {
+  get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const startHour = () => +(store.get('stage-weather:start-hour', 9));
+
+// ---------- wind ----------
+function nearest(pts, lat, lon){
+  let best = pts[0], bd = Infinity;
+  for(const p of pts){ const d = (p.lat-lat)**2 + ((p.lon-lon)*Math.cos(lat*Math.PI/180))**2; if(d < bd){ bd = d; best = p; } }
+  return best;
+}
+function stepAt(series, date, hourFloat){
+  let best = null, bd = Infinity;
+  for(const s of series){
+    const {date:d, hour:h} = localParts(s.time);
+    if(d !== date) continue;
+    const diff = Math.abs(h - hourFloat);
+    if(diff < bd){ bd = diff; best = s; }
+  }
+  return bd <= 3.5 ? best : null;   // 6-hour steps further out: still the nearest step
+}
+const hhmm = h => `${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
+
+async function windFor(stage, date){
+  const segs = W[stage.wind_key || String(stage.stage)];   // wind_key: the guest's chosen route ("4:7366")
+  if(!segs || !segs.length) return null;
+  const climbScale = stage.gain_m && segs[segs.length-1].climb_total ? stage.gain_m / segs[segs.length-1].climb_total : 1;
+  const series = {};
+  for(const pt of stage.points){ try{ series[pt.lat+','+pt.lon] = (await forecast(pt)).series; }catch(e){} }
+  const out = [];
+  for(const g of segs){
+    const hours = g.km_to / FLAT_KMH + (g.climb_total * climbScale) / CLIMB_MH;
+    const at = startHour() + hours;
+    const pt = nearest(stage.points, g.lat, g.lon);
+    const ser = series[pt.lat+','+pt.lon];
+    const st = ser && stepAt(ser, date, at);
+    if(!st) return null;
+    const det = st.data.instant.details;
+    const ws = (det.wind_speed || 0) * 3.6;
+    // wind_from_direction: where the wind comes FROM; riding into it = headwind
+    const comp = ws * Math.cos((det.wind_from_direction - g.bearing) * Math.PI / 180);
+    const kind = comp >= SIG_KMH ? 'head' : comp <= -SIG_KMH ? 'tail' : 'cross';
+    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind});
+  }
+  return out;
+}
+
+function stretches(segs, kind){
+  const res = []; let cur = null;
+  for(const s of segs){
+    if(s.kind === kind){ if(!cur) cur = {from:s.km_from, to:s.km_to, t0:s.at, t1:s.at, max:Math.abs(s.comp)}; else { cur.to = s.km_to; cur.t1 = s.at; cur.max = Math.max(cur.max, Math.abs(s.comp)); } }
+    else if(cur){ res.push(cur); cur = null; }
+  }
+  if(cur) res.push(cur);
+  return res.filter(r => r.to - r.from >= 2);    // shorter than 2 km is not worth telling
+}
+
+function windHTML(segs, stage){
+  const total = segs[segs.length-1].km_to;
+  const km = k => Math.round(segs.filter(s=>s.kind===k).reduce((a,s)=>a+(s.km_to-s.km_from),0));
+  const bar = segs.map(s => `<span class="wseg ${s.kind}" style="flex:${(s.km_to-s.km_from).toFixed(2)}" title="km ${s.km_from.toFixed(0)}–${s.km_to.toFixed(0)} · ${hhmm(s.at)} · ${s.kind==='head'?'headwind':s.kind==='tail'?'tailwind':'crosswind or calm'} ${Math.abs(s.comp)} km/h"></span>`).join('');
+  const head = stretches(segs,'head').sort((a,b)=>(b.to-b.from)-(a.to-a.from)).slice(0,2);
+  const lines = head.map(h => `<li>Headwind km ${Math.round(h.from)}–${Math.round(h.to)} (about ${hhmm(h.t0)}–${hhmm(h.t1)}), up to ${Math.round(h.max)} km/h against you</li>`);
+  const tail = stretches(segs,'tail').sort((a,b)=>(b.to-b.from)-(a.to-a.from))[0];
+  if(tail) lines.push(`<li>Tailwind km ${Math.round(tail.from)}–${Math.round(tail.to)} (about ${hhmm(tail.t0)}–${hhmm(tail.t1)})</li>`);
+  return `<div class="wind">
+    <div class="lbl">Wind on the road · leaving at
+      <select class="wstart">${[7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <div class="wbar">${bar}</div>
+    <div class="wscale"><span>0 km</span><span>${Math.round(total)} km</span></div>
+    <p class="wsum"><span class="key head"></span>Headwind ${km('head')} km · <span class="key tail"></span>tailwind ${km('tail')} km · <span class="key cross"></span>crosswind or calm ${km('cross')} km</p>
+    ${lines.length ? `<ul class="facts">${lines.join('')}</ul>` : ''}
+    <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
+  </div>`;
+}
+
+// ---------- trail reports ----------
+// PROTOTYPE: reports are saved only in this browser. The shared store (all guests of the product) is still to be decided.
+const TAGS = ['Muddy','Washed out','Closed','Detour signed','Busy traffic','Water point dry','Café closed','All good'];
+function reports(){ return store.get(RKEY, []); }
+function reportsHTML(stage, date){
+  const since = addDays(todayLocal(), -REPORT_DAYS);
+  const list = reports().filter(r => r.product === P.product && r.stage === stage.stage && r.date >= since)
+    .sort((a,b)=> b.date.localeCompare(a.date));
+  const rel = d => { const n = Math.round((Date.parse(date)-Date.parse(d))/864e5); return n>0 ? `${n} day${n>1?'s':''} before you` : n===0 ? 'the same day' : `${-n} day${n<-1?'s':''} after`; };
+  const items = list.map(r => `<li><span class="rtag">${r.tags.join(', ')}</span>${r.km!=null?` · km ${r.km}`:''}<br>${escapeHTML(r.text)}<br>
+      <span class="lbl">A guest on ${fmtDate(r.date)} · ${rel(r.date)}</span></li>`).join('');
+  return `<div class="reports">
+    <div class="lbl">On the trail: reports from guests (last ${REPORT_DAYS} days)</div>
+    ${items ? `<ul class="rlist">${items}</ul>` : `<p class="later">No reports for this stage in the last ${REPORT_DAYS} days.</p>`}
+    <details class="radd"><summary>Rode this stage today? Tell the next guests</summary>
+      <form data-stage="${stage.stage}">
+        <div class="rtags">${TAGS.map(t=>`<label><input type="checkbox" value="${t}"> ${t}</label>`).join('')}</div>
+        <input type="number" name="km" min="0" max="${Math.ceil(stage.km||200)}" placeholder="At km (optional)">
+        <textarea name="text" maxlength="280" rows="2" placeholder="What should the next guests know? (no names, please)"></textarea>
+        <button type="submit">Share</button>
+        <span class="lbl">Prototype: saved on this device only.</span>
+      </form>
+    </details>
+  </div>`;
+}
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+document.addEventListener('submit', e => {
+  const f = e.target.closest('.radd form'); if(!f) return;
+  e.preventDefault();
+  const tags = [...f.querySelectorAll('input[type=checkbox]:checked')].map(i=>i.value);
+  const text = f.text.value.trim();
+  if(!tags.length && !text) return;
+  const km = f.km.value === '' ? null : +f.km.value;
+  const all = reports();
+  all.push({product:P.product, stage:+f.dataset.stage, date:todayLocal(), tags: tags.length?tags:['Note'], km, text});
+  store.set(RKEY, all);
+  render();
+});
+document.addEventListener('change', e => {
+  if(e.target.classList && e.target.classList.contains('wstart')){ store.set('stage-weather:start-hour', +e.target.value); render(); }
+});
+
+// ---------- hook into the page ----------
+async function addons(){
+  const start = document.getElementById('start').value;
+  if(!start) return;
+  const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
+  for(const s of P.stages){
+    const sec = document.getElementById('s'+s.stage); if(!sec) continue;
+    sec.querySelectorAll('.wind,.reports').forEach(n=>n.remove());
+    const date = addDays(start, s.day-1);
+    if(date >= today && date <= lastDay){
+      try{ const w = await windFor(s, date); if(w) sec.insertAdjacentHTML('beforeend', windHTML(w, s)); }catch(e){}
+    }
+    // build_addons.py --no-reports switches them off (public page until reports have a shared, reviewed store)
+    if(window.STAGE_WEATHER_REPORTS !== false && (s.parts || []).length) sec.insertAdjacentHTML('beforeend', reportsHTML(s, date));
+  }
+}
+const base = render;
+// eslint-disable-next-line no-global-assign
+render = async function(){ await base(); await addons(); };
+addons();
+})();
+</script>
+</body>
+</html>
