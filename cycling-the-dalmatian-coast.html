@@ -162,8 +162,9 @@ function symbolFrom(precip, snow, cloudPct){
   }
   return cloudPct < 15 ? 'clearsky_day' : cloudPct < 40 ? 'fair_day' : cloudPct < 75 ? 'partlycloudy_day' : 'cloudy';
 }
-function step(time, t, wind, gust, precip, symbol, src){
-  return {time, src, data: {instant: {details: {air_temperature: t, wind_speed: wind, wind_speed_of_gust: gust}},
+// dir: degrees the wind comes FROM, as met.no's wind_from_direction (wind on the road needs it)
+function step(time, t, wind, gust, precip, symbol, src, dir){
+  return {time, src, data: {instant: {details: {air_temperature: t, wind_speed: wind, wind_speed_of_gust: gust, wind_from_direction: dir}},
           next_1_hours: {summary: {symbol_code: symbol}, details: {precipitation_amount: precip}}}};
 }
 
@@ -174,9 +175,11 @@ function geoSeries(feature, ts){
   const P = feature.properties.parameters, out = [];
   // a value at hour t covers the hour that ENDS at t; met.no's next_1_hours covers the hour that STARTS at the step
   for(let i = 0; i < ts.length - 1; i++){
-    const j = i + 1, wind = Math.hypot(P['10u'].data[i], P['10v'].data[i]);
+    const j = i + 1, u = P['10u'].data[i], v = P['10v'].data[i], wind = Math.hypot(u, v);
+    // u/v point where the air goes; the wind comes FROM the opposite direction
+    const dir = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360;
     out.push(step(new Date(ts[i]).toISOString(), P['2t'].data[i], wind, P['10fg'].data[j],
-                  P.tp.data[j], symbolFrom(P.tp.data[j], P.sf.data[j], P.tcc.data[j]), 'geosphere'));
+                  P.tp.data[j], symbolFrom(P.tp.data[j], P.sf.data[j], P.tcc.data[j]), 'geosphere', dir));
   }
   return out;
 }
@@ -215,12 +218,12 @@ function forecastNws(pt){
         for(let k = 0; k < h; k++) m.set(t0 + k*3600e3, spread ? (v.value || 0) / h : v.value); }
       return m; };
     const T = per('temperature'), W = per('windSpeed'), Gu = per('windGust'), R = per('quantitativePrecipitation', true),
-          C = per('skyCover'), TH = per('probabilityOfThunder');
+          C = per('skyCover'), TH = per('probabilityOfThunder'), D = per('windDirection');
     const out = [];
     for(const [t, temp] of [...T.entries()].sort((a, b) => a[0] - b[0])){
       const p = R.get(t) || 0, sym = symbolFrom(p, 0, C.get(t) ?? 50);
       const e = step(new Date(t).toISOString(), temp, (W.get(t) || 0) / 3.6, Gu.has(t) ? Gu.get(t) / 3.6 : undefined, p,
-                     (TH.get(t) || 0) >= 30 && p >= 0.1 ? 'rainandthunder' : sym, 'nws');
+                     (TH.get(t) || 0) >= 30 && p >= 0.1 ? 'rainandthunder' : sym, 'nws', D.get(t));
       e.data.next_1_hours.details.probability_of_thunder = TH.get(t) || 0;
       out.push(e);
     }
