@@ -36,6 +36,12 @@ h1{font-size:1.45rem;margin:0 0 4px}
 .facts{font-size:.92rem;margin:0;padding:0;list-style:none}
 .facts li{margin:2px 0}
 .rain{color:var(--rain)}
+.planb{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.92rem}
+.planb summary{cursor:pointer;font-weight:600}
+.planb.rough{border-color:var(--warn-ink);background:var(--warn-bg)}
+.planb ul,.planb-all ul{margin:6px 0;padding-left:18px}
+.planb li{margin:6px 0}
+.planb-all{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .choice{margin:6px 0 2px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .pick{font:inherit;font-size:.85rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line);
   background:var(--bg);color:var(--ink);cursor:pointer}
@@ -59,6 +65,7 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
     <input type="date" id="start">
   </div>
   <p class="status" id="status"></p>
+  <div id="planb-all"></div>
   <div id="stages"></div>
   <footer>
     <p>Forecast for the highest point and the finish of each stage (on days without a stage, for the town), for daytime hours (08:00–18:00 local time).
@@ -68,7 +75,7 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Cycling the Dalmatian Coast", "timezone": "Europe/Zagreb", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Split", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Split", "lat": 43.5082, "lon": 16.4388, "ele": null}]}, {"stage": 2, "day": 2, "title": "Exploring the Island of Brač", "kind": "route_day", "route_name": "Split -> Bol", "ops_route": 2972, "parts": [{"ops_route": 3228, "name": "Supetar Ferry Harbour -> Bol", "rwgps_id": "57480201"}], "km": 43.9, "gain_m": 787, "points": [{"role": "high", "label": "Highest point", "lat": 43.2774, "lon": 16.7108, "ele": 441}, {"role": "end", "label": "Finish · Bol", "lat": 43.2614, "lon": 16.6566, "ele": 6}]}, {"stage": 3, "day": 3, "title": "Zlatni Rat and Vidova Gora", "kind": "route_day", "route_name": "Bol -> Milna", "ops_route": 3026, "parts": [{"ops_route": 3026, "name": "Bol -> Milna", "rwgps_id": "57469552"}], "km": 41.4, "gain_m": 883, "points": [{"role": "high", "label": "Highest point", "lat": 43.2932, "lon": 16.5691, "ele": 604}, {"role": "end", "label": "Finish · Milna", "lat": 43.327, "lon": 16.4481, "ele": 4}]}, {"stage": 4, "day": 4, "title": "Lavender Roads and UNESCO Heritage in Hvar Town", "kind": "route_day", "route_name": "Milna -> Sveta Nedjelja -> Hvar", "ops_route": 3080, "parts": [{"ops_route": 543, "name": "Hvar Ferry Harbour -> Sveta Nedjelja -> Villa Nora Hotel", "rwgps_id": "56421992"}], "km": 35.6, "gain_m": 888, "points": [{"role": "high", "label": "Highest point", "lat": 43.1467, "lon": 16.5487, "ele": 177}, {"role": "end", "label": "Finish · Hvar", "lat": 43.1727, "lon": 16.4425, "ele": 15}], "options": [{"route_name": "Milna -> Sveta Nedjelja -> Hvar", "ops_route": 3080, "parts": [{"ops_route": 543, "name": "Hvar Ferry Harbour -> Sveta Nedjelja -> Villa Nora Hotel", "rwgps_id": "56421992"}], "km": 35.6, "gain_m": 888, "points": [{"role": "high", "label": "Highest point", "lat": 43.1467, "lon": 16.5487, "ele": 177}, {"role": "end", "label": "Finish · Hvar", "lat": 43.1727, "lon": 16.4425, "ele": 15}], "key": "3080", "label": "via Sveta Nedjelja"}, {"route_name": "Milna -> Jelsa -> Hvar", "ops_route": 7366, "parts": [{"ops_route": 4655, "name": "Hvar Ferry Harbour -> Jelsa -> Villa Nora Hotel", "rwgps_id": "55222177"}], "km": 62.4, "gain_m": 1152, "points": [{"role": "high", "label": "Highest point", "lat": 43.1805, "lon": 16.5217, "ele": 410}, {"role": "end", "label": "Finish · Hvar", "lat": 43.1726, "lon": 16.4427, "ele": 14}], "key": "7366", "label": "via Jelsa"}]}, {"stage": 5, "day": 5, "title": "Exploring the Heritage of Korčula Island", "kind": "route_day", "route_name": "Hvar -> Pupnat -> Korčula", "ops_route": 2765, "parts": [{"ops_route": 3230, "name": "Korčula Ferry Harbour -> Pupnat -> Korčula", "rwgps_id": "57480291"}], "km": 39.8, "gain_m": 690, "points": [{"role": "high", "label": "Highest point", "lat": 42.9517, "lon": 17.0469, "ele": 351}, {"role": "end", "label": "Finish · Korčula", "lat": 42.951, "lon": 17.1447, "ele": 13}], "options": [{"route_name": "Hvar -> Pupnat -> Korčula", "ops_route": 2765, "parts": [{"ops_route": 3230, "name": "Korčula Ferry Harbour -> Pupnat -> Korčula", "rwgps_id": "57480291"}], "km": 39.8, "gain_m": 690, "points": [{"role": "high", "label": "Highest point", "lat": 42.9517, "lon": 17.0469, "ele": 351}, {"role": "end", "label": "Finish · Korčula", "lat": 42.951, "lon": 17.1447, "ele": 13}], "key": "2765", "label": "via Pupnat"}, {"route_name": "Hvar -> Žrnovo -> Korčula", "ops_route": 7368, "parts": [{"ops_route": 4662, "name": "Korčula Ferry Harbour -> Žrnovo -> Marko Polo Maradiso Hotel", "rwgps_id": "57730482"}], "km": 43.3, "gain_m": 676, "points": [{"role": "high", "label": "Highest point", "lat": 42.9517, "lon": 17.0469, "ele": 351}, {"role": "end", "label": "Finish · Korčula", "lat": 42.9557, "lon": 17.1374, "ele": 16}], "key": "7368", "label": "via Žrnovo"}]}, {"stage": 6, "day": 6, "title": "Discovering Dubrovnik", "kind": "route_day", "route_name": "Korčula -> Dubrovnik", "ops_route": 2865, "points": [{"role": "place", "label": "Dubrovnik", "lat": 42.6507, "lon": 18.0944, "ele": null}]}, {"stage": 7, "day": 7, "title": "Departure from Dubrovnik", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Dubrovnik", "lat": 42.6507, "lon": 18.0944, "ele": null}]}]}</script>
+<script id="product-data" type="application/json">{"product": "Cycling the Dalmatian Coast", "timezone": "Europe/Zagreb", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Split", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Split", "lat": 43.5082, "lon": 16.4388, "ele": null}]}, {"stage": 2, "day": 2, "title": "Exploring the Island of Brač", "kind": "route_day", "route_name": "Split -> Bol", "ops_route": 2972, "parts": [{"ops_route": 3228, "name": "Supetar Ferry Harbour -> Bol", "rwgps_id": "57480201"}], "km": 43.9, "gain_m": 787, "points": [{"role": "high", "label": "Highest point", "lat": 43.2774, "lon": 16.7108, "ele": 441}, {"role": "end", "label": "Finish · Bol", "lat": 43.2614, "lon": 16.6566, "ele": 6}]}, {"stage": 3, "day": 3, "title": "Zlatni Rat and Vidova Gora", "kind": "route_day", "route_name": "Bol -> Milna", "ops_route": 3026, "parts": [{"ops_route": 3026, "name": "Bol -> Milna", "rwgps_id": "57469552"}], "km": 41.4, "gain_m": 883, "points": [{"role": "high", "label": "Highest point", "lat": 43.2932, "lon": 16.5691, "ele": 604}, {"role": "end", "label": "Finish · Milna", "lat": 43.327, "lon": 16.4481, "ele": 4}]}, {"stage": 4, "day": 4, "title": "Lavender Roads and UNESCO Heritage in Hvar Town", "kind": "route_day", "route_name": "Milna -> Sveta Nedjelja -> Hvar", "ops_route": 3080, "parts": [{"ops_route": 543, "name": "Hvar Ferry Harbour -> Sveta Nedjelja -> Villa Nora Hotel", "rwgps_id": "56421992"}], "km": 35.6, "gain_m": 888, "points": [{"role": "high", "label": "Highest point", "lat": 43.1467, "lon": 16.5487, "ele": 177}, {"role": "end", "label": "Finish · Hvar", "lat": 43.1727, "lon": 16.4425, "ele": 15}], "options": [{"route_name": "Milna -> Sveta Nedjelja -> Hvar", "ops_route": 3080, "parts": [{"ops_route": 543, "name": "Hvar Ferry Harbour -> Sveta Nedjelja -> Villa Nora Hotel", "rwgps_id": "56421992"}], "km": 35.6, "gain_m": 888, "points": [{"role": "high", "label": "Highest point", "lat": 43.1467, "lon": 16.5487, "ele": 177}, {"role": "end", "label": "Finish · Hvar", "lat": 43.1727, "lon": 16.4425, "ele": 15}], "key": "3080", "label": "via Sveta Nedjelja"}, {"route_name": "Milna -> Jelsa -> Hvar", "ops_route": 7366, "parts": [{"ops_route": 4655, "name": "Hvar Ferry Harbour -> Jelsa -> Villa Nora Hotel", "rwgps_id": "55222177"}], "km": 62.4, "gain_m": 1152, "points": [{"role": "high", "label": "Highest point", "lat": 43.1805, "lon": 16.5217, "ele": 410}, {"role": "end", "label": "Finish · Hvar", "lat": 43.1726, "lon": 16.4427, "ele": 14}], "key": "7366", "label": "via Jelsa"}]}, {"stage": 5, "day": 5, "title": "Exploring the Heritage of Korčula Island", "kind": "route_day", "route_name": "Hvar -> Pupnat -> Korčula", "ops_route": 2765, "parts": [{"ops_route": 3230, "name": "Korčula Ferry Harbour -> Pupnat -> Korčula", "rwgps_id": "57480291"}], "km": 39.8, "gain_m": 690, "points": [{"role": "high", "label": "Highest point", "lat": 42.9517, "lon": 17.0469, "ele": 351}, {"role": "end", "label": "Finish · Korčula", "lat": 42.951, "lon": 17.1447, "ele": 13}], "options": [{"route_name": "Hvar -> Pupnat -> Korčula", "ops_route": 2765, "parts": [{"ops_route": 3230, "name": "Korčula Ferry Harbour -> Pupnat -> Korčula", "rwgps_id": "57480291"}], "km": 39.8, "gain_m": 690, "points": [{"role": "high", "label": "Highest point", "lat": 42.9517, "lon": 17.0469, "ele": 351}, {"role": "end", "label": "Finish · Korčula", "lat": 42.951, "lon": 17.1447, "ele": 13}], "key": "2765", "label": "via Pupnat"}, {"route_name": "Hvar -> Žrnovo -> Korčula", "ops_route": 7368, "parts": [{"ops_route": 4662, "name": "Korčula Ferry Harbour -> Žrnovo -> Marko Polo Maradiso Hotel", "rwgps_id": "57730482"}], "km": 43.3, "gain_m": 676, "points": [{"role": "high", "label": "Highest point", "lat": 42.9517, "lon": 17.0469, "ele": 351}, {"role": "end", "label": "Finish · Korčula", "lat": 42.9557, "lon": 17.1374, "ele": 16}], "key": "7368", "label": "via Žrnovo"}]}, {"stage": 6, "day": 6, "title": "Discovering Dubrovnik", "kind": "route_day", "route_name": "Korčula -> Dubrovnik", "ops_route": 2865, "points": [{"role": "place", "label": "Dubrovnik", "lat": 42.6507, "lon": 18.0944, "ele": null}]}, {"stage": 7, "day": 7, "title": "Departure from Dubrovnik", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Dubrovnik", "lat": 42.6507, "lon": 18.0944, "ele": null}]}], "planb": {"all": [], "by_day": {"2": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": {"name": "Taxi Kačavida", "area": "Brač, from Supetar", "phone": "+385 91 522 4379", "website": "http://taxi-supetar-brac.com/", "note": "Vans for up to 8 passengers.", "bikes_confirmed": false}, "must": "When you call, you must say that you have bikes and how many, so they send a vehicle that fits them."}], "3": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": {"name": "Taxi Kačavida", "area": "Brač, from Supetar", "phone": "+385 91 522 4379", "website": "http://taxi-supetar-brac.com/", "note": "Vans for up to 8 passengers.", "bikes_confirmed": false}, "must": "When you call, you must say that you have bikes and how many, so they send a vehicle that fits them."}], "4": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": {"name": "Hvar Taxi", "area": "Hvar, whole island", "phone": "+385 91 534 0538", "website": "https://hvartransfer.com", "note": "Vans and a 17-seat minibus.", "bikes_confirmed": false}, "must": "When you call, you must say that you have bikes and how many, so they send a vehicle that fits them."}], "5": [{"kind": "fallback", "text": "If there is no shortcut on this day, you can wait at your hotel until the weather improves, or call a local taxi that also carries bikes. You pay the taxi yourself.", "taxi": {"name": "Kaleta Travel", "area": "Korčula town", "phone": "+385 98 244 761", "website": "https://kaleta.hr/transfers/", "note": "Their vehicles carry bicycles.", "bikes_confirmed": true}, "must": "When you call, you must say that you have bikes and how many, so they send a vehicle that fits them."}]}}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -226,6 +233,39 @@ document.getElementById('stages').addEventListener('click', e => {
   render();
 });
 
+// ---------- Plan B (from the product's dossier in Prodigy, checked by a PD; guest wording approved) ----------
+// a day is "rough" when the forecast has thunder, heavy rain or strong wind: then the day's options open by themselves
+function isRough(v){ return !!v && ((v.worst||'').includes('thunder') || v.thunderP >= 20 || v.precip >= 10 || v.wind >= 40); }
+function esc(t){ return String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function legHTML(l){
+  const meta = [l.operator, l.freq, l.months, l.booking && l.booking !== 'Not needed' ? `booking: ${l.booking}` : ''].filter(Boolean).map(esc).join(' · ');
+  return `<li><strong>${esc(l.how)}</strong> ${esc(l.from)} → ${esc(l.to)}
+    ${meta ? `<br><span class="lbl">${meta}</span>` : ''}
+    ${l.runs ? `<br>${esc(l.runs)}` : ''}
+    ${l.link ? `<br><a href="${esc(l.link)}" target="_blank" rel="noopener">Timetable and prices</a>` : ''}${l.checked ? ` <span class="lbl">(checked ${esc(l.checked)})</span>` : ''}</li>`;
+}
+function fallbackHTML(e){
+  const t = e.taxi;
+  const taxi = t ? `<br><strong>${esc(t.name)}</strong>${t.area ? ` · ${esc(t.area)}` : ''}
+    ${t.phone ? `<br><a href="tel:${esc(t.phone.replace(/[^+\d]/g,''))}">${esc(t.phone)}</a>` : ''}${t.website ? ` · <a href="${esc(t.website)}" target="_blank" rel="noopener">website</a>` : ''}
+    ${t.note ? `<br><span class="lbl">${esc(t.note)}</span>` : ''}
+    ${e.must ? `<br><strong>${esc(e.must)}</strong>` : ''}` : '';
+  return `<li>${esc(e.text)}${taxi}</li>`;
+}
+function planbHTML(s, rough){
+  const items = ((P.planb || {}).by_day || {})[String(s.day)] || [];
+  if(!items.length) return '';
+  const body = items.map(e => e.kind === 'leg' ? legHTML(e) : e.kind === 'fallback' ? fallbackHTML(e) : `<li>${esc(e.text)}</li>`).join('');
+  return `<details class="planb${rough ? ' rough' : ''}"${rough ? ' open' : ''}>
+    <summary>${rough ? 'Rough weather forecast: your options on this day' : 'If the weather turns: options on this day'}</summary>
+    <ul>${body}</ul><p class="lbl">You decide whether to walk; these are the options, with their sources.</p></details>`;
+}
+function planbAllHTML(){
+  const all = (P.planb || {}).all || [];
+  if(!all.length) return '';
+  return `<div class="planb-all"><strong>If the weather turns</strong><ul>${all.map(e => `<li>${esc(e.text)}</li>`).join('')}</ul></div>`;
+}
+
 async function render(){
   const start = document.getElementById('start').value;
   const box = document.getElementById('stages'), status = document.getElementById('status');
@@ -237,12 +277,14 @@ async function render(){
     return `<section class="stage" id="s${s.stage}">
       <h2>Day ${s.day} · ${s.title}</h2>${choiceHTML(s)}
       <div class="meta">${fmtDate(date)}${s.km != null ? ` · ${s.km} km · ${s.gain_m} m ascent` : ''}</div>
-      <div class="pts"><p class="later">Loading…</p></div></section>`;
+      <div class="pts"><p class="later">Loading…</p></div><div class="planb-slot">${planbHTML(s, false)}</div></section>`;
   }).join('');
+  document.getElementById('planb-all').innerHTML = planbAllHTML();
   let stamps = [], offline = false, failed = 0;
   for(const s of P.stages){
     const date = addDays(start, s.day-1);
     const el = document.querySelector(`#s${s.stage} .pts`);
+    let notable = false;
     if(date < today){ el.innerHTML = `<p class="later">This day is in the past.</p>`; continue; }
     if(date > lastDay){
       el.innerHTML = s.points.map(pt=>pointHTML(pt,null)).join('') ;
@@ -251,10 +293,16 @@ async function render(){
     }
     const parts = [];
     for(const pt of s.points){
-      try{ const f = await forecast(pt); stamps.push(f.fetched); offline = offline || f.fromCache; parts.push(pointHTML(pt, dayView(f.series, date))); }
+      try{
+        const f = await forecast(pt); stamps.push(f.fetched); offline = offline || f.fromCache;
+        const v = dayView(f.series, date);
+        if(isRough(v)) notable = true;
+        parts.push(pointHTML(pt, v));
+      }
       catch(e){ failed++; parts.push(`<div class="pt"><div class="lbl">${pt.label}</div><p class="later">The forecast could not be loaded (no connection?). <a href="${yrLink(pt)}">yr.no</a></p></div>`); }
     }
     el.innerHTML = parts.join('');
+    if(notable) document.querySelector(`#s${s.stage} .planb-slot`).innerHTML = planbHTML(s, true);
   }
   const oldest = stamps.length ? Math.min(...stamps) : null;
   status.textContent = oldest
