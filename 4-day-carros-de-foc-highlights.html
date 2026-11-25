@@ -78,7 +78,7 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "4-Day Carros de Foc Highlights", "timezone": "Europe/Madrid", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Espot and ascent to Refugi Ernest Mallafré", "kind": "route_day", "route_name": "Espot -> Refugi Ernest Mallafré", "ops_route": 3702, "parts": [{"ops_route": 3702, "name": "Espot -> Refugi Ernest Mallafré", "rwgps_id": "57650529"}], "km": 7.6, "gain_m": 569, "points": [{"role": "high", "label": "Highest point", "lat": 42.5789, "lon": 1.0089, "ele": 1898}, {"role": "end", "label": "Finish · Refugi Ernest Mallafré", "lat": 42.5788, "lon": 1.009, "ele": 1898}]}, {"stage": 2, "day": 2, "title": "Refugi Ernest Mallafré — Refugi d’Estany Llong", "kind": "route_day", "route_name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "ops_route": 722, "parts": [{"ops_route": 722, "name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "rwgps_id": "51066143"}], "km": 8.0, "gain_m": 531, "points": [{"role": "high", "label": "Highest point", "lat": 42.5785, "lon": 0.9734, "ele": 2429}, {"role": "end", "label": "Finish · Refugi d'Estany Llong", "lat": 42.5727, "lon": 0.9423, "ele": 1992}]}, {"stage": 3, "day": 3, "title": "Refugi d’Estany Llong — Refugi Josep Maria Blanc", "kind": "route_day", "route_name": "Refugi d'Estany Llong -> Refugi J M Blanc", "ops_route": 723, "parts": [{"ops_route": 723, "name": "Refugi d'Estany Llong -> Refugi J M Blanc", "rwgps_id": "54783698"}], "km": 17.8, "gain_m": 984, "points": [{"role": "high", "label": "Highest point", "lat": 42.5299, "lon": 1.0215, "ele": 2662}, {"role": "end", "label": "Finish · Refugi J M Blanc", "lat": 42.5456, "lon": 1.0442, "ele": 2312}]}, {"stage": 4, "day": 4, "title": "Refugi Josep Maria Blanc — Espot", "kind": "route_day", "route_name": "Refugi Josep Maria Blanc -> Espot", "ops_route": 3700, "parts": [{"ops_route": 3700, "name": "Refugi Josep Maria Blanc -> Espot", "rwgps_id": "57650526"}], "km": 7.0, "gain_m": 0, "points": [{"role": "high", "label": "Highest point", "lat": 42.5453, "lon": 1.0442, "ele": 2318}, {"role": "end", "label": "Finish · Espot", "lat": 42.5757, "lon": 1.0884, "ele": 1318}]}]}</script>
+<script id="product-data" type="application/json">{"product": "4-Day Carros de Foc Highlights", "timezone": "Europe/Madrid", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Espot and ascent to Refugi Ernest Mallafré", "kind": "route_day", "route_name": "Espot -> Refugi Ernest Mallafré", "ops_route": 3702, "parts": [{"ops_route": 3702, "name": "Espot -> Refugi Ernest Mallafré", "rwgps_id": "57650529"}], "km": 7.6, "gain_m": 569, "points": [{"role": "high", "label": "Highest point", "lat": 42.5789, "lon": 1.0089, "ele": 1898}, {"role": "end", "label": "Finish · Refugi Ernest Mallafré", "lat": 42.5788, "lon": 1.009, "ele": 1898}]}, {"stage": 2, "day": 2, "title": "Refugi Ernest Mallafré — Refugi d’Estany Llong", "kind": "route_day", "route_name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "ops_route": 722, "parts": [{"ops_route": 722, "name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "rwgps_id": "51066143"}], "km": 8.0, "gain_m": 531, "points": [{"role": "high", "label": "Highest point", "lat": 42.5785, "lon": 0.9734, "ele": 2429}, {"role": "end", "label": "Finish · Refugi d'Estany Llong", "lat": 42.5727, "lon": 0.9423, "ele": 1992}]}, {"stage": 3, "day": 3, "title": "Refugi d’Estany Llong — Refugi Josep Maria Blanc", "kind": "route_day", "route_name": "Refugi d'Estany Llong -> Refugi J M Blanc", "ops_route": 723, "parts": [{"ops_route": 723, "name": "Refugi d'Estany Llong -> Refugi J M Blanc", "rwgps_id": "54783698"}], "km": 17.8, "gain_m": 984, "points": [{"role": "high", "label": "Highest point", "lat": 42.5299, "lon": 1.0215, "ele": 2662}, {"role": "end", "label": "Finish · Refugi J M Blanc", "lat": 42.5456, "lon": 1.0442, "ele": 2312}]}, {"stage": 4, "day": 4, "title": "Refugi Josep Maria Blanc — Espot", "kind": "route_day", "route_name": "Refugi Josep Maria Blanc -> Espot", "ops_route": 3700, "parts": [{"ops_route": 3700, "name": "Refugi Josep Maria Blanc -> Espot", "rwgps_id": "57650526"}], "km": 7.0, "gain_m": 0, "points": [{"role": "high", "label": "Highest point", "lat": 42.5453, "lon": 1.0442, "ele": 2318}, {"role": "end", "label": "Finish · Espot", "lat": 42.5757, "lon": 1.0884, "ele": 1318}]}], "vertical": "Hiking"}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -323,6 +323,13 @@ function pointHTML(pt, v){
   </div>`;
 }
 
+// ---------- the date of each day ----------
+// Day N is the arrival date + N-1, unless the link says otherwise: a sold tour can have extra nights, so a per-tour
+// link (tour_links.py) carries the real date of those days: ?dt=2:2027-05-09,3:2027-05-10
+const URL_DATES = Object.fromEntries((new URLSearchParams(location.search).get('dt') || '')
+  .split(',').filter(Boolean).map(x => x.split(':')).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x[1] || '')));
+function dayDate(start, s){ return URL_DATES[String(s.day)] || addDays(start, s.day - 1); }
+
 // ---------- route choice (days with more than one route) ----------
 // order: link (?r=4:7366,5:7368, made per tour from OPS) > the guest's own pick > the product default
 const OPTION_FIELDS = ['route_name','ops_route','parts','km','gain_m','points'];
@@ -398,14 +405,14 @@ async function render(){
   const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
   applyChoices();
   FC = new Map();
-  const due = P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+  const due = P.stages.filter(s => { const dt = dayDate(start, s); return dt >= today && dt <= addDays(today, 3); })
                       .flatMap(s => s.points).filter(pt => !(store.get(`geo:${pt.lat},${pt.lon}`)?.expires > Date.now()));
   GEO_BATCH = due.length ? geoBatch(due) : null;
-  GEO_DUE = new Set(P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+  GEO_DUE = new Set(P.stages.filter(s => { const dt = dayDate(start, s); return dt >= today && dt <= addDays(today, 3); })
                             .flatMap(s => s.points).map(pt => `${pt.lat},${pt.lon}`));
-  for(const s of P.stages){ const dt = addDays(start, s.day-1); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
+  for(const s of P.stages){ const dt = dayDate(start, s); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
   box.innerHTML = P.stages.map(s=>{
-    const date = addDays(start, s.day-1);
+    const date = dayDate(start, s);
     return `<section class="stage" id="s${s.stage}">
       <h2>Day ${s.day} · ${s.title}</h2>${choiceHTML(s)}
       <div class="meta">${fmtDate(date)}${s.km != null ? ` · ${s.km} km · ${s.gain_m} m ascent` : ''}</div>
@@ -414,7 +421,7 @@ async function render(){
   document.getElementById('planb-all').innerHTML = planbAllHTML();
   let stamps = [], offline = false, failed = 0;
   for(const s of P.stages){
-    const date = addDays(start, s.day-1);
+    const date = dayDate(start, s);
     const el = document.querySelector(`#s${s.stage} .pts`);
     let notable = false;
     if(date < today){ el.innerHTML = `<p class="later">This day is in the past.</p>`; continue; }
@@ -440,13 +447,13 @@ async function render(){
   status.textContent = oldest
     ? (offline ? `No connection: showing the forecast saved on ${fmtStamp(oldest)}.` : `Forecast updated ${fmtStamp(oldest)}.`)
     : (failed ? 'The forecast could not be loaded.' : 'None of your stages is within the next 9 days yet.');
-  try{ history.replaceState(null,'',`?start=${start}${choicesParam()}`); }catch(e){}
+  try{ const dt = Object.entries(URL_DATES).map(([d, v]) => `${d}:${v}`).join(','); history.replaceState(null,'',`?start=${start}${choicesParam()}${dt ? `&dt=${dt}` : ''}`); }catch(e){}
 }
 
 const qs = new URLSearchParams(location.search);
 const inp = document.getElementById('start');
 inp.value = qs.get('start') || store.get('start') || '';
-inp.addEventListener('change', ()=>{ store.set('start', inp.value); render(); });
+inp.addEventListener('change', ()=>{ store.set('start', inp.value); for(const k in URL_DATES) delete URL_DATES[k]; render(); });   // a new arrival date drops the tour's own dates
 render();
 </script>
 <script>
@@ -476,13 +483,19 @@ if ('serviceWorker' in navigator) {
 .rtags{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem}
 .radd input[type=number],.radd textarea{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 .radd button{justify-self:start;font:inherit;padding:6px 14px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
+
+.onway{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.onway .flagline{color:var(--warn-ink)}
 </style>
-<script id="wind-data" type="application/json">{}</script>
+<script id="wind-data" type="application/json">{"1": [{"km_from": 0.0, "km_to": 1.0, "bearing": 312, "lat": 42.579, "lon": 1.0831, "climb_m": 69, "climb_total": 69}, {"km_from": 1.0, "km_to": 2.04, "bearing": 286, "lat": 42.5831, "lon": 1.073, "climb_m": 110, "climb_total": 179}, {"km_from": 2.04, "km_to": 3.05, "bearing": 285, "lat": 42.5854, "lon": 1.0616, "climb_m": 117, "climb_total": 296}, {"km_from": 3.05, "km_to": 4.1, "bearing": 262, "lat": 42.5859, "lon": 1.05, "climb_m": 76, "climb_total": 372}, {"km_from": 4.1, "km_to": 5.16, "bearing": 246, "lat": 42.5834, "lon": 1.0382, "climb_m": 36, "climb_total": 408}, {"km_from": 5.16, "km_to": 6.18, "bearing": 268, "lat": 42.5814, "lon": 1.0266, "climb_m": 94, "climb_total": 502}, {"km_from": 6.18, "km_to": 7.19, "bearing": 265, "lat": 42.5809, "lon": 1.0158, "climb_m": 95, "climb_total": 597}, {"km_from": 7.19, "km_to": 7.59, "bearing": 217, "lat": 42.5797, "lon": 1.0099, "climb_m": 25, "climb_total": 623}], "2": [{"km_from": 0.0, "km_to": 1.07, "bearing": 280, "lat": 42.5795, "lon": 1.0042, "climb_m": 103, "climb_total": 103}, {"km_from": 1.07, "km_to": 2.09, "bearing": 290, "lat": 42.5813, "lon": 0.9948, "climb_m": 160, "climb_total": 262}, {"km_from": 2.09, "km_to": 3.13, "bearing": 254, "lat": 42.5816, "lon": 0.9856, "climb_m": 170, "climb_total": 432}, {"km_from": 3.13, "km_to": 4.16, "bearing": 249, "lat": 42.5796, "lon": 0.9773, "climb_m": 171, "climb_total": 603}, {"km_from": 4.16, "km_to": 5.17, "bearing": 243, "lat": 42.577, "lon": 0.9694, "climb_m": 1, "climb_total": 604}, {"km_from": 5.17, "km_to": 6.19, "bearing": 239, "lat": 42.5742, "lon": 0.9624, "climb_m": 0, "climb_total": 604}, {"km_from": 6.19, "km_to": 7.23, "bearing": 266, "lat": 42.5727, "lon": 0.9544, "climb_m": 3, "climb_total": 607}, {"km_from": 7.23, "km_to": 7.95, "bearing": 273, "lat": 42.5725, "lon": 0.9458, "climb_m": 13, "climb_total": 620}], "3": [{"km_from": 0.0, "km_to": 1.01, "bearing": 147, "lat": 42.5707, "lon": 0.944, "climb_m": 117, "climb_total": 117}, {"km_from": 1.01, "km_to": 2.03, "bearing": 198, "lat": 42.5656, "lon": 0.9444, "climb_m": 117, "climb_total": 234}, {"km_from": 2.03, "km_to": 3.05, "bearing": 208, "lat": 42.5599, "lon": 0.9412, "climb_m": 100, "climb_total": 334}, {"km_from": 3.05, "km_to": 4.06, "bearing": 134, "lat": 42.5543, "lon": 0.9435, "climb_m": 43, "climb_total": 378}, {"km_from": 4.06, "km_to": 5.09, "bearing": 144, "lat": 42.5477, "lon": 0.9512, "climb_m": 96, "climb_total": 474}, {"km_from": 5.09, "km_to": 6.09, "bearing": 122, "lat": 42.5423, "lon": 0.9589, "climb_m": 143, "climb_total": 616}, {"km_from": 6.09, "km_to": 7.1, "bearing": 131, "lat": 42.5377, "lon": 0.9672, "climb_m": 4, "climb_total": 621}, {"km_from": 7.1, "km_to": 8.1, "bearing": 160, "lat": 42.5319, "lon": 0.9728, "climb_m": 43, "climb_total": 664}, {"km_from": 8.1, "km_to": 9.11, "bearing": 144, "lat": 42.5254, "lon": 0.9776, "climb_m": 48, "climb_total": 712}, {"km_from": 9.11, "km_to": 10.11, "bearing": 125, "lat": 42.52, "lon": 0.9853, "climb_m": 29, "climb_total": 741}, {"km_from": 10.11, "km_to": 11.13, "bearing": 82, "lat": 42.5182, "lon": 0.9945, "climb_m": 98, "climb_total": 839}, {"km_from": 11.13, "km_to": 12.15, "bearing": 35, "lat": 42.5212, "lon": 1.0017, "climb_m": 49, "climb_total": 888}, {"km_from": 12.15, "km_to": 13.15, "bearing": 53, "lat": 42.5258, "lon": 1.0077, "climb_m": 108, "climb_total": 996}, {"km_from": 13.15, "km_to": 14.19, "bearing": 74, "lat": 42.5288, "lon": 1.0162, "climb_m": 154, "climb_total": 1150}, {"km_from": 14.19, "km_to": 15.21, "bearing": 31, "lat": 42.5333, "lon": 1.0239, "climb_m": 33, "climb_total": 1183}, {"km_from": 15.21, "km_to": 16.21, "bearing": 63, "lat": 42.5382, "lon": 1.0305, "climb_m": 7, "climb_total": 1190}, {"km_from": 16.21, "km_to": 17.22, "bearing": 61, "lat": 42.541, "lon": 1.0378, "climb_m": 16, "climb_total": 1205}, {"km_from": 17.22, "km_to": 17.75, "bearing": 33, "lat": 42.5441, "lon": 1.0428, "climb_m": 24, "climb_total": 1229}], "4": [{"km_from": 0.0, "km_to": 1.02, "bearing": 30, "lat": 42.5484, "lon": 1.0463, "climb_m": 12, "climb_total": 12}, {"km_from": 1.02, "km_to": 2.02, "bearing": 58, "lat": 42.5527, "lon": 1.0519, "climb_m": 23, "climb_total": 35}, {"km_from": 2.02, "km_to": 3.05, "bearing": 66, "lat": 42.5555, "lon": 1.0589, "climb_m": 4, "climb_total": 39}, {"km_from": 3.05, "km_to": 4.07, "bearing": 17, "lat": 42.5602, "lon": 1.0639, "climb_m": 23, "climb_total": 61}, {"km_from": 4.07, "km_to": 5.07, "bearing": 72, "lat": 42.5649, "lon": 1.0702, "climb_m": 3, "climb_total": 65}, {"km_from": 5.07, "km_to": 6.08, "bearing": 44, "lat": 42.5684, "lon": 1.0781, "climb_m": 1, "climb_total": 65}, {"km_from": 6.08, "km_to": 6.98, "bearing": 47, "lat": 42.5731, "lon": 1.0847, "climb_m": 1, "climb_total": 66}]}</script>
 <script>// Addons for the stage weather page: wind relative to the riding direction, and trail reports from guests.
 // Loaded after the main script; uses its globals (P, forecast, addDays, localParts, todayLocal, fmtDate, HORIZON_DAYS).
 (function(){
 const W = JSON.parse(document.getElementById('wind-data').textContent || '{}');
-const FLAT_KMH = 16, CLIMB_MH = 600;            // riding model: 16 km/h on the flat, 600 m of climbing per hour
+// pace model per vertical: on a bike 16 km/h on the flat and 600 m of climbing an hour; on foot 4 km/h and 300 m
+const BIKE = (P.vertical || '') === 'Cycling';
+const FLAT_KMH = BIKE ? 16 : 4, CLIMB_MH = BIKE ? 600 : 300;
+const RAIN_MMH = 0.3, THUNDER_P = 20;          // an hour with at least this much rain / this thunder probability counts
 const SIG_KMH = 8;                              // wind component that counts as head- or tailwind
 const REPORT_DAYS = 14;                         // reports older than this are not shown
 const RKEY = 'stage-weather:reports:v1';
@@ -491,7 +504,7 @@ const store = {
   get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? d; }catch(e){ return d; } },
   set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 };
-const startHour = () => +(store.get('stage-weather:start-hour', 9));
+const startHour = () => +(store.get('stage-weather:start-hour', BIKE ? 9 : 8));
 
 // ---------- wind ----------
 function nearest(pts, lat, lon){
@@ -509,7 +522,7 @@ function stepAt(series, date, hourFloat){
   }
   return bd <= 3.5 ? best : null;   // 6-hour steps further out: still the nearest step
 }
-const hhmm = h => `${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
+const hhmm = h => { const m = Math.round(h * 60); return `${String(Math.floor(m / 60) % 24).padStart(2,'0')}:${String(m % 60).padStart(2,'0')}`; };   // round the minutes first: never 09:60
 
 async function windFor(stage, date){
   const segs = W[stage.wind_key || String(stage.stage)];   // wind_key: the guest's chosen route ("4:7366")
@@ -530,7 +543,12 @@ async function windFor(stage, date){
     // wind_from_direction: where the wind comes FROM; riding into it = headwind
     const comp = ws * Math.cos((det.wind_from_direction - g.bearing) * Math.PI / 180);
     const kind = comp >= SIG_KMH ? 'head' : comp <= -SIG_KMH ? 'tail' : 'cross';
-    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind});
+    // weather at that place and hour (6-hour steps further out: their rain spread over the hours)
+    const n1 = st.data.next_1_hours, n6 = st.data.next_6_hours;
+    const rain = n1 ? (n1.details.precipitation_amount || 0) : n6 ? (n6.details.precipitation_amount || 0) / 6 : 0;
+    const sym = (n1 || n6 || {summary: {}}).summary.symbol_code || '';
+    const thunder = sym.includes('thunder') || ((n1 && n1.details.probability_of_thunder) || 0) >= THUNDER_P;
+    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind, rain, thunder, hourly: !!n1});
   }
   return out;
 }
@@ -554,12 +572,56 @@ function windHTML(segs, stage){
   const tail = stretches(segs,'tail').sort((a,b)=>(b.to-b.from)-(a.to-a.from))[0];
   if(tail) lines.push(`<li>Tailwind km ${Math.round(tail.from)}–${Math.round(tail.to)} (about ${hhmm(tail.t0)}–${hhmm(tail.t1)})</li>`);
   return `<div class="wind">
-    <div class="lbl">Wind on the road · leaving at
-      <select class="wstart">${[7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <div class="lbl">Wind on the road (leaving at ${startHour()}:00)</div>
     <div class="wbar">${bar}</div>
     <div class="wscale"><span>0 km</span><span>${Math.round(total)} km</span></div>
     <p class="wsum"><span class="key head"></span>Headwind ${km('head')} km · <span class="key tail"></span>tailwind ${km('tail')} km · <span class="key cross"></span>crosswind or calm ${km('cross')} km</p>
     ${lines.length ? `<ul class="facts">${lines.join('')}</ul>` : ''}
+    <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
+  </div>`;
+}
+
+// ---------- on the way: where you are, and the weather there, hour by hour ----------
+function runs(segs, test){
+  const res = []; let cur = null;
+  for(const s of segs){
+    if(test(s)){ if(!cur) cur = {from: s.km_from, to: s.km_to, t0: s.at, t1: s.at}; else { cur.to = s.km_to; cur.t1 = s.at; } }
+    else if(cur){ res.push(cur); cur = null; }
+  }
+  if(cur) res.push(cur);
+  return res;
+}
+function onWayHTML(segs, stage){
+  const hi = (stage.points || []).find(p => p.role === 'high');
+  const hiSeg = hi ? nearest(segs, hi.lat, hi.lon) : null;
+  const last = segs[segs.length - 1];
+  const where = (r) => hiSeg && r.from <= hiSeg.km_to && r.to >= hiSeg.km_from ? ', around the highest point' : '';
+  const lines = [];
+  const ele = hi && hi.ele != null ? ` (${hi.ele} m)` : '';
+  if(hiSeg === segs[0]) lines.push(`<li>Highest point${ele} at the start; finish at about <b>${hhmm(last.at)}</b></li>`);
+  else if(hiSeg === last) lines.push(`<li>Highest point${ele} at the finish, at about <b>${hhmm(last.at)}</b></li>`);
+  else if(hiSeg) lines.push(`<li>Highest point${ele} at about <b>${hhmm(hiSeg.at)}</b>, finish at about <b>${hhmm(last.at)}</b></li>`);
+  else lines.push(`<li>Finish at about <b>${hhmm(last.at)}</b></li>`);
+  const when = r => hhmm(r.t0) === hhmm(r.t1) ? `about ${hhmm(r.t0)}` : `about ${hhmm(r.t0)}–${hhmm(r.t1)}`;
+  // 6-hour steps (more than ~2.5 days ahead) can't place rain on a km: then only a rough line
+  if(segs.some(s => !s.hourly)){
+    const wet = segs.some(s => s.rain >= RAIN_MMH), storm = segs.some(s => s.thunder);
+    lines.push(storm ? `<li class="flagline">Rough forecast: thunderstorms possible while you are on the way; hour by hour about 2 days before</li>`
+             : wet ? `<li class="rain">Rough forecast: rain possible while you are on the way; hour by hour about 2 days before</li>`
+             : `<li>Rough forecast: no rain or storms for those hours; hour by hour about 2 days before</li>`);
+    return onWayBox(lines);
+  }
+  const storms = runs(segs, s => s.thunder), rain = runs(segs, s => s.rain >= RAIN_MMH && !s.thunder);
+  storms.forEach(r => lines.push(`<li class="flagline">Thunderstorms possible km ${Math.round(r.from)}–${Math.round(r.to)} (${when(r)})${where(r)}</li>`));
+  rain.forEach(r => lines.push(`<li class="rain">Rain likely km ${Math.round(r.from)}–${Math.round(r.to)} (${when(r)})${where(r)}</li>`));
+  if(!storms.length && !rain.length) lines.push(`<li>No rain or storms forecast along your way at those times.</li>`);
+  return onWayBox(lines);
+}
+function onWayBox(lines){
+  return `<div class="onway">
+    <div class="lbl">On the way · leaving at
+      <select class="wstart">${[6,7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <ul class="facts">${lines.join('')}</ul>
     <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
   </div>`;
 }
@@ -614,10 +676,16 @@ async function addons(){
   const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
   for(const s of P.stages){
     const sec = document.getElementById('s'+s.stage); if(!sec) continue;
-    sec.querySelectorAll('.wind,.reports').forEach(n=>n.remove());
-    const date = addDays(start, s.day-1);
+    sec.querySelectorAll('.wind,.onway,.reports').forEach(n=>n.remove());
+    const date = dayDate(start, s);
     if(date >= today && date <= lastDay){
-      try{ const w = await windFor(s, date); if(w) sec.insertAdjacentHTML('beforeend', windHTML(w, s)); }catch(e){}
+      try{
+        const w = await windFor(s, date);
+        if(w){
+          sec.insertAdjacentHTML('beforeend', onWayHTML(w, s));
+          if(BIKE) sec.insertAdjacentHTML('beforeend', windHTML(w, s));
+        }
+      }catch(e){}
     }
     // build_addons.py --no-reports switches them off (public page until reports have a shared, reviewed store)
     if(window.STAGE_WEATHER_REPORTS !== false && (s.parts || []).length) sec.insertAdjacentHTML('beforeend', reportsHTML(s, date));

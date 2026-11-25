@@ -78,7 +78,7 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Pokljuka Family Hut to Hut Hike", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Goreljek — Blejska Hut", "kind": "route_day", "route_name": "Goreljek Bus Stop -> Blejska koča, Lipanca", "ops_route": 956, "parts": [{"ops_route": 956, "name": "Goreljek Bus Stop -> Blejska koča, Lipanca", "rwgps_id": "46632625"}], "km": 5.7, "gain_m": 397, "points": [{"role": "high", "label": "Highest point", "lat": 46.3753, "lon": 13.9277, "ele": 1634}, {"role": "end", "label": "Finish · Blejska Koča na Lipanci", "lat": 46.3753, "lon": 13.9277, "ele": 1634}]}, {"stage": 2, "day": 2, "title": "Blejska Hut — Uskovnica Hut", "kind": "route_day", "route_name": "Blejska koča, Lipanca -> Planinska koča na Uskovnici", "ops_route": 911, "parts": [{"ops_route": 911, "name": "Blejska koča, Lipanca -> Planinska koča na Uskovnici", "rwgps_id": "54011601"}], "km": 10.6, "gain_m": 379, "points": [{"role": "high", "label": "Highest point", "lat": 46.3608, "lon": 13.8941, "ele": 1964}, {"role": "end", "label": "Finish · Planinska koča na Uskovnici", "lat": 46.3206, "lon": 13.9095, "ele": 1153}]}, {"stage": 3, "day": 3, "title": "Uskovnica Hut — Goreljek", "kind": "route_day", "route_name": "Planinska koča na Uskovnici -> Goreljek Bus Stop", "ops_route": 1168, "parts": [{"ops_route": 1168, "name": "Planinska koča na Uskovnici -> Goreljek Bus Stop", "rwgps_id": "47059274"}], "km": 12.5, "gain_m": 315, "points": [{"role": "high", "label": "Highest point", "lat": 46.3212, "lon": 13.9515, "ele": 1387}, {"role": "end", "label": "Finish · Goreljek Bus Stop", "lat": 46.3416, "lon": 13.961, "ele": 1261}]}]}</script>
+<script id="product-data" type="application/json">{"product": "Pokljuka Family Hut to Hut Hike", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Goreljek — Blejska Hut", "kind": "route_day", "route_name": "Goreljek Bus Stop -> Blejska koča, Lipanca", "ops_route": 956, "parts": [{"ops_route": 956, "name": "Goreljek Bus Stop -> Blejska koča, Lipanca", "rwgps_id": "46632625"}], "km": 5.7, "gain_m": 397, "points": [{"role": "high", "label": "Highest point", "lat": 46.3753, "lon": 13.9277, "ele": 1634}, {"role": "end", "label": "Finish · Blejska Koča na Lipanci", "lat": 46.3753, "lon": 13.9277, "ele": 1634}]}, {"stage": 2, "day": 2, "title": "Blejska Hut — Uskovnica Hut", "kind": "route_day", "route_name": "Blejska koča, Lipanca -> Planinska koča na Uskovnici", "ops_route": 911, "parts": [{"ops_route": 911, "name": "Blejska koča, Lipanca -> Planinska koča na Uskovnici", "rwgps_id": "54011601"}], "km": 10.6, "gain_m": 379, "points": [{"role": "high", "label": "Highest point", "lat": 46.3608, "lon": 13.8941, "ele": 1964}, {"role": "end", "label": "Finish · Planinska koča na Uskovnici", "lat": 46.3206, "lon": 13.9095, "ele": 1153}]}, {"stage": 3, "day": 3, "title": "Uskovnica Hut — Goreljek", "kind": "route_day", "route_name": "Planinska koča na Uskovnici -> Goreljek Bus Stop", "ops_route": 1168, "parts": [{"ops_route": 1168, "name": "Planinska koča na Uskovnici -> Goreljek Bus Stop", "rwgps_id": "47059274"}], "km": 12.5, "gain_m": 315, "points": [{"role": "high", "label": "Highest point", "lat": 46.3212, "lon": 13.9515, "ele": 1387}, {"role": "end", "label": "Finish · Goreljek Bus Stop", "lat": 46.3416, "lon": 13.961, "ele": 1261}]}], "vertical": "Hiking"}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -323,6 +323,13 @@ function pointHTML(pt, v){
   </div>`;
 }
 
+// ---------- the date of each day ----------
+// Day N is the arrival date + N-1, unless the link says otherwise: a sold tour can have extra nights, so a per-tour
+// link (tour_links.py) carries the real date of those days: ?dt=2:2027-05-09,3:2027-05-10
+const URL_DATES = Object.fromEntries((new URLSearchParams(location.search).get('dt') || '')
+  .split(',').filter(Boolean).map(x => x.split(':')).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x[1] || '')));
+function dayDate(start, s){ return URL_DATES[String(s.day)] || addDays(start, s.day - 1); }
+
 // ---------- route choice (days with more than one route) ----------
 // order: link (?r=4:7366,5:7368, made per tour from OPS) > the guest's own pick > the product default
 const OPTION_FIELDS = ['route_name','ops_route','parts','km','gain_m','points'];
@@ -398,14 +405,14 @@ async function render(){
   const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
   applyChoices();
   FC = new Map();
-  const due = P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+  const due = P.stages.filter(s => { const dt = dayDate(start, s); return dt >= today && dt <= addDays(today, 3); })
                       .flatMap(s => s.points).filter(pt => !(store.get(`geo:${pt.lat},${pt.lon}`)?.expires > Date.now()));
   GEO_BATCH = due.length ? geoBatch(due) : null;
-  GEO_DUE = new Set(P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+  GEO_DUE = new Set(P.stages.filter(s => { const dt = dayDate(start, s); return dt >= today && dt <= addDays(today, 3); })
                             .flatMap(s => s.points).map(pt => `${pt.lat},${pt.lon}`));
-  for(const s of P.stages){ const dt = addDays(start, s.day-1); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
+  for(const s of P.stages){ const dt = dayDate(start, s); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
   box.innerHTML = P.stages.map(s=>{
-    const date = addDays(start, s.day-1);
+    const date = dayDate(start, s);
     return `<section class="stage" id="s${s.stage}">
       <h2>Day ${s.day} · ${s.title}</h2>${choiceHTML(s)}
       <div class="meta">${fmtDate(date)}${s.km != null ? ` · ${s.km} km · ${s.gain_m} m ascent` : ''}</div>
@@ -414,7 +421,7 @@ async function render(){
   document.getElementById('planb-all').innerHTML = planbAllHTML();
   let stamps = [], offline = false, failed = 0;
   for(const s of P.stages){
-    const date = addDays(start, s.day-1);
+    const date = dayDate(start, s);
     const el = document.querySelector(`#s${s.stage} .pts`);
     let notable = false;
     if(date < today){ el.innerHTML = `<p class="later">This day is in the past.</p>`; continue; }
@@ -440,13 +447,13 @@ async function render(){
   status.textContent = oldest
     ? (offline ? `No connection: showing the forecast saved on ${fmtStamp(oldest)}.` : `Forecast updated ${fmtStamp(oldest)}.`)
     : (failed ? 'The forecast could not be loaded.' : 'None of your stages is within the next 9 days yet.');
-  try{ history.replaceState(null,'',`?start=${start}${choicesParam()}`); }catch(e){}
+  try{ const dt = Object.entries(URL_DATES).map(([d, v]) => `${d}:${v}`).join(','); history.replaceState(null,'',`?start=${start}${choicesParam()}${dt ? `&dt=${dt}` : ''}`); }catch(e){}
 }
 
 const qs = new URLSearchParams(location.search);
 const inp = document.getElementById('start');
 inp.value = qs.get('start') || store.get('start') || '';
-inp.addEventListener('change', ()=>{ store.set('start', inp.value); render(); });
+inp.addEventListener('change', ()=>{ store.set('start', inp.value); for(const k in URL_DATES) delete URL_DATES[k]; render(); });   // a new arrival date drops the tour's own dates
 render();
 </script>
 <script>
@@ -476,13 +483,19 @@ if ('serviceWorker' in navigator) {
 .rtags{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem}
 .radd input[type=number],.radd textarea{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 .radd button{justify-self:start;font:inherit;padding:6px 14px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
+
+.onway{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.onway .flagline{color:var(--warn-ink)}
 </style>
-<script id="wind-data" type="application/json">{}</script>
+<script id="wind-data" type="application/json">{"1": [{"km_from": 0.0, "km_to": 1.03, "bearing": 333, "lat": 46.3455, "lon": 13.9579, "climb_m": 37, "climb_total": 37}, {"km_from": 1.03, "km_to": 2.03, "bearing": 337, "lat": 46.3534, "lon": 13.9525, "climb_m": 34, "climb_total": 71}, {"km_from": 2.03, "km_to": 3.03, "bearing": 343, "lat": 46.3616, "lon": 13.9483, "climb_m": 54, "climb_total": 125}, {"km_from": 3.03, "km_to": 4.04, "bearing": 306, "lat": 46.368, "lon": 13.9417, "climb_m": 84, "climb_total": 208}, {"km_from": 4.04, "km_to": 5.05, "bearing": 311, "lat": 46.372, "lon": 13.9344, "climb_m": 130, "climb_total": 339}, {"km_from": 5.05, "km_to": 5.65, "bearing": 301, "lat": 46.3744, "lon": 13.9298, "climb_m": 88, "climb_total": 427}], "2": [{"km_from": 0.0, "km_to": 1.0, "bearing": 233, "lat": 46.373, "lon": 13.9238, "climb_m": 163, "climb_total": 163}, {"km_from": 1.0, "km_to": 2.0, "bearing": 312, "lat": 46.3726, "lon": 13.9173, "climb_m": 80, "climb_total": 243}, {"km_from": 2.0, "km_to": 3.02, "bearing": 229, "lat": 46.3721, "lon": 13.9113, "climb_m": 69, "climb_total": 312}, {"km_from": 3.02, "km_to": 4.02, "bearing": 230, "lat": 46.3677, "lon": 13.9037, "climb_m": 125, "climb_total": 437}, {"km_from": 4.02, "km_to": 5.03, "bearing": 227, "lat": 46.3627, "lon": 13.8956, "climb_m": 87, "climb_total": 524}, {"km_from": 5.03, "km_to": 6.03, "bearing": 188, "lat": 46.3572, "lon": 13.891, "climb_m": 12, "climb_total": 536}, {"km_from": 6.03, "km_to": 7.03, "bearing": 147, "lat": 46.3509, "lon": 13.8934, "climb_m": 5, "climb_total": 541}, {"km_from": 7.03, "km_to": 8.05, "bearing": 155, "lat": 46.3439, "lon": 13.899, "climb_m": 30, "climb_total": 571}, {"km_from": 8.05, "km_to": 9.05, "bearing": 174, "lat": 46.3361, "lon": 13.9021, "climb_m": 5, "climb_total": 576}, {"km_from": 9.05, "km_to": 10.07, "bearing": 156, "lat": 46.3279, "lon": 13.9054, "climb_m": 3, "climb_total": 578}, {"km_from": 10.07, "km_to": 10.55, "bearing": 163, "lat": 46.3222, "lon": 13.9088, "climb_m": 0, "climb_total": 578}], "3": [{"km_from": 0.0, "km_to": 1.0, "bearing": 1, "lat": 46.324, "lon": 13.9096, "climb_m": 113, "climb_total": 113}, {"km_from": 1.0, "km_to": 2.02, "bearing": 129, "lat": 46.3248, "lon": 13.9142, "climb_m": 58, "climb_total": 171}, {"km_from": 2.02, "km_to": 3.03, "bearing": 98, "lat": 46.3218, "lon": 13.9237, "climb_m": 143, "climb_total": 314}, {"km_from": 3.03, "km_to": 4.04, "bearing": 164, "lat": 46.3176, "lon": 13.9303, "climb_m": 104, "climb_total": 418}, {"km_from": 4.04, "km_to": 5.05, "bearing": 111, "lat": 46.3126, "lon": 13.9367, "climb_m": 58, "climb_total": 476}, {"km_from": 5.05, "km_to": 6.08, "bearing": 22, "lat": 46.3142, "lon": 13.9434, "climb_m": 81, "climb_total": 557}, {"km_from": 6.08, "km_to": 7.08, "bearing": 43, "lat": 46.3192, "lon": 13.9479, "climb_m": 56, "climb_total": 613}, {"km_from": 7.08, "km_to": 8.1, "bearing": 66, "lat": 46.3224, "lon": 13.9544, "climb_m": 21, "climb_total": 634}, {"km_from": 8.1, "km_to": 9.11, "bearing": 30, "lat": 46.3261, "lon": 13.9602, "climb_m": 26, "climb_total": 660}, {"km_from": 9.11, "km_to": 10.12, "bearing": 97, "lat": 46.3282, "lon": 13.9678, "climb_m": 12, "climb_total": 672}, {"km_from": 10.12, "km_to": 11.13, "bearing": 356, "lat": 46.3315, "lon": 13.9729, "climb_m": 18, "climb_total": 691}, {"km_from": 11.13, "km_to": 12.13, "bearing": 296, "lat": 46.337, "lon": 13.9671, "climb_m": 32, "climb_total": 723}, {"km_from": 12.13, "km_to": 12.47, "bearing": 350, "lat": 46.3402, "lon": 13.9613, "climb_m": 7, "climb_total": 730}]}</script>
 <script>// Addons for the stage weather page: wind relative to the riding direction, and trail reports from guests.
 // Loaded after the main script; uses its globals (P, forecast, addDays, localParts, todayLocal, fmtDate, HORIZON_DAYS).
 (function(){
 const W = JSON.parse(document.getElementById('wind-data').textContent || '{}');
-const FLAT_KMH = 16, CLIMB_MH = 600;            // riding model: 16 km/h on the flat, 600 m of climbing per hour
+// pace model per vertical: on a bike 16 km/h on the flat and 600 m of climbing an hour; on foot 4 km/h and 300 m
+const BIKE = (P.vertical || '') === 'Cycling';
+const FLAT_KMH = BIKE ? 16 : 4, CLIMB_MH = BIKE ? 600 : 300;
+const RAIN_MMH = 0.3, THUNDER_P = 20;          // an hour with at least this much rain / this thunder probability counts
 const SIG_KMH = 8;                              // wind component that counts as head- or tailwind
 const REPORT_DAYS = 14;                         // reports older than this are not shown
 const RKEY = 'stage-weather:reports:v1';
@@ -491,7 +504,7 @@ const store = {
   get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? d; }catch(e){ return d; } },
   set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 };
-const startHour = () => +(store.get('stage-weather:start-hour', 9));
+const startHour = () => +(store.get('stage-weather:start-hour', BIKE ? 9 : 8));
 
 // ---------- wind ----------
 function nearest(pts, lat, lon){
@@ -509,7 +522,7 @@ function stepAt(series, date, hourFloat){
   }
   return bd <= 3.5 ? best : null;   // 6-hour steps further out: still the nearest step
 }
-const hhmm = h => `${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
+const hhmm = h => { const m = Math.round(h * 60); return `${String(Math.floor(m / 60) % 24).padStart(2,'0')}:${String(m % 60).padStart(2,'0')}`; };   // round the minutes first: never 09:60
 
 async function windFor(stage, date){
   const segs = W[stage.wind_key || String(stage.stage)];   // wind_key: the guest's chosen route ("4:7366")
@@ -530,7 +543,12 @@ async function windFor(stage, date){
     // wind_from_direction: where the wind comes FROM; riding into it = headwind
     const comp = ws * Math.cos((det.wind_from_direction - g.bearing) * Math.PI / 180);
     const kind = comp >= SIG_KMH ? 'head' : comp <= -SIG_KMH ? 'tail' : 'cross';
-    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind});
+    // weather at that place and hour (6-hour steps further out: their rain spread over the hours)
+    const n1 = st.data.next_1_hours, n6 = st.data.next_6_hours;
+    const rain = n1 ? (n1.details.precipitation_amount || 0) : n6 ? (n6.details.precipitation_amount || 0) / 6 : 0;
+    const sym = (n1 || n6 || {summary: {}}).summary.symbol_code || '';
+    const thunder = sym.includes('thunder') || ((n1 && n1.details.probability_of_thunder) || 0) >= THUNDER_P;
+    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind, rain, thunder, hourly: !!n1});
   }
   return out;
 }
@@ -554,12 +572,56 @@ function windHTML(segs, stage){
   const tail = stretches(segs,'tail').sort((a,b)=>(b.to-b.from)-(a.to-a.from))[0];
   if(tail) lines.push(`<li>Tailwind km ${Math.round(tail.from)}–${Math.round(tail.to)} (about ${hhmm(tail.t0)}–${hhmm(tail.t1)})</li>`);
   return `<div class="wind">
-    <div class="lbl">Wind on the road · leaving at
-      <select class="wstart">${[7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <div class="lbl">Wind on the road (leaving at ${startHour()}:00)</div>
     <div class="wbar">${bar}</div>
     <div class="wscale"><span>0 km</span><span>${Math.round(total)} km</span></div>
     <p class="wsum"><span class="key head"></span>Headwind ${km('head')} km · <span class="key tail"></span>tailwind ${km('tail')} km · <span class="key cross"></span>crosswind or calm ${km('cross')} km</p>
     ${lines.length ? `<ul class="facts">${lines.join('')}</ul>` : ''}
+    <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
+  </div>`;
+}
+
+// ---------- on the way: where you are, and the weather there, hour by hour ----------
+function runs(segs, test){
+  const res = []; let cur = null;
+  for(const s of segs){
+    if(test(s)){ if(!cur) cur = {from: s.km_from, to: s.km_to, t0: s.at, t1: s.at}; else { cur.to = s.km_to; cur.t1 = s.at; } }
+    else if(cur){ res.push(cur); cur = null; }
+  }
+  if(cur) res.push(cur);
+  return res;
+}
+function onWayHTML(segs, stage){
+  const hi = (stage.points || []).find(p => p.role === 'high');
+  const hiSeg = hi ? nearest(segs, hi.lat, hi.lon) : null;
+  const last = segs[segs.length - 1];
+  const where = (r) => hiSeg && r.from <= hiSeg.km_to && r.to >= hiSeg.km_from ? ', around the highest point' : '';
+  const lines = [];
+  const ele = hi && hi.ele != null ? ` (${hi.ele} m)` : '';
+  if(hiSeg === segs[0]) lines.push(`<li>Highest point${ele} at the start; finish at about <b>${hhmm(last.at)}</b></li>`);
+  else if(hiSeg === last) lines.push(`<li>Highest point${ele} at the finish, at about <b>${hhmm(last.at)}</b></li>`);
+  else if(hiSeg) lines.push(`<li>Highest point${ele} at about <b>${hhmm(hiSeg.at)}</b>, finish at about <b>${hhmm(last.at)}</b></li>`);
+  else lines.push(`<li>Finish at about <b>${hhmm(last.at)}</b></li>`);
+  const when = r => hhmm(r.t0) === hhmm(r.t1) ? `about ${hhmm(r.t0)}` : `about ${hhmm(r.t0)}–${hhmm(r.t1)}`;
+  // 6-hour steps (more than ~2.5 days ahead) can't place rain on a km: then only a rough line
+  if(segs.some(s => !s.hourly)){
+    const wet = segs.some(s => s.rain >= RAIN_MMH), storm = segs.some(s => s.thunder);
+    lines.push(storm ? `<li class="flagline">Rough forecast: thunderstorms possible while you are on the way; hour by hour about 2 days before</li>`
+             : wet ? `<li class="rain">Rough forecast: rain possible while you are on the way; hour by hour about 2 days before</li>`
+             : `<li>Rough forecast: no rain or storms for those hours; hour by hour about 2 days before</li>`);
+    return onWayBox(lines);
+  }
+  const storms = runs(segs, s => s.thunder), rain = runs(segs, s => s.rain >= RAIN_MMH && !s.thunder);
+  storms.forEach(r => lines.push(`<li class="flagline">Thunderstorms possible km ${Math.round(r.from)}–${Math.round(r.to)} (${when(r)})${where(r)}</li>`));
+  rain.forEach(r => lines.push(`<li class="rain">Rain likely km ${Math.round(r.from)}–${Math.round(r.to)} (${when(r)})${where(r)}</li>`));
+  if(!storms.length && !rain.length) lines.push(`<li>No rain or storms forecast along your way at those times.</li>`);
+  return onWayBox(lines);
+}
+function onWayBox(lines){
+  return `<div class="onway">
+    <div class="lbl">On the way · leaving at
+      <select class="wstart">${[6,7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <ul class="facts">${lines.join('')}</ul>
     <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
   </div>`;
 }
@@ -614,10 +676,16 @@ async function addons(){
   const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
   for(const s of P.stages){
     const sec = document.getElementById('s'+s.stage); if(!sec) continue;
-    sec.querySelectorAll('.wind,.reports').forEach(n=>n.remove());
-    const date = addDays(start, s.day-1);
+    sec.querySelectorAll('.wind,.onway,.reports').forEach(n=>n.remove());
+    const date = dayDate(start, s);
     if(date >= today && date <= lastDay){
-      try{ const w = await windFor(s, date); if(w) sec.insertAdjacentHTML('beforeend', windHTML(w, s)); }catch(e){}
+      try{
+        const w = await windFor(s, date);
+        if(w){
+          sec.insertAdjacentHTML('beforeend', onWayHTML(w, s));
+          if(BIKE) sec.insertAdjacentHTML('beforeend', windHTML(w, s));
+        }
+      }catch(e){}
     }
     // build_addons.py --no-reports switches them off (public page until reports have a shared, reviewed store)
     if(window.STAGE_WEATHER_REPORTS !== false && (s.parts || []).length) sec.insertAdjacentHTML('beforeend', reportsHTML(s, date));

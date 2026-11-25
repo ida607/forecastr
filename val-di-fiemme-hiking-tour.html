@@ -78,7 +78,7 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Val di Fiemme Hiking Tour", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Predazzo — Alpe Lusia", "kind": "route_day", "route_name": "Predazzo -> Alpe Lusia", "ops_route": 3638, "parts": [{"ops_route": 3638, "name": "Predazzo -> Alpe Lusia", "rwgps_id": "57650062"}], "km": 13.6, "gain_m": 1058, "points": [{"role": "high", "label": "Highest point", "lat": 46.3434, "lon": 11.7017, "ele": 2049}, {"role": "end", "label": "Finish · Rifugio Lusia", "lat": 46.3434, "lon": 11.7017, "ele": 2049}]}, {"stage": 2, "day": 2, "title": "Alpe Lusia — Bocche Peak", "kind": "route_day", "route_name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "ops_route": 681, "parts": [{"ops_route": 681, "name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "rwgps_id": "55256311"}], "km": 13.7, "gain_m": 869, "points": [{"role": "high", "label": "Highest point", "lat": 46.3542, "lon": 11.7527, "ele": 2715}, {"role": "end", "label": "Finish · Rifugio Capanna Passo Valles", "lat": 46.3386, "lon": 11.8005, "ele": 2036}]}, {"stage": 3, "day": 3, "title": "Bocche Peak — Passo Rolle", "kind": "route_day", "route_name": "Rifugio Capanna Passo Valles -> Passo Rolle", "ops_route": 5819, "parts": [{"ops_route": 682, "name": "Rifugio Capanna Passo Valles -> Hotel Venezia", "rwgps_id": "55310295"}], "km": 11.1, "gain_m": 539, "points": [{"role": "high", "label": "Highest point", "lat": 46.3292, "lon": 11.816, "ele": 2294}, {"role": "end", "label": "Finish · Passo Rolle", "lat": 46.2963, "lon": 11.7826, "ele": 1959}]}, {"stage": 4, "day": 4, "title": "Passo Rolle — Predazzo", "kind": "route_day", "route_name": "Passo Rolle -> Bellamonte Bus Stop", "ops_route": 5820, "parts": [{"ops_route": 5822, "name": "Passo Rolle -> San Martino di Castrozza Bus Station", "rwgps_id": "57914017"}], "km": 8.0, "gain_m": 73, "points": [{"role": "high", "label": "Highest point", "lat": 46.2963, "lon": 11.7874, "ele": 1978}, {"role": "end", "label": "Finish · Bellamonte Bus Stop", "lat": 46.2624, "lon": 11.8042, "ele": 1474}]}]}</script>
+<script id="product-data" type="application/json">{"product": "Val di Fiemme Hiking Tour", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Predazzo — Alpe Lusia", "kind": "route_day", "route_name": "Predazzo -> Alpe Lusia", "ops_route": 3638, "parts": [{"ops_route": 3638, "name": "Predazzo -> Alpe Lusia", "rwgps_id": "57650062"}], "km": 13.6, "gain_m": 1058, "points": [{"role": "high", "label": "Highest point", "lat": 46.3434, "lon": 11.7017, "ele": 2049}, {"role": "end", "label": "Finish · Rifugio Lusia", "lat": 46.3434, "lon": 11.7017, "ele": 2049}]}, {"stage": 2, "day": 2, "title": "Alpe Lusia — Bocche Peak", "kind": "route_day", "route_name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "ops_route": 681, "parts": [{"ops_route": 681, "name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "rwgps_id": "55256311"}], "km": 13.7, "gain_m": 869, "points": [{"role": "high", "label": "Highest point", "lat": 46.3542, "lon": 11.7527, "ele": 2715}, {"role": "end", "label": "Finish · Rifugio Capanna Passo Valles", "lat": 46.3386, "lon": 11.8005, "ele": 2036}]}, {"stage": 3, "day": 3, "title": "Bocche Peak — Passo Rolle", "kind": "route_day", "route_name": "Rifugio Capanna Passo Valles -> Passo Rolle", "ops_route": 5819, "parts": [{"ops_route": 682, "name": "Rifugio Capanna Passo Valles -> Hotel Venezia", "rwgps_id": "55310295"}], "km": 11.1, "gain_m": 539, "points": [{"role": "high", "label": "Highest point", "lat": 46.3292, "lon": 11.816, "ele": 2294}, {"role": "end", "label": "Finish · Passo Rolle", "lat": 46.2963, "lon": 11.7826, "ele": 1959}]}, {"stage": 4, "day": 4, "title": "Passo Rolle — Predazzo", "kind": "route_day", "route_name": "Passo Rolle -> Bellamonte Bus Stop", "ops_route": 5820, "parts": [{"ops_route": 5822, "name": "Passo Rolle -> San Martino di Castrozza Bus Station", "rwgps_id": "57914017"}], "km": 8.0, "gain_m": 73, "points": [{"role": "high", "label": "Highest point", "lat": 46.2963, "lon": 11.7874, "ele": 1978}, {"role": "end", "label": "Finish · Bellamonte Bus Stop", "lat": 46.2624, "lon": 11.8042, "ele": 1474}]}], "vertical": "Hiking"}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -323,6 +323,13 @@ function pointHTML(pt, v){
   </div>`;
 }
 
+// ---------- the date of each day ----------
+// Day N is the arrival date + N-1, unless the link says otherwise: a sold tour can have extra nights, so a per-tour
+// link (tour_links.py) carries the real date of those days: ?dt=2:2027-05-09,3:2027-05-10
+const URL_DATES = Object.fromEntries((new URLSearchParams(location.search).get('dt') || '')
+  .split(',').filter(Boolean).map(x => x.split(':')).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x[1] || '')));
+function dayDate(start, s){ return URL_DATES[String(s.day)] || addDays(start, s.day - 1); }
+
 // ---------- route choice (days with more than one route) ----------
 // order: link (?r=4:7366,5:7368, made per tour from OPS) > the guest's own pick > the product default
 const OPTION_FIELDS = ['route_name','ops_route','parts','km','gain_m','points'];
@@ -398,14 +405,14 @@ async function render(){
   const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
   applyChoices();
   FC = new Map();
-  const due = P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+  const due = P.stages.filter(s => { const dt = dayDate(start, s); return dt >= today && dt <= addDays(today, 3); })
                       .flatMap(s => s.points).filter(pt => !(store.get(`geo:${pt.lat},${pt.lon}`)?.expires > Date.now()));
   GEO_BATCH = due.length ? geoBatch(due) : null;
-  GEO_DUE = new Set(P.stages.filter(s => { const dt = addDays(start, s.day-1); return dt >= today && dt <= addDays(today, 3); })
+  GEO_DUE = new Set(P.stages.filter(s => { const dt = dayDate(start, s); return dt >= today && dt <= addDays(today, 3); })
                             .flatMap(s => s.points).map(pt => `${pt.lat},${pt.lon}`));
-  for(const s of P.stages){ const dt = addDays(start, s.day-1); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
+  for(const s of P.stages){ const dt = dayDate(start, s); if(dt >= today && dt <= lastDay) s.points.forEach(pt => forecastOnce(pt).catch(() => {})); }
   box.innerHTML = P.stages.map(s=>{
-    const date = addDays(start, s.day-1);
+    const date = dayDate(start, s);
     return `<section class="stage" id="s${s.stage}">
       <h2>Day ${s.day} · ${s.title}</h2>${choiceHTML(s)}
       <div class="meta">${fmtDate(date)}${s.km != null ? ` · ${s.km} km · ${s.gain_m} m ascent` : ''}</div>
@@ -414,7 +421,7 @@ async function render(){
   document.getElementById('planb-all').innerHTML = planbAllHTML();
   let stamps = [], offline = false, failed = 0;
   for(const s of P.stages){
-    const date = addDays(start, s.day-1);
+    const date = dayDate(start, s);
     const el = document.querySelector(`#s${s.stage} .pts`);
     let notable = false;
     if(date < today){ el.innerHTML = `<p class="later">This day is in the past.</p>`; continue; }
@@ -440,13 +447,13 @@ async function render(){
   status.textContent = oldest
     ? (offline ? `No connection: showing the forecast saved on ${fmtStamp(oldest)}.` : `Forecast updated ${fmtStamp(oldest)}.`)
     : (failed ? 'The forecast could not be loaded.' : 'None of your stages is within the next 9 days yet.');
-  try{ history.replaceState(null,'',`?start=${start}${choicesParam()}`); }catch(e){}
+  try{ const dt = Object.entries(URL_DATES).map(([d, v]) => `${d}:${v}`).join(','); history.replaceState(null,'',`?start=${start}${choicesParam()}${dt ? `&dt=${dt}` : ''}`); }catch(e){}
 }
 
 const qs = new URLSearchParams(location.search);
 const inp = document.getElementById('start');
 inp.value = qs.get('start') || store.get('start') || '';
-inp.addEventListener('change', ()=>{ store.set('start', inp.value); render(); });
+inp.addEventListener('change', ()=>{ store.set('start', inp.value); for(const k in URL_DATES) delete URL_DATES[k]; render(); });   // a new arrival date drops the tour's own dates
 render();
 </script>
 <script>
@@ -476,13 +483,19 @@ if ('serviceWorker' in navigator) {
 .rtags{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem}
 .radd input[type=number],.radd textarea{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 .radd button{justify-self:start;font:inherit;padding:6px 14px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
+
+.onway{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.onway .flagline{color:var(--warn-ink)}
 </style>
-<script id="wind-data" type="application/json">{}</script>
+<script id="wind-data" type="application/json">{"1": [{"km_from": 0.0, "km_to": 1.05, "bearing": 98, "lat": 46.3106, "lon": 11.6066, "climb_m": 28, "climb_total": 28}, {"km_from": 1.05, "km_to": 2.08, "bearing": 83, "lat": 46.3108, "lon": 11.6168, "climb_m": 53, "climb_total": 81}, {"km_from": 2.08, "km_to": 3.08, "bearing": 90, "lat": 46.3113, "lon": 11.6296, "climb_m": 55, "climb_total": 136}, {"km_from": 3.08, "km_to": 4.11, "bearing": 116, "lat": 46.3097, "lon": 11.6406, "climb_m": 67, "climb_total": 203}, {"km_from": 4.11, "km_to": 5.13, "bearing": 105, "lat": 46.3071, "lon": 11.6511, "climb_m": 105, "climb_total": 307}, {"km_from": 5.13, "km_to": 6.14, "bearing": 108, "lat": 46.3049, "lon": 11.6616, "climb_m": 97, "climb_total": 404}, {"km_from": 6.14, "km_to": 7.14, "bearing": 78, "lat": 46.3047, "lon": 11.6717, "climb_m": 62, "climb_total": 465}, {"km_from": 7.14, "km_to": 8.17, "bearing": 355, "lat": 46.3085, "lon": 11.6765, "climb_m": 94, "climb_total": 559}, {"km_from": 8.17, "km_to": 9.17, "bearing": 357, "lat": 46.3139, "lon": 11.676, "climb_m": 85, "climb_total": 644}, {"km_from": 9.17, "km_to": 10.19, "bearing": 61, "lat": 46.3183, "lon": 11.681, "climb_m": 129, "climb_total": 773}, {"km_from": 10.19, "km_to": 11.19, "bearing": 14, "lat": 46.3238, "lon": 11.6874, "climb_m": 143, "climb_total": 916}, {"km_from": 11.19, "km_to": 12.21, "bearing": 29, "lat": 46.3308, "lon": 11.6913, "climb_m": 130, "climb_total": 1046}, {"km_from": 12.21, "km_to": 13.22, "bearing": 41, "lat": 46.337, "lon": 11.6976, "climb_m": 133, "climb_total": 1178}, {"km_from": 13.22, "km_to": 13.62, "bearing": 5, "lat": 46.3416, "lon": 11.7015, "climb_m": 61, "climb_total": 1239}], "2": [{"km_from": 0.0, "km_to": 1.0, "bearing": 98, "lat": 46.3431, "lon": 11.7064, "climb_m": 144, "climb_total": 144}, {"km_from": 1.0, "km_to": 2.08, "bearing": 82, "lat": 46.3432, "lon": 11.7173, "climb_m": 136, "climb_total": 280}, {"km_from": 2.08, "km_to": 3.08, "bearing": 84, "lat": 46.3441, "lon": 11.7267, "climb_m": 113, "climb_total": 392}, {"km_from": 3.08, "km_to": 4.09, "bearing": 53, "lat": 46.3467, "lon": 11.7349, "climb_m": 55, "climb_total": 448}, {"km_from": 4.09, "km_to": 5.1, "bearing": 58, "lat": 46.3507, "lon": 11.7436, "climb_m": 201, "climb_total": 649}, {"km_from": 5.1, "km_to": 6.11, "bearing": 106, "lat": 46.3516, "lon": 11.7518, "climb_m": 136, "climb_total": 785}, {"km_from": 6.11, "km_to": 7.12, "bearing": 116, "lat": 46.3499, "lon": 11.7586, "climb_m": 1, "climb_total": 786}, {"km_from": 7.12, "km_to": 8.12, "bearing": 153, "lat": 46.3472, "lon": 11.7626, "climb_m": 3, "climb_total": 789}, {"km_from": 8.12, "km_to": 9.17, "bearing": 125, "lat": 46.3429, "lon": 11.7691, "climb_m": 22, "climb_total": 811}, {"km_from": 9.17, "km_to": 10.17, "bearing": 183, "lat": 46.3377, "lon": 11.774, "climb_m": 1, "climb_total": 813}, {"km_from": 10.17, "km_to": 11.18, "bearing": 119, "lat": 46.3334, "lon": 11.778, "climb_m": 12, "climb_total": 824}, {"km_from": 11.18, "km_to": 12.19, "bearing": 40, "lat": 46.3349, "lon": 11.7859, "climb_m": 46, "climb_total": 870}, {"km_from": 12.19, "km_to": 13.21, "bearing": 59, "lat": 46.3396, "lon": 11.7936, "climb_m": 56, "climb_total": 926}, {"km_from": 13.21, "km_to": 13.66, "bearing": 141, "lat": 46.3399, "lon": 11.7989, "climb_m": 47, "climb_total": 973}], "3": [{"km_from": 0.0, "km_to": 1.02, "bearing": 140, "lat": 46.3358, "lon": 11.8037, "climb_m": 140, "climb_total": 140}, {"km_from": 1.02, "km_to": 2.02, "bearing": 121, "lat": 46.3311, "lon": 11.8116, "climb_m": 134, "climb_total": 274}, {"km_from": 2.02, "km_to": 3.05, "bearing": 131, "lat": 46.3268, "lon": 11.8202, "climb_m": 16, "climb_total": 290}, {"km_from": 3.05, "km_to": 4.06, "bearing": 202, "lat": 46.3209, "lon": 11.8223, "climb_m": 9, "climb_total": 299}, {"km_from": 4.06, "km_to": 5.11, "bearing": 179, "lat": 46.314, "lon": 11.8204, "climb_m": 10, "climb_total": 309}, {"km_from": 5.11, "km_to": 6.14, "bearing": 204, "lat": 46.3063, "lon": 11.8179, "climb_m": 61, "climb_total": 369}, {"km_from": 6.14, "km_to": 7.15, "bearing": 231, "lat": 46.3011, "lon": 11.8133, "climb_m": 96, "climb_total": 465}, {"km_from": 7.15, "km_to": 8.16, "bearing": 217, "lat": 46.2984, "lon": 11.8096, "climb_m": 96, "climb_total": 561}, {"km_from": 8.16, "km_to": 9.19, "bearing": 297, "lat": 46.2982, "lon": 11.804, "climb_m": 45, "climb_total": 606}, {"km_from": 9.19, "km_to": 10.2, "bearing": 274, "lat": 46.2999, "lon": 11.7949, "climb_m": 0, "climb_total": 606}, {"km_from": 10.2, "km_to": 11.08, "bearing": 231, "lat": 46.2982, "lon": 11.7861, "climb_m": 12, "climb_total": 618}], "4": [{"km_from": 0.0, "km_to": 1.0, "bearing": 262, "lat": 46.2958, "lon": 11.7841, "climb_m": 10, "climb_total": 10}, {"km_from": 1.0, "km_to": 2.0, "bearing": 221, "lat": 46.2934, "lon": 11.7773, "climb_m": 17, "climb_total": 26}, {"km_from": 2.0, "km_to": 3.01, "bearing": 215, "lat": 46.2882, "lon": 11.7716, "climb_m": 64, "climb_total": 90}, {"km_from": 3.01, "km_to": 4.02, "bearing": 179, "lat": 46.2811, "lon": 11.7685, "climb_m": 26, "climb_total": 116}, {"km_from": 4.02, "km_to": 5.04, "bearing": 136, "lat": 46.2744, "lon": 11.7724, "climb_m": 6, "climb_total": 122}, {"km_from": 5.04, "km_to": 6.04, "bearing": 115, "lat": 46.2702, "lon": 11.7805, "climb_m": 17, "climb_total": 139}, {"km_from": 6.04, "km_to": 7.06, "bearing": 125, "lat": 46.2666, "lon": 11.7896, "climb_m": 12, "climb_total": 150}, {"km_from": 7.06, "km_to": 7.96, "bearing": 106, "lat": 46.2634, "lon": 11.7993, "climb_m": 14, "climb_total": 164}]}</script>
 <script>// Addons for the stage weather page: wind relative to the riding direction, and trail reports from guests.
 // Loaded after the main script; uses its globals (P, forecast, addDays, localParts, todayLocal, fmtDate, HORIZON_DAYS).
 (function(){
 const W = JSON.parse(document.getElementById('wind-data').textContent || '{}');
-const FLAT_KMH = 16, CLIMB_MH = 600;            // riding model: 16 km/h on the flat, 600 m of climbing per hour
+// pace model per vertical: on a bike 16 km/h on the flat and 600 m of climbing an hour; on foot 4 km/h and 300 m
+const BIKE = (P.vertical || '') === 'Cycling';
+const FLAT_KMH = BIKE ? 16 : 4, CLIMB_MH = BIKE ? 600 : 300;
+const RAIN_MMH = 0.3, THUNDER_P = 20;          // an hour with at least this much rain / this thunder probability counts
 const SIG_KMH = 8;                              // wind component that counts as head- or tailwind
 const REPORT_DAYS = 14;                         // reports older than this are not shown
 const RKEY = 'stage-weather:reports:v1';
@@ -491,7 +504,7 @@ const store = {
   get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? d; }catch(e){ return d; } },
   set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 };
-const startHour = () => +(store.get('stage-weather:start-hour', 9));
+const startHour = () => +(store.get('stage-weather:start-hour', BIKE ? 9 : 8));
 
 // ---------- wind ----------
 function nearest(pts, lat, lon){
@@ -509,7 +522,7 @@ function stepAt(series, date, hourFloat){
   }
   return bd <= 3.5 ? best : null;   // 6-hour steps further out: still the nearest step
 }
-const hhmm = h => `${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
+const hhmm = h => { const m = Math.round(h * 60); return `${String(Math.floor(m / 60) % 24).padStart(2,'0')}:${String(m % 60).padStart(2,'0')}`; };   // round the minutes first: never 09:60
 
 async function windFor(stage, date){
   const segs = W[stage.wind_key || String(stage.stage)];   // wind_key: the guest's chosen route ("4:7366")
@@ -530,7 +543,12 @@ async function windFor(stage, date){
     // wind_from_direction: where the wind comes FROM; riding into it = headwind
     const comp = ws * Math.cos((det.wind_from_direction - g.bearing) * Math.PI / 180);
     const kind = comp >= SIG_KMH ? 'head' : comp <= -SIG_KMH ? 'tail' : 'cross';
-    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind});
+    // weather at that place and hour (6-hour steps further out: their rain spread over the hours)
+    const n1 = st.data.next_1_hours, n6 = st.data.next_6_hours;
+    const rain = n1 ? (n1.details.precipitation_amount || 0) : n6 ? (n6.details.precipitation_amount || 0) / 6 : 0;
+    const sym = (n1 || n6 || {summary: {}}).summary.symbol_code || '';
+    const thunder = sym.includes('thunder') || ((n1 && n1.details.probability_of_thunder) || 0) >= THUNDER_P;
+    out.push({...g, at, ws: Math.round(ws), comp: Math.round(comp), kind, rain, thunder, hourly: !!n1});
   }
   return out;
 }
@@ -554,12 +572,56 @@ function windHTML(segs, stage){
   const tail = stretches(segs,'tail').sort((a,b)=>(b.to-b.from)-(a.to-a.from))[0];
   if(tail) lines.push(`<li>Tailwind km ${Math.round(tail.from)}–${Math.round(tail.to)} (about ${hhmm(tail.t0)}–${hhmm(tail.t1)})</li>`);
   return `<div class="wind">
-    <div class="lbl">Wind on the road · leaving at
-      <select class="wstart">${[7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <div class="lbl">Wind on the road (leaving at ${startHour()}:00)</div>
     <div class="wbar">${bar}</div>
     <div class="wscale"><span>0 km</span><span>${Math.round(total)} km</span></div>
     <p class="wsum"><span class="key head"></span>Headwind ${km('head')} km · <span class="key tail"></span>tailwind ${km('tail')} km · <span class="key cross"></span>crosswind or calm ${km('cross')} km</p>
     ${lines.length ? `<ul class="facts">${lines.join('')}</ul>` : ''}
+    <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
+  </div>`;
+}
+
+// ---------- on the way: where you are, and the weather there, hour by hour ----------
+function runs(segs, test){
+  const res = []; let cur = null;
+  for(const s of segs){
+    if(test(s)){ if(!cur) cur = {from: s.km_from, to: s.km_to, t0: s.at, t1: s.at}; else { cur.to = s.km_to; cur.t1 = s.at; } }
+    else if(cur){ res.push(cur); cur = null; }
+  }
+  if(cur) res.push(cur);
+  return res;
+}
+function onWayHTML(segs, stage){
+  const hi = (stage.points || []).find(p => p.role === 'high');
+  const hiSeg = hi ? nearest(segs, hi.lat, hi.lon) : null;
+  const last = segs[segs.length - 1];
+  const where = (r) => hiSeg && r.from <= hiSeg.km_to && r.to >= hiSeg.km_from ? ', around the highest point' : '';
+  const lines = [];
+  const ele = hi && hi.ele != null ? ` (${hi.ele} m)` : '';
+  if(hiSeg === segs[0]) lines.push(`<li>Highest point${ele} at the start; finish at about <b>${hhmm(last.at)}</b></li>`);
+  else if(hiSeg === last) lines.push(`<li>Highest point${ele} at the finish, at about <b>${hhmm(last.at)}</b></li>`);
+  else if(hiSeg) lines.push(`<li>Highest point${ele} at about <b>${hhmm(hiSeg.at)}</b>, finish at about <b>${hhmm(last.at)}</b></li>`);
+  else lines.push(`<li>Finish at about <b>${hhmm(last.at)}</b></li>`);
+  const when = r => hhmm(r.t0) === hhmm(r.t1) ? `about ${hhmm(r.t0)}` : `about ${hhmm(r.t0)}–${hhmm(r.t1)}`;
+  // 6-hour steps (more than ~2.5 days ahead) can't place rain on a km: then only a rough line
+  if(segs.some(s => !s.hourly)){
+    const wet = segs.some(s => s.rain >= RAIN_MMH), storm = segs.some(s => s.thunder);
+    lines.push(storm ? `<li class="flagline">Rough forecast: thunderstorms possible while you are on the way; hour by hour about 2 days before</li>`
+             : wet ? `<li class="rain">Rough forecast: rain possible while you are on the way; hour by hour about 2 days before</li>`
+             : `<li>Rough forecast: no rain or storms for those hours; hour by hour about 2 days before</li>`);
+    return onWayBox(lines);
+  }
+  const storms = runs(segs, s => s.thunder), rain = runs(segs, s => s.rain >= RAIN_MMH && !s.thunder);
+  storms.forEach(r => lines.push(`<li class="flagline">Thunderstorms possible km ${Math.round(r.from)}–${Math.round(r.to)} (${when(r)})${where(r)}</li>`));
+  rain.forEach(r => lines.push(`<li class="rain">Rain likely km ${Math.round(r.from)}–${Math.round(r.to)} (${when(r)})${where(r)}</li>`));
+  if(!storms.length && !rain.length) lines.push(`<li>No rain or storms forecast along your way at those times.</li>`);
+  return onWayBox(lines);
+}
+function onWayBox(lines){
+  return `<div class="onway">
+    <div class="lbl">On the way · leaving at
+      <select class="wstart">${[6,7,8,9,10,11].map(h=>`<option value="${h}" ${h===startHour()?'selected':''}>${h}:00</option>`).join('')}</select></div>
+    <ul class="facts">${lines.join('')}</ul>
     <p class="lbl">Times assume ${FLAT_KMH} km/h on the flat and ${CLIMB_MH} m of climbing per hour, without breaks.</p>
   </div>`;
 }
@@ -614,10 +676,16 @@ async function addons(){
   const today = todayLocal(), lastDay = addDays(today, HORIZON_DAYS);
   for(const s of P.stages){
     const sec = document.getElementById('s'+s.stage); if(!sec) continue;
-    sec.querySelectorAll('.wind,.reports').forEach(n=>n.remove());
-    const date = addDays(start, s.day-1);
+    sec.querySelectorAll('.wind,.onway,.reports').forEach(n=>n.remove());
+    const date = dayDate(start, s);
     if(date >= today && date <= lastDay){
-      try{ const w = await windFor(s, date); if(w) sec.insertAdjacentHTML('beforeend', windHTML(w, s)); }catch(e){}
+      try{
+        const w = await windFor(s, date);
+        if(w){
+          sec.insertAdjacentHTML('beforeend', onWayHTML(w, s));
+          if(BIKE) sec.insertAdjacentHTML('beforeend', windHTML(w, s));
+        }
+      }catch(e){}
     }
     // build_addons.py --no-reports switches them off (public page until reports have a shared, reviewed store)
     if(window.STAGE_WEATHER_REPORTS !== false && (s.parts || []).length) sec.insertAdjacentHTML('beforeend', reportsHTML(s, date));
