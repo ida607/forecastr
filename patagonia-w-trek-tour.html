@@ -344,6 +344,45 @@ function dayDate(start, s){ return URL_DATES[String(s.day)] || addDays(start, s.
 const OPTION_FIELDS = ['route_name','ops_route','parts','km','gain_m','points'];
 const URL_CHOICES = Object.fromEntries((new URLSearchParams(location.search).get('r') || '')
   .split(',').filter(Boolean).map(x => x.split(':')));
+
+// ---------- the tour's own days, as OPS has them (?days=2027-06-05:,2027-06-06:4101,...) ----------
+// The guidebook card in OPS can insert every day of the tour as <date>:<selected OPS route, empty if none>. The page
+// turns that into the real date of each page day and the tour's route on days with a choice, by the same rule as
+// tour_links.py: a page day is the one whose route, option or part is the tour day's route; days without a route are
+// placed by their neighbours. Only dates and route ids are in the link, nothing about guests.
+let TOUR_START = null;
+(function fromTourDays(){
+  const raw = new URLSearchParams(location.search).get('days');
+  if(!raw) return;
+  const tour = raw.split(',').map(x => x.split(':')).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x[0] || ''));
+  if(!tour.length) return;
+  const idx = {};
+  const ids = o => [o.ops_route, ...(o.parts || []).map(p => p.ops_route)].filter(Boolean).map(String);
+  for(const s of P.stages){
+    for(const o of (s.options || [])) for(const id of ids(o)) if(!(id in idx)) idx[id] = [s.day, o.key];
+    for(const id of ids(s)) if(!(id in idx)) idx[id] = [s.day, s.options ? s.options[0].key : null];
+  }
+  const start = new URLSearchParams(location.search).get('start') || tour[0][0];
+  TOUR_START = start;
+  const dates = {};
+  for(const [d, id] of tour){
+    const hit = id ? idx[id] : null;
+    if(hit && !(hit[0] in dates)){
+      dates[hit[0]] = d;
+      if(hit[1] != null && !(String(hit[0]) in URL_CHOICES)) URL_CHOICES[String(hit[0])] = hit[1];
+    }
+  }
+  const pageDays = P.stages.map(s => s.day), first = Math.min(...pageDays), last = Math.max(...pageDays);
+  if(!(first in dates)) dates[first] = start;
+  if(!(last in dates)) dates[last] = tour[tour.length - 1][0];
+  for(const pd of pageDays){
+    if(pd in dates) continue;
+    const prev = Math.max(...Object.keys(dates).map(Number).filter(p => p < pd));
+    dates[pd] = isFinite(prev) ? addDays(dates[prev], pd - prev) : addDays(start, pd - first);
+  }
+  for(const pd of pageDays) if(dates[pd] !== addDays(start, pd - 1) && !(String(pd) in URL_DATES)) URL_DATES[String(pd)] = dates[pd];
+})();
+
 function chosenKey(s){
   const keys = s.options.map(o => o.key);
   const pick = [URL_CHOICES[String(s.day)], store.get(`route:${P.product}:${s.day}`)].find(k => keys.includes(k));
@@ -461,7 +500,7 @@ async function render(){
 
 const qs = new URLSearchParams(location.search);
 const inp = document.getElementById('start');
-inp.value = qs.get('start') || store.get('start') || '';
+inp.value = qs.get('start') || TOUR_START || store.get('start') || '';
 inp.addEventListener('change', ()=>{ store.set('start', inp.value); for(const k in URL_DATES) delete URL_DATES[k]; render(); });   // a new arrival date drops the tour's own dates
 render();
 </script>
