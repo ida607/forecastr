@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Rondane National Park Hiking Tour", "timezone": "Europe/Oslo", "stages": [{"stage": 1, "day": 1, "title": "Spranget — Rondvassbu", "kind": "route_day", "route_name": "Spranget Bus Stop -> DNT Rondvassbu", "ops_route": 765, "parts": [{"ops_route": 765, "name": "Spranget Bus Stop -> DNT Rondvassbu", "rwgps_id": "53844636"}], "km": 6.4, "gain_m": 179, "points": [{"role": "high", "label": "Highest point", "lat": 61.8596, "lon": 9.7796, "ele": 1229}, {"role": "end", "label": "Finish · Rondvassbu", "lat": 61.8788, "lon": 9.7965, "ele": 1164}]}, {"stage": 2, "day": 2, "title": "Rondvassbu — Dørålseter", "kind": "route_day", "route_name": "DNT Rondvassbu -> Nedre Dørålseter Turisthytte til Rondvassbu", "ops_route": 697, "parts": [{"ops_route": 697, "name": "DNT Rondvassbu -> Nedre Dørålseter Turisthytte til Rondvassbu", "rwgps_id": "53852907"}], "km": 16.7, "gain_m": 587, "points": [{"role": "high", "label": "Highest point", "lat": 61.9069, "lon": 9.789, "ele": 1638}, {"role": "end", "label": "Finish · Dørålseter", "lat": 61.9978, "lon": 9.8067, "ele": 1042}]}, {"stage": 3, "day": 3, "title": "Dørålseter — Bjørnhollia", "kind": "route_day", "route_name": "Nedre Dørålseter Turisthytte til Rondvassbu -> DNT Bjørnhollia", "ops_route": 698, "parts": [{"ops_route": 698, "name": "Nedre Dørålseter Turisthytte til Rondvassbu -> DNT Bjørnhollia", "rwgps_id": "53853073"}], "km": 20.9, "gain_m": 512, "points": [{"role": "high", "label": "Highest point", "lat": 61.9296, "lon": 9.8545, "ele": 1434}, {"role": "end", "label": "Finish · Bjørnhollia", "lat": 61.8839, "lon": 10.0117, "ele": 893}]}, {"stage": 4, "day": 4, "title": "Bjørnhollia — Rondvassbu", "kind": "route_day", "route_name": "DNT Bjørnhollia -> DNT Rondvassbu", "ops_route": 699, "parts": [{"ops_route": 699, "name": "DNT Bjørnhollia -> DNT Rondvassbu", "rwgps_id": "53853256"}], "km": 12.4, "gain_m": 441, "points": [{"role": "high", "label": "Highest point", "lat": 61.8744, "lon": 9.8839, "ele": 1303}, {"role": "end", "label": "Finish · Rondvassbu", "lat": 61.8787, "lon": 9.7965, "ele": 1164}]}, {"stage": 5, "day": 5, "title": "Rondvassbu — Otta", "kind": "route_day", "route_name": "DNT Rondvassbu -> Spranget Bus Stop", "ops_route": 766, "parts": [{"ops_route": 766, "name": "DNT Rondvassbu -> Spranget Bus Stop", "rwgps_id": "53853296"}], "km": 6.4, "gain_m": 88, "points": [{"role": "high", "label": "Highest point", "lat": 61.8596, "lon": 9.7796, "ele": 1229}, {"role": "end", "label": "Finish · Spranget Bus Stop", "lat": 61.8349, "lon": 9.7306, "ele": 1074}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Rondane National Park Hiking Tour", "timezone": "Europe/Oslo", "stages": [{"stage": 1, "day": 1, "title": "Spranget — Rondvassbu", "kind": "route_day", "route_name": "Spranget Bus Stop -> DNT Rondvassbu", "ops_route": 765, "parts": [{"ops_route": 765, "name": "Spranget Bus Stop -> DNT Rondvassbu", "rwgps_id": "53844636"}], "km": 6.4, "gain_m": 179, "points": [{"role": "high", "label": "Highest point", "lat": 61.8596, "lon": 9.7796, "ele": 1229}, {"role": "end", "label": "Finish · Rondvassbu", "lat": 61.8788, "lon": 9.7965, "ele": 1164}]}, {"stage": 2, "day": 2, "title": "Rondvassbu — Dørålseter", "kind": "route_day", "route_name": "DNT Rondvassbu -> Nedre Dørålseter Turisthytte til Rondvassbu", "ops_route": 697, "parts": [{"ops_route": 697, "name": "DNT Rondvassbu -> Nedre Dørålseter Turisthytte til Rondvassbu", "rwgps_id": "53852907"}], "km": 16.7, "gain_m": 587, "points": [{"role": "high", "label": "Highest point", "lat": 61.9069, "lon": 9.789, "ele": 1638}, {"role": "end", "label": "Finish · Dørålseter", "lat": 61.9978, "lon": 9.8067, "ele": 1042}]}, {"stage": 3, "day": 3, "title": "Dørålseter — Bjørnhollia", "kind": "route_day", "route_name": "Nedre Dørålseter Turisthytte til Rondvassbu -> DNT Bjørnhollia", "ops_route": 698, "parts": [{"ops_route": 698, "name": "Nedre Dørålseter Turisthytte til Rondvassbu -> DNT Bjørnhollia", "rwgps_id": "53853073"}], "km": 20.9, "gain_m": 512, "points": [{"role": "high", "label": "Highest point", "lat": 61.9296, "lon": 9.8545, "ele": 1434}, {"role": "end", "label": "Finish · Bjørnhollia", "lat": 61.8839, "lon": 10.0117, "ele": 893}]}, {"stage": 4, "day": 4, "title": "Bjørnhollia — Rondvassbu", "kind": "route_day", "route_name": "DNT Bjørnhollia -> DNT Rondvassbu", "ops_route": 699, "parts": [{"ops_route": 699, "name": "DNT Bjørnhollia -> DNT Rondvassbu", "rwgps_id": "53853256"}], "km": 12.4, "gain_m": 441, "points": [{"role": "high", "label": "Highest point", "lat": 61.8744, "lon": 9.8839, "ele": 1303}, {"role": "end", "label": "Finish · Rondvassbu", "lat": 61.8787, "lon": 9.7965, "ele": 1164}]}, {"stage": 5, "day": 5, "title": "Rondvassbu — Otta", "kind": "route_day", "route_name": "DNT Rondvassbu -> Spranget Bus Stop", "ops_route": 766, "parts": [{"ops_route": 766, "name": "DNT Rondvassbu -> Spranget Bus Stop", "rwgps_id": "53853296"}], "km": 6.4, "gain_m": 88, "points": [{"role": "high", "label": "Highest point", "lat": 61.8596, "lon": 9.7796, "ele": 1229}, {"role": "end", "label": "Finish · Spranget Bus Stop", "lat": 61.8349, "lon": 9.7306, "ele": 1074}]}], "vertical": "Hiking", "brand": {"name": "Norway Hut to Hut Hiking", "site": "https://norwayhuttohuthiking.com", "privacy": "https://norwayhuttohuthiking.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

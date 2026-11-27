@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Innsbruck Sky Trails", "timezone": "Europe/Vienna", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Innsbruck", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Innsbruck", "lat": 47.2692, "lon": 11.4041, "ele": null}]}, {"stage": 2, "day": 2, "title": "Innsbruck — Innsbruck", "kind": "route_day", "route_name": "Innsbruck -> Innsbruck #1", "ops_route": 2604, "parts": [{"ops_route": 1271, "name": "Pfeishütte -> Hafelekar Cable Car Top Station", "rwgps_id": "53039363"}], "km": 5.5, "gain_m": 448, "points": [{"role": "high", "label": "Highest point", "lat": 47.3234, "lon": 11.4107, "ele": 2275}, {"role": "end", "label": "Finish · Innsbruck", "lat": 47.312, "lon": 11.3839, "ele": 2248}]}, {"stage": 3, "day": 3, "title": "Innsbruck — Innsbruck", "kind": "route_day", "route_name": "Innsbruck -> Innsbruck #2", "ops_route": 2605, "parts": [{"ops_route": 4170, "name": "Igls -> Tulfeinalm", "rwgps_id": "57640451"}], "km": 17.5, "gain_m": 1456, "points": [{"role": "high", "label": "Highest point", "lat": 47.2185, "lon": 11.5337, "ele": 2238}, {"role": "end", "label": "Finish · Innsbruck", "lat": 47.2185, "lon": 11.5337, "ele": 2238}]}, {"stage": 4, "day": 4, "title": "Departure", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Innsbruck", "lat": 47.2692, "lon": 11.4041, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Innsbruck Sky Trails", "timezone": "Europe/Vienna", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Innsbruck", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Innsbruck", "lat": 47.2692, "lon": 11.4041, "ele": null}]}, {"stage": 2, "day": 2, "title": "Innsbruck — Innsbruck", "kind": "route_day", "route_name": "Innsbruck -> Innsbruck #1", "ops_route": 2604, "parts": [{"ops_route": 1271, "name": "Pfeishütte -> Hafelekar Cable Car Top Station", "rwgps_id": "53039363"}], "km": 5.5, "gain_m": 448, "points": [{"role": "high", "label": "Highest point", "lat": 47.3234, "lon": 11.4107, "ele": 2275}, {"role": "end", "label": "Finish · Innsbruck", "lat": 47.312, "lon": 11.3839, "ele": 2248}]}, {"stage": 3, "day": 3, "title": "Innsbruck — Innsbruck", "kind": "route_day", "route_name": "Innsbruck -> Innsbruck #2", "ops_route": 2605, "parts": [{"ops_route": 4170, "name": "Igls -> Tulfeinalm", "rwgps_id": "57640451"}], "km": 17.5, "gain_m": 1456, "points": [{"role": "high", "label": "Highest point", "lat": 47.2185, "lon": 11.5337, "ele": 2238}, {"role": "end", "label": "Finish · Innsbruck", "lat": 47.2185, "lon": 11.5337, "ele": 2238}]}, {"stage": 4, "day": 4, "title": "Departure", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Innsbruck", "lat": 47.2692, "lon": 11.4041, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hut to Hut Hiking Austria", "site": "https://huttohuthikingaustria.com", "privacy": "https://huttohuthikingaustria.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Adlerweg Highlights", "timezone": "Europe/Vienna", "stages": [{"stage": 1, "day": 1, "title": "Pertisau — Binsalm", "kind": "route_day", "route_name": "Pertisau -> Binsalm", "ops_route": 3577, "parts": [{"ops_route": 3577, "name": "Pertisau -> Binsalm", "rwgps_id": "57641125"}], "km": 15.1, "gain_m": 993, "points": [{"role": "high", "label": "Highest point", "lat": 47.3844, "lon": 11.5977, "ele": 1948}, {"role": "end", "label": "Finish · Binsalm", "lat": 47.3965, "lon": 11.5779, "ele": 1504}]}, {"stage": 2, "day": 2, "title": "Binsalm — Karwendelhaus", "kind": "route_day", "route_name": "Binsalm -> Karwendelhaus in Karwendel", "ops_route": 853, "parts": [{"ops_route": 853, "name": "Binsalm -> Karwendelhaus in Karwendel", "rwgps_id": "53028371"}], "km": 17.0, "gain_m": 1125, "points": [{"role": "high", "label": "Highest point", "lat": 47.3998, "lon": 11.4992, "ele": 1842}, {"role": "end", "label": "Finish · Karwendelhaus", "lat": 47.4273, "lon": 11.4216, "ele": 1753}]}, {"stage": 3, "day": 3, "title": "Karwendelhaus — Scharnitz", "kind": "route_day", "route_name": "Karwendelhaus -> Scharnitz", "ops_route": 5829, "points": [{"role": "place", "label": "Scharnitz", "lat": 47.3903, "lon": 11.2647, "ele": null}]}, {"stage": 5, "day": 5, "title": "Hallerangerhaus — Nordkettebahn", "kind": "route_day", "route_name": "Hallerangerhaus - DAV Sektion Schwaben -> Hafelekar Cable Car Top Station", "ops_route": 1272, "parts": [{"ops_route": 1272, "name": "Hallerangerhaus - DAV Sektion Schwaben -> Hafelekar Cable Car Top Station", "rwgps_id": "53039349"}], "km": 12.9, "gain_m": 1079, "points": [{"role": "high", "label": "Highest point", "lat": 47.3234, "lon": 11.4107, "ele": 2275}, {"role": "end", "label": "Finish · Hafelekar Cable Car Top Station", "lat": 47.312, "lon": 11.3839, "ele": 2248}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Adlerweg Highlights", "timezone": "Europe/Vienna", "stages": [{"stage": 1, "day": 1, "title": "Pertisau — Binsalm", "kind": "route_day", "route_name": "Pertisau -> Binsalm", "ops_route": 3577, "parts": [{"ops_route": 3577, "name": "Pertisau -> Binsalm", "rwgps_id": "57641125"}], "km": 15.1, "gain_m": 993, "points": [{"role": "high", "label": "Highest point", "lat": 47.3844, "lon": 11.5977, "ele": 1948}, {"role": "end", "label": "Finish · Binsalm", "lat": 47.3965, "lon": 11.5779, "ele": 1504}]}, {"stage": 2, "day": 2, "title": "Binsalm — Karwendelhaus", "kind": "route_day", "route_name": "Binsalm -> Karwendelhaus in Karwendel", "ops_route": 853, "parts": [{"ops_route": 853, "name": "Binsalm -> Karwendelhaus in Karwendel", "rwgps_id": "53028371"}], "km": 17.0, "gain_m": 1125, "points": [{"role": "high", "label": "Highest point", "lat": 47.3998, "lon": 11.4992, "ele": 1842}, {"role": "end", "label": "Finish · Karwendelhaus", "lat": 47.4273, "lon": 11.4216, "ele": 1753}]}, {"stage": 3, "day": 3, "title": "Karwendelhaus — Scharnitz", "kind": "route_day", "route_name": "Karwendelhaus -> Scharnitz", "ops_route": 5829, "points": [{"role": "place", "label": "Scharnitz", "lat": 47.3903, "lon": 11.2647, "ele": null}]}, {"stage": 5, "day": 5, "title": "Hallerangerhaus — Nordkettebahn", "kind": "route_day", "route_name": "Hallerangerhaus - DAV Sektion Schwaben -> Hafelekar Cable Car Top Station", "ops_route": 1272, "parts": [{"ops_route": 1272, "name": "Hallerangerhaus - DAV Sektion Schwaben -> Hafelekar Cable Car Top Station", "rwgps_id": "53039349"}], "km": 12.9, "gain_m": 1079, "points": [{"role": "high", "label": "Highest point", "lat": 47.3234, "lon": 11.4107, "ele": 2275}, {"role": "end", "label": "Finish · Hafelekar Cable Car Top Station", "lat": 47.312, "lon": 11.3839, "ele": 2248}]}], "vertical": "Hiking", "brand": {"name": "Hut to Hut Hiking Austria", "site": "https://huttohuthikingaustria.com", "privacy": "https://huttohuthikingaustria.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

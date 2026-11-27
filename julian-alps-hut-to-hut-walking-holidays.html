@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Julian Alps Hut-to-Hut Walking Holidays", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Bled", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bled", "lat": 46.3683, "lon": 14.1146, "ele": null}]}, {"stage": 2, "day": 2, "title": "Highlights of Bled", "kind": "route_day", "route_name": "Bled -> Bled Castle -> Bled", "ops_route": 5981, "points": [{"role": "place", "label": "Bled", "lat": 46.3683, "lon": 14.1146, "ele": null}]}, {"stage": 3, "day": 3, "title": "Mountain Pastures above Bohinj", "kind": "route_day", "route_name": "Bled -> Vodnikov dom na Velem polju", "ops_route": 5970, "parts": [{"ops_route": 779, "name": "Stara Fužina Parking -> Vodnikov dom na Velem polju", "rwgps_id": "52479123"}], "km": 11.1, "gain_m": 1293, "points": [{"role": "high", "label": "Highest point", "lat": 46.3551, "lon": 13.8622, "ele": 1865}, {"role": "end", "label": "Finish · Vodnikov dom na Velem polju", "lat": 46.3558, "lon": 13.8615, "ele": 1834}]}, {"stage": 4, "day": 4, "title": "The Seven Lakes Valley", "kind": "route_day", "route_name": "Vodnikov dom na Velem polju -> Hribarice -> Koča pri Triglavskih jezerih", "ops_route": 847, "parts": [{"ops_route": 847, "name": "Vodnikov dom na Velem polju -> Hribarice -> Koča pri Triglavskih jezerih", "rwgps_id": "50375413"}], "km": 12.2, "gain_m": 605, "points": [{"role": "high", "label": "Highest point", "lat": 46.3551, "lon": 13.8159, "ele": 2350}, {"role": "end", "label": "Finish · Koča pri Triglavskih jezerih", "lat": 46.3187, "lon": 13.779, "ele": 1689}]}, {"stage": 5, "day": 5, "title": "Descend back to Bohinj", "kind": "route_day", "route_name": "Koča pri Triglavskih jezerih -> Bohinjska Bistrica", "ops_route": 5971, "parts": [{"ops_route": 1110, "name": "Koča pri Triglavskih jezerih -> Koča na Planini pri Jezeru -> Stara Fužina Parking", "rwgps_id": "54736854"}], "km": 13.5, "gain_m": 106, "points": [{"role": "high", "label": "Highest point", "lat": 46.311, "lon": 13.7983, "ele": 1704}, {"role": "end", "label": "Finish · Bohinjska Bistrica", "lat": 46.2903, "lon": 13.8866, "ele": 578}]}, {"stage": 6, "day": 6, "title": "Lake Bohinj Free Day", "kind": "rest", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bohinjska Bistrica", "lat": 46.2743, "lon": 13.9592, "ele": null}]}, {"stage": 7, "day": 7, "title": "Departure from Bohinj", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bohinjska Bistrica", "lat": 46.2743, "lon": 13.9592, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Julian Alps Hut-to-Hut Walking Holidays", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Bled", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bled", "lat": 46.3683, "lon": 14.1146, "ele": null}]}, {"stage": 2, "day": 2, "title": "Highlights of Bled", "kind": "route_day", "route_name": "Bled -> Bled Castle -> Bled", "ops_route": 5981, "points": [{"role": "place", "label": "Bled", "lat": 46.3683, "lon": 14.1146, "ele": null}]}, {"stage": 3, "day": 3, "title": "Mountain Pastures above Bohinj", "kind": "route_day", "route_name": "Bled -> Vodnikov dom na Velem polju", "ops_route": 5970, "parts": [{"ops_route": 779, "name": "Stara Fužina Parking -> Vodnikov dom na Velem polju", "rwgps_id": "52479123"}], "km": 11.1, "gain_m": 1293, "points": [{"role": "high", "label": "Highest point", "lat": 46.3551, "lon": 13.8622, "ele": 1865}, {"role": "end", "label": "Finish · Vodnikov dom na Velem polju", "lat": 46.3558, "lon": 13.8615, "ele": 1834}]}, {"stage": 4, "day": 4, "title": "The Seven Lakes Valley", "kind": "route_day", "route_name": "Vodnikov dom na Velem polju -> Hribarice -> Koča pri Triglavskih jezerih", "ops_route": 847, "parts": [{"ops_route": 847, "name": "Vodnikov dom na Velem polju -> Hribarice -> Koča pri Triglavskih jezerih", "rwgps_id": "50375413"}], "km": 12.2, "gain_m": 605, "points": [{"role": "high", "label": "Highest point", "lat": 46.3551, "lon": 13.8159, "ele": 2350}, {"role": "end", "label": "Finish · Koča pri Triglavskih jezerih", "lat": 46.3187, "lon": 13.779, "ele": 1689}]}, {"stage": 5, "day": 5, "title": "Descend back to Bohinj", "kind": "route_day", "route_name": "Koča pri Triglavskih jezerih -> Bohinjska Bistrica", "ops_route": 5971, "parts": [{"ops_route": 1110, "name": "Koča pri Triglavskih jezerih -> Koča na Planini pri Jezeru -> Stara Fužina Parking", "rwgps_id": "54736854"}], "km": 13.5, "gain_m": 106, "points": [{"role": "high", "label": "Highest point", "lat": 46.311, "lon": 13.7983, "ele": 1704}, {"role": "end", "label": "Finish · Bohinjska Bistrica", "lat": 46.2903, "lon": 13.8866, "ele": 578}]}, {"stage": 6, "day": 6, "title": "Lake Bohinj Free Day", "kind": "rest", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bohinjska Bistrica", "lat": 46.2743, "lon": 13.9592, "ele": null}]}, {"stage": 7, "day": 7, "title": "Departure from Bohinj", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bohinjska Bistrica", "lat": 46.2743, "lon": 13.9592, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Walking Holidays Slovenia", "site": "https://walking-holidays-slovenia.com", "privacy": "https://walking-holidays-slovenia.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

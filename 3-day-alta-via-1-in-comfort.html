@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "3-Day Alta Via 1 in Comfort", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Paradise of Lake Braies", "kind": "route_day", "route_name": "Lago di Braies Bus Stop -> San Vigilio di Marebbe", "ops_route": 5978, "parts": [{"ops_route": 1228, "name": "Lago di Braies Bus Stop -> Pederü Bus Stop", "rwgps_id": "55374824"}], "km": 14.1, "gain_m": 943, "points": [{"role": "high", "label": "Highest point", "lat": 46.6676, "lon": 12.0832, "ele": 2374}, {"role": "end", "label": "Finish · San Vigilio di Marebbe", "lat": 46.639, "lon": 12.0416, "ele": 1542}]}, {"stage": 2, "day": 2, "title": "Fanes-Sennes-Braies Natural Park", "kind": "route_day", "route_name": "San Vigilio di Marebbe -> Corvara", "ops_route": 5979, "parts": [{"ops_route": 6549, "name": "Pederü Bus Stop -> Sciarè Bus Stop", "rwgps_id": "55374834"}], "km": 15.8, "gain_m": 732, "points": [{"role": "high", "label": "Highest point", "lat": 46.6092, "lon": 12.0155, "ele": 2173}, {"role": "end", "label": "Finish · Corvara", "lat": 46.5533, "lon": 11.9685, "ele": 1657}]}, {"stage": 3, "day": 3, "title": "WWI Frontline and Cinque Torri", "kind": "route_day", "route_name": "Corvara -> Piazza Roma Bus Stop", "ops_route": 5980, "parts": [{"ops_route": 1239, "name": "Lagazuoi Cable Car Top Station -> Cinque Torri Chairlift Top Station", "rwgps_id": "55374893"}], "km": 9.9, "gain_m": 358, "points": [{"role": "high", "label": "Highest point", "lat": 46.5279, "lon": 12.0087, "ele": 2675}, {"role": "end", "label": "Finish · Piazza Roma Bus Stop", "lat": 46.5082, "lon": 12.0466, "ele": 2245}]}], "vertical": "Hiking", "planb": {"all": [{"kind": "note", "text": "Buses meet the trail at both ends of every day, so you can cut a day short."}], "by_day": {"3": [{"kind": "note", "text": "From Passo Falzarego, bus 52 goes straight to Cortina instead of the walk to Cinque Torri."}, {"kind": "leg", "how": "Cable car", "from": "Rifugio Lagazuoi", "to": "Passo Falzarego", "operator": "Funivia Lagazuoi", "freq": "Every 15 minutes", "months": "June to mid-October", "runs": "Saves 3.8 km and about 680 m of descent to Passo Falzarego; then about 6 km past Col Gallina to Cinque Torri.", "stop": "Top station next to the hut", "link": "https://lagazuoi.it/IT/Info-Prezzi-e-info-utili-page20-Funivia-del-Lagazuoi", "booking": "Not needed", "checked": "2026-11-10", "when": "Day 3"}]}}}</script>
+<script id="product-data" type="application/json">{"product": "3-Day Alta Via 1 in Comfort", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Paradise of Lake Braies", "kind": "route_day", "route_name": "Lago di Braies Bus Stop -> San Vigilio di Marebbe", "ops_route": 5978, "parts": [{"ops_route": 1228, "name": "Lago di Braies Bus Stop -> Pederü Bus Stop", "rwgps_id": "55374824"}], "km": 14.1, "gain_m": 943, "points": [{"role": "high", "label": "Highest point", "lat": 46.6676, "lon": 12.0832, "ele": 2374}, {"role": "end", "label": "Finish · San Vigilio di Marebbe", "lat": 46.639, "lon": 12.0416, "ele": 1542}]}, {"stage": 2, "day": 2, "title": "Fanes-Sennes-Braies Natural Park", "kind": "route_day", "route_name": "San Vigilio di Marebbe -> Corvara", "ops_route": 5979, "parts": [{"ops_route": 6549, "name": "Pederü Bus Stop -> Sciarè Bus Stop", "rwgps_id": "55374834"}], "km": 15.8, "gain_m": 732, "points": [{"role": "high", "label": "Highest point", "lat": 46.6092, "lon": 12.0155, "ele": 2173}, {"role": "end", "label": "Finish · Corvara", "lat": 46.5533, "lon": 11.9685, "ele": 1657}]}, {"stage": 3, "day": 3, "title": "WWI Frontline and Cinque Torri", "kind": "route_day", "route_name": "Corvara -> Piazza Roma Bus Stop", "ops_route": 5980, "parts": [{"ops_route": 1239, "name": "Lagazuoi Cable Car Top Station -> Cinque Torri Chairlift Top Station", "rwgps_id": "55374893"}], "km": 9.9, "gain_m": 358, "points": [{"role": "high", "label": "Highest point", "lat": 46.5279, "lon": 12.0087, "ele": 2675}, {"role": "end", "label": "Finish · Piazza Roma Bus Stop", "lat": 46.5082, "lon": 12.0466, "ele": 2245}]}], "vertical": "Hiking", "brand": {"name": "Hut To Hut Hiking Dolomites", "site": "https://huttohuthikingdolomites.com", "privacy": "https://huttohuthikingdolomites.com/data-privacy-policy"}, "planb": {"all": [{"kind": "note", "text": "Buses meet the trail at both ends of every day, so you can cut a day short."}], "by_day": {"3": [{"kind": "note", "text": "From Passo Falzarego, bus 52 goes straight to Cortina instead of the walk to Cinque Torri."}, {"kind": "leg", "how": "Cable car", "from": "Rifugio Lagazuoi", "to": "Passo Falzarego", "operator": "Funivia Lagazuoi", "freq": "Every 15 minutes", "months": "June to mid-October", "runs": "Saves 3.8 km and about 680 m of descent to Passo Falzarego; then about 6 km past Col Gallina to Cinque Torri.", "stop": "Top station next to the hut", "link": "https://lagazuoi.it/IT/Info-Prezzi-e-info-utili-page20-Funivia-del-Lagazuoi", "booking": "Not needed", "checked": "2026-11-10", "when": "Day 3"}]}}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

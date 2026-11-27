@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Whisky Trail", "timezone": "Europe/London", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Craigellachie", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Craigellachie", "lat": 57.4898, "lon": -3.188, "ele": null}]}, {"stage": 2, "day": 2, "title": "Craigellachie — Craigellachie", "kind": "route_day", "route_name": "Craigellachie -> Craigellachie #1", "ops_route": 2596, "parts": [{"ops_route": 2596, "name": "Craigellachie -> Craigellachie #1", "rwgps_id": "48330153"}], "km": 17.1, "gain_m": 282, "points": [{"role": "high", "label": "Highest point", "lat": 57.4608, "lon": -3.1651, "ele": 337}, {"role": "end", "label": "Finish · Craigellachie", "lat": 57.4909, "lon": -3.1918, "ele": 80}]}, {"stage": 3, "day": 3, "title": "Craigellachie — Ballindalloch", "kind": "route_day", "route_name": "Craigellachie -> Ballindalloch", "ops_route": 2597, "parts": [{"ops_route": 2597, "name": "Craigellachie -> Ballindalloch", "rwgps_id": "48330201"}], "km": 21.5, "gain_m": 126, "points": [{"role": "high", "label": "Highest point", "lat": 57.4071, "lon": -3.3725, "ele": 170}, {"role": "end", "label": "Finish · Ballindalloch", "lat": 57.4067, "lon": -3.3635, "ele": 161}]}, {"stage": 4, "day": 4, "title": "Ballindalloch — Tomintoul", "kind": "route_day", "route_name": "Ballindalloch -> Tomintoul", "ops_route": 2598, "parts": [{"ops_route": 2598, "name": "Ballindalloch -> Tomintoul", "rwgps_id": "48330269"}], "km": 10.1, "gain_m": 336, "points": [{"role": "high", "label": "Highest point", "lat": 57.3756, "lon": -3.3218, "ele": 470}, {"role": "end", "label": "Finish · Tomintoul", "lat": 57.3513, "lon": -3.3378, "ele": 238}]}, {"stage": 5, "day": 5, "title": "Departure from Tomintoul", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Tomintoul", "lat": 57.2519, "lon": -3.3793, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Whisky Trail", "timezone": "Europe/London", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Craigellachie", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Craigellachie", "lat": 57.4898, "lon": -3.188, "ele": null}]}, {"stage": 2, "day": 2, "title": "Craigellachie — Craigellachie", "kind": "route_day", "route_name": "Craigellachie -> Craigellachie #1", "ops_route": 2596, "parts": [{"ops_route": 2596, "name": "Craigellachie -> Craigellachie #1", "rwgps_id": "48330153"}], "km": 17.1, "gain_m": 282, "points": [{"role": "high", "label": "Highest point", "lat": 57.4608, "lon": -3.1651, "ele": 337}, {"role": "end", "label": "Finish · Craigellachie", "lat": 57.4909, "lon": -3.1918, "ele": 80}]}, {"stage": 3, "day": 3, "title": "Craigellachie — Ballindalloch", "kind": "route_day", "route_name": "Craigellachie -> Ballindalloch", "ops_route": 2597, "parts": [{"ops_route": 2597, "name": "Craigellachie -> Ballindalloch", "rwgps_id": "48330201"}], "km": 21.5, "gain_m": 126, "points": [{"role": "high", "label": "Highest point", "lat": 57.4071, "lon": -3.3725, "ele": 170}, {"role": "end", "label": "Finish · Ballindalloch", "lat": 57.4067, "lon": -3.3635, "ele": 161}]}, {"stage": 4, "day": 4, "title": "Ballindalloch — Tomintoul", "kind": "route_day", "route_name": "Ballindalloch -> Tomintoul", "ops_route": 2598, "parts": [{"ops_route": 2598, "name": "Ballindalloch -> Tomintoul", "rwgps_id": "48330269"}], "km": 10.1, "gain_m": 336, "points": [{"role": "high", "label": "Highest point", "lat": 57.3756, "lon": -3.3218, "ele": 470}, {"role": "end", "label": "Finish · Tomintoul", "lat": 57.3513, "lon": -3.3378, "ele": 238}]}, {"stage": 5, "day": 5, "title": "Departure from Tomintoul", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Tomintoul", "lat": 57.2519, "lon": -3.3793, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hiking Tours", "site": "https://hiking-tours.com", "privacy": "https://hiking-tours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

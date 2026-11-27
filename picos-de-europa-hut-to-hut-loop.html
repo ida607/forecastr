@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Picos de Europa Hut to Hut Loop", "timezone": "Europe/Madrid", "stages": [{"stage": 1, "day": 1, "title": "Arrival to Sotres — Refugio Vega de Urriellu", "kind": "route_day", "route_name": "Sotres Parking -> Refugio Vega de Urriellu", "ops_route": 1779, "parts": [{"ops_route": 1779, "name": "Sotres Parking -> Refugio Vega de Urriellu", "rwgps_id": "54575899"}], "km": 10.7, "gain_m": 1128, "points": [{"role": "high", "label": "Highest point", "lat": 43.2029, "lon": -4.8212, "ele": 1984}, {"role": "end", "label": "Finish · Refugio Vega de Urriellu", "lat": 43.2028, "lon": -4.8214, "ele": 1983}]}, {"stage": 2, "day": 2, "title": "Refugio Vega de Urriellu — Refugio Collado Jermoso", "kind": "route_day", "route_name": "Refugio Vega de Urriellu -> Refugio Diego Mella / Collado Jermoso", "ops_route": 735, "parts": [{"ops_route": 735, "name": "Refugio Vega de Urriellu -> Refugio Diego Mella / Collado Jermoso", "rwgps_id": "54576382"}], "km": 8.8, "gain_m": 582, "points": [{"role": "high", "label": "Highest point", "lat": 43.1803, "lon": -4.8313, "ele": 2385}, {"role": "end", "label": "Finish · Refugio Collado Jermoso", "lat": 43.1731, "lon": -4.8693, "ele": 2077}]}, {"stage": 3, "day": 3, "title": "Refugio Collado Jermoso — Espinama", "kind": "route_day", "route_name": "Refugio Collado Jermoso -> Espinama", "ops_route": 3522, "parts": [{"ops_route": 3522, "name": "Refugio Collado Jermoso -> Espinama", "rwgps_id": "57639242"}], "km": 15.6, "gain_m": 522, "points": [{"role": "high", "label": "Highest point", "lat": 43.1576, "lon": -4.8358, "ele": 2251}, {"role": "end", "label": "Finish · Espinama", "lat": 43.1275, "lon": -4.7857, "ele": 875}]}, {"stage": 4, "day": 4, "title": "Espinama — Sotres", "kind": "route_day", "route_name": "Espinama -> Sotres Parking", "ops_route": 5807, "parts": [{"ops_route": 3523, "name": "Espinama -> Sotres", "rwgps_id": "57639243"}], "km": 14.5, "gain_m": 716, "points": [{"role": "high", "label": "Highest point", "lat": 43.1632, "lon": -4.7664, "ele": 1480}, {"role": "end", "label": "Finish · Sotres Parking", "lat": 43.2332, "lon": -4.7461, "ele": 1035}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Picos de Europa Hut to Hut Loop", "timezone": "Europe/Madrid", "stages": [{"stage": 1, "day": 1, "title": "Arrival to Sotres — Refugio Vega de Urriellu", "kind": "route_day", "route_name": "Sotres Parking -> Refugio Vega de Urriellu", "ops_route": 1779, "parts": [{"ops_route": 1779, "name": "Sotres Parking -> Refugio Vega de Urriellu", "rwgps_id": "54575899"}], "km": 10.7, "gain_m": 1128, "points": [{"role": "high", "label": "Highest point", "lat": 43.2029, "lon": -4.8212, "ele": 1984}, {"role": "end", "label": "Finish · Refugio Vega de Urriellu", "lat": 43.2028, "lon": -4.8214, "ele": 1983}]}, {"stage": 2, "day": 2, "title": "Refugio Vega de Urriellu — Refugio Collado Jermoso", "kind": "route_day", "route_name": "Refugio Vega de Urriellu -> Refugio Diego Mella / Collado Jermoso", "ops_route": 735, "parts": [{"ops_route": 735, "name": "Refugio Vega de Urriellu -> Refugio Diego Mella / Collado Jermoso", "rwgps_id": "54576382"}], "km": 8.8, "gain_m": 582, "points": [{"role": "high", "label": "Highest point", "lat": 43.1803, "lon": -4.8313, "ele": 2385}, {"role": "end", "label": "Finish · Refugio Collado Jermoso", "lat": 43.1731, "lon": -4.8693, "ele": 2077}]}, {"stage": 3, "day": 3, "title": "Refugio Collado Jermoso — Espinama", "kind": "route_day", "route_name": "Refugio Collado Jermoso -> Espinama", "ops_route": 3522, "parts": [{"ops_route": 3522, "name": "Refugio Collado Jermoso -> Espinama", "rwgps_id": "57639242"}], "km": 15.6, "gain_m": 522, "points": [{"role": "high", "label": "Highest point", "lat": 43.1576, "lon": -4.8358, "ele": 2251}, {"role": "end", "label": "Finish · Espinama", "lat": 43.1275, "lon": -4.7857, "ele": 875}]}, {"stage": 4, "day": 4, "title": "Espinama — Sotres", "kind": "route_day", "route_name": "Espinama -> Sotres Parking", "ops_route": 5807, "parts": [{"ops_route": 3523, "name": "Espinama -> Sotres", "rwgps_id": "57639243"}], "km": 14.5, "gain_m": 716, "points": [{"role": "high", "label": "Highest point", "lat": 43.1632, "lon": -4.7664, "ele": 1480}, {"role": "end", "label": "Finish · Sotres Parking", "lat": 43.2332, "lon": -4.7461, "ele": 1035}]}], "vertical": "Hiking", "brand": {"name": "Hiking Tours", "site": "https://hiking-tours.com", "privacy": "https://hiking-tours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

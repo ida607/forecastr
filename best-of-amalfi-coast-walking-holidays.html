@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Best of Amalfi Coast Walking Holidays", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Arriving in Amalfi", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Amalfi", "lat": 40.6338, "lon": 14.6028, "ele": null}]}, {"stage": 2, "day": 2, "title": "Circular Walk in Valle dei Mulini", "kind": "route_day", "route_name": "Amalfi -> Valle dei Mulini -> Amalfi", "ops_route": 3717, "parts": [{"ops_route": 3717, "name": "Amalfi -> Valle dei Mulini -> Amalfi", "rwgps_id": "57650790"}], "km": 11.3, "gain_m": 513, "points": [{"role": "high", "label": "Highest point", "lat": 40.6511, "lon": 14.6045, "ele": 429}, {"role": "end", "label": "Finish · Amalfi", "lat": 40.6343, "lon": 14.6024, "ele": 19}]}, {"stage": 3, "day": 3, "title": "Amalfi to Praiano", "kind": "route_day", "route_name": "Amalfi -> Praiano", "ops_route": 3713, "parts": [{"ops_route": 3713, "name": "Amalfi -> Praiano", "rwgps_id": "57650777"}], "km": 10.9, "gain_m": 587, "points": [{"role": "high", "label": "Highest point", "lat": 40.6259, "lon": 14.5571, "ele": 435}, {"role": "end", "label": "Finish · Praiano", "lat": 40.6103, "lon": 14.5293, "ele": 187}]}, {"stage": 4, "day": 4, "title": "From Praiano to Positano", "kind": "route_day", "route_name": "Praiano -> Positano", "ops_route": 3714, "parts": [{"ops_route": 3714, "name": "Praiano -> Positano", "rwgps_id": "57650781"}], "km": 9.7, "gain_m": 509, "points": [{"role": "high", "label": "Highest point", "lat": 40.6208, "lon": 14.5241, "ele": 538}, {"role": "end", "label": "Finish · Positano", "lat": 40.628, "lon": 14.4848, "ele": 82}]}, {"stage": 5, "day": 5, "title": "Hotel Dimora Fornillo — Naples", "kind": "route_day", "route_name": "Positano -> Naples", "ops_route": 6130, "parts": [{"ops_route": 3501, "name": "Positano -> Praiano", "rwgps_id": "57639140"}, {"ops_route": 1932, "name": "Capri Marina Grande Ferry Harbour -> Villa Jovis -> Capri Marina Grande Ferry Harbour", "rwgps_id": "50086279"}], "km": 23.4, "gain_m": 1165, "points": [{"role": "high", "label": "Highest point", "lat": 40.6276, "lon": 14.5145, "ele": 579}, {"role": "end", "label": "Finish · Naples", "lat": 40.5555, "lon": 14.2402, "ele": 14}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Best of Amalfi Coast Walking Holidays", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Arriving in Amalfi", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Amalfi", "lat": 40.6338, "lon": 14.6028, "ele": null}]}, {"stage": 2, "day": 2, "title": "Circular Walk in Valle dei Mulini", "kind": "route_day", "route_name": "Amalfi -> Valle dei Mulini -> Amalfi", "ops_route": 3717, "parts": [{"ops_route": 3717, "name": "Amalfi -> Valle dei Mulini -> Amalfi", "rwgps_id": "57650790"}], "km": 11.3, "gain_m": 513, "points": [{"role": "high", "label": "Highest point", "lat": 40.6511, "lon": 14.6045, "ele": 429}, {"role": "end", "label": "Finish · Amalfi", "lat": 40.6343, "lon": 14.6024, "ele": 19}]}, {"stage": 3, "day": 3, "title": "Amalfi to Praiano", "kind": "route_day", "route_name": "Amalfi -> Praiano", "ops_route": 3713, "parts": [{"ops_route": 3713, "name": "Amalfi -> Praiano", "rwgps_id": "57650777"}], "km": 10.9, "gain_m": 587, "points": [{"role": "high", "label": "Highest point", "lat": 40.6259, "lon": 14.5571, "ele": 435}, {"role": "end", "label": "Finish · Praiano", "lat": 40.6103, "lon": 14.5293, "ele": 187}]}, {"stage": 4, "day": 4, "title": "From Praiano to Positano", "kind": "route_day", "route_name": "Praiano -> Positano", "ops_route": 3714, "parts": [{"ops_route": 3714, "name": "Praiano -> Positano", "rwgps_id": "57650781"}], "km": 9.7, "gain_m": 509, "points": [{"role": "high", "label": "Highest point", "lat": 40.6208, "lon": 14.5241, "ele": 538}, {"role": "end", "label": "Finish · Positano", "lat": 40.628, "lon": 14.4848, "ele": 82}]}, {"stage": 5, "day": 5, "title": "Hotel Dimora Fornillo — Naples", "kind": "route_day", "route_name": "Positano -> Naples", "ops_route": 6130, "parts": [{"ops_route": 3501, "name": "Positano -> Praiano", "rwgps_id": "57639140"}, {"ops_route": 1932, "name": "Capri Marina Grande Ferry Harbour -> Villa Jovis -> Capri Marina Grande Ferry Harbour", "rwgps_id": "50086279"}], "km": 23.4, "gain_m": 1165, "points": [{"role": "high", "label": "Highest point", "lat": 40.6276, "lon": 14.5145, "ele": 579}, {"role": "end", "label": "Finish · Naples", "lat": 40.5555, "lon": 14.2402, "ele": 14}]}], "vertical": "Hiking", "brand": {"name": "Walking Holidays Amalfi Coast", "site": "https://walkingholidaysamalficoast.com", "privacy": "https://walkingholidaysamalficoast.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

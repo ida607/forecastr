@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "The Zugspitze Hike", "timezone": "Europe/Berlin", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Garmisch-Partenkirchen", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Garmisch-Partenkirchen", "lat": 47.493, "lon": 11.0962, "ele": null}]}, {"stage": 2, "day": 2, "title": "Garmisch-Partenkirchen — Reintalangerhütte", "kind": "route_day", "route_name": "Garmisch-Partenkirchen -> Reintalangerhütte", "ops_route": 5929, "parts": [{"ops_route": 1031, "name": "Biohotel Bavaria -> Reintalanger Hut", "rwgps_id": "54960283"}], "km": 16.6, "gain_m": 792, "points": [{"role": "high", "label": "Highest point", "lat": 47.4051, "lon": 11.0367, "ele": 1375}, {"role": "end", "label": "Finish · Reintalangerhütte", "lat": 47.4052, "lon": 11.0357, "ele": 1373}]}, {"stage": 3, "day": 3, "title": "Reintalangerhütte — Zugspitze summit — Knorr Hütte", "kind": "route_day", "route_name": "Reintalanger Hut -> Knorr Hut", "ops_route": 936, "parts": [{"ops_route": 936, "name": "Reintalanger Hut -> Knorr Hut", "rwgps_id": "54961578"}], "km": 11.3, "gain_m": 1549, "points": [{"role": "high", "label": "Highest point", "lat": 47.421, "lon": 10.9848, "ele": 2933}, {"role": "end", "label": "Finish · Knorrhütte", "lat": 47.4102, "lon": 11.0129, "ele": 2063}]}, {"stage": 4, "day": 4, "title": "Knorr Hütte — Ehrwald", "kind": "route_day", "route_name": "Knorrhütte -> Garmisch-Partenkirchen", "ops_route": 5930, "parts": [{"ops_route": 989, "name": "Knorr Hut -> Ehrwald Zugspitzbahn Train Station", "rwgps_id": "54961954"}], "km": 14.0, "gain_m": 147, "points": [{"role": "high", "label": "Highest point", "lat": 47.39, "lon": 11.0077, "ele": 2116}, {"role": "end", "label": "Finish · Garmisch-Partenkirchen", "lat": 47.4095, "lon": 10.9137, "ele": 975}]}, {"stage": 5, "day": 5, "title": "Departure from Garmisch-Partenkirchen", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Garmisch-Partenkirchen", "lat": 47.493, "lon": 11.0962, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "The Zugspitze Hike", "timezone": "Europe/Berlin", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Garmisch-Partenkirchen", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Garmisch-Partenkirchen", "lat": 47.493, "lon": 11.0962, "ele": null}]}, {"stage": 2, "day": 2, "title": "Garmisch-Partenkirchen — Reintalangerhütte", "kind": "route_day", "route_name": "Garmisch-Partenkirchen -> Reintalangerhütte", "ops_route": 5929, "parts": [{"ops_route": 1031, "name": "Biohotel Bavaria -> Reintalanger Hut", "rwgps_id": "54960283"}], "km": 16.6, "gain_m": 792, "points": [{"role": "high", "label": "Highest point", "lat": 47.4051, "lon": 11.0367, "ele": 1375}, {"role": "end", "label": "Finish · Reintalangerhütte", "lat": 47.4052, "lon": 11.0357, "ele": 1373}]}, {"stage": 3, "day": 3, "title": "Reintalangerhütte — Zugspitze summit — Knorr Hütte", "kind": "route_day", "route_name": "Reintalanger Hut -> Knorr Hut", "ops_route": 936, "parts": [{"ops_route": 936, "name": "Reintalanger Hut -> Knorr Hut", "rwgps_id": "54961578"}], "km": 11.3, "gain_m": 1549, "points": [{"role": "high", "label": "Highest point", "lat": 47.421, "lon": 10.9848, "ele": 2933}, {"role": "end", "label": "Finish · Knorrhütte", "lat": 47.4102, "lon": 11.0129, "ele": 2063}]}, {"stage": 4, "day": 4, "title": "Knorr Hütte — Ehrwald", "kind": "route_day", "route_name": "Knorrhütte -> Garmisch-Partenkirchen", "ops_route": 5930, "parts": [{"ops_route": 989, "name": "Knorr Hut -> Ehrwald Zugspitzbahn Train Station", "rwgps_id": "54961954"}], "km": 14.0, "gain_m": 147, "points": [{"role": "high", "label": "Highest point", "lat": 47.39, "lon": 11.0077, "ele": 2116}, {"role": "end", "label": "Finish · Garmisch-Partenkirchen", "lat": 47.4095, "lon": 10.9137, "ele": 975}]}, {"stage": 5, "day": 5, "title": "Departure from Garmisch-Partenkirchen", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Garmisch-Partenkirchen", "lat": 47.493, "lon": 11.0962, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hiking Tours", "site": "https://hiking-tours.com", "privacy": "https://hiking-tours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

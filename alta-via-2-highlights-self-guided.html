@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Alta Via 2 Highlights Self-Guided", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Selva di Val Gardena — Rifugio Puez", "kind": "route_day", "route_name": "Selva di Val Gardena -> Rifugio Puez", "ops_route": 3596, "parts": [{"ops_route": 3596, "name": "Selva di Val Gardena -> Rifugio Puez", "rwgps_id": "57641226"}], "km": 9.4, "gain_m": 934, "points": [{"role": "high", "label": "Highest point", "lat": 46.59, "lon": 11.8296, "ele": 2482}, {"role": "end", "label": "Finish · Rifugio Puez / Puez Hütte", "lat": 46.59, "lon": 11.8293, "ele": 2480}]}, {"stage": 2, "day": 2, "title": "Rifugio Puez — Rifugio Genova", "kind": "route_day", "route_name": "Puez Hütte -> Schlüterhütte", "ops_route": 1075, "parts": [{"ops_route": 1075, "name": "Puez Hütte -> Schlüterhütte", "rwgps_id": "54866879"}], "km": 9.9, "gain_m": 564, "points": [{"role": "high", "label": "Highest point", "lat": 46.5973, "lon": 11.7966, "ele": 2743}, {"role": "end", "label": "Finish · Rifugio Genova / Schlüterhütte", "lat": 46.6352, "lon": 11.8048, "ele": 2300}]}, {"stage": 3, "day": 3, "title": "Rifugio Genova — Ortisei", "kind": "route_day", "route_name": "Schlüterhütte -> Chiesetta di Sant’Antonio", "ops_route": 1076, "parts": [{"ops_route": 1076, "name": "Schlüterhütte -> Chiesetta di Sant’Antonio", "rwgps_id": "54866962"}], "km": 17.3, "gain_m": 514, "points": [{"role": "high", "label": "Highest point", "lat": 46.6352, "lon": 11.8048, "ele": 2300}, {"role": "end", "label": "Finish · Chiesetta di Sant’Antonio", "lat": 46.5735, "lon": 11.6738, "ele": 1222}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Alta Via 2 Highlights Self-Guided", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Selva di Val Gardena — Rifugio Puez", "kind": "route_day", "route_name": "Selva di Val Gardena -> Rifugio Puez", "ops_route": 3596, "parts": [{"ops_route": 3596, "name": "Selva di Val Gardena -> Rifugio Puez", "rwgps_id": "57641226"}], "km": 9.4, "gain_m": 934, "points": [{"role": "high", "label": "Highest point", "lat": 46.59, "lon": 11.8296, "ele": 2482}, {"role": "end", "label": "Finish · Rifugio Puez / Puez Hütte", "lat": 46.59, "lon": 11.8293, "ele": 2480}]}, {"stage": 2, "day": 2, "title": "Rifugio Puez — Rifugio Genova", "kind": "route_day", "route_name": "Puez Hütte -> Schlüterhütte", "ops_route": 1075, "parts": [{"ops_route": 1075, "name": "Puez Hütte -> Schlüterhütte", "rwgps_id": "54866879"}], "km": 9.9, "gain_m": 564, "points": [{"role": "high", "label": "Highest point", "lat": 46.5973, "lon": 11.7966, "ele": 2743}, {"role": "end", "label": "Finish · Rifugio Genova / Schlüterhütte", "lat": 46.6352, "lon": 11.8048, "ele": 2300}]}, {"stage": 3, "day": 3, "title": "Rifugio Genova — Ortisei", "kind": "route_day", "route_name": "Schlüterhütte -> Chiesetta di Sant’Antonio", "ops_route": 1076, "parts": [{"ops_route": 1076, "name": "Schlüterhütte -> Chiesetta di Sant’Antonio", "rwgps_id": "54866962"}], "km": 17.3, "gain_m": 514, "points": [{"role": "high", "label": "Highest point", "lat": 46.6352, "lon": 11.8048, "ele": 2300}, {"role": "end", "label": "Finish · Chiesetta di Sant’Antonio", "lat": 46.5735, "lon": 11.6738, "ele": 1222}]}], "vertical": "Hiking", "brand": {"name": "Hut To Hut Hiking Dolomites", "site": "https://huttohuthikingdolomites.com", "privacy": "https://huttohuthikingdolomites.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Kesch Trek", "timezone": "Europe/Zurich", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Davos", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Davos", "lat": 46.7931, "lon": 9.8206, "ele": null}]}, {"stage": 2, "day": 2, "title": "Flüela Pass — Grialetsch Hut", "kind": "route_day", "route_name": "Davos -> Grialetsch-Hütte", "ops_route": 5942, "parts": [{"ops_route": 1008, "name": "Flüela Bus Stop -> Chamanna da Grialetsch CAS", "rwgps_id": "50359898"}], "km": 6.3, "gain_m": 448, "points": [{"role": "high", "label": "Highest point", "lat": 46.7269, "lon": 9.9685, "ele": 2781}, {"role": "end", "label": "Finish · Grialetsch-Hütte", "lat": 46.71, "lon": 9.9607, "ele": 2539}]}, {"stage": 3, "day": 3, "title": "Grialetsch Hut — Kesch Hut", "kind": "route_day", "route_name": "Chamanna da Grialetsch CAS -> Kesch-Hütte SAC", "ops_route": 714, "parts": [{"ops_route": 714, "name": "Chamanna da Grialetsch CAS -> Kesch-Hütte SAC", "rwgps_id": "50359994"}], "km": 13.0, "gain_m": 601, "points": [{"role": "high", "label": "Highest point", "lat": 46.6451, "lon": 9.8759, "ele": 2618}, {"role": "end", "label": "Finish · Kesch-Hütte", "lat": 46.6453, "lon": 9.8752, "ele": 2611}]}, {"stage": 4, "day": 4, "title": "Kesch Hut — Es-cha Hut", "kind": "route_day", "route_name": "Kesch-Hütte SAC -> Chamanna d'Es-cha CAS", "ops_route": 715, "parts": [{"ops_route": 715, "name": "Kesch-Hütte SAC -> Chamanna d'Es-cha CAS", "rwgps_id": "50360276"}], "km": 14.1, "gain_m": 968, "points": [{"role": "high", "label": "Highest point", "lat": 46.6079, "lon": 9.8651, "ele": 2871}, {"role": "end", "label": "Finish · Chamanna d'Es-cha", "lat": 46.6114, "lon": 9.9028, "ele": 2576}]}, {"stage": 5, "day": 5, "title": "Es-cha Hut — Bergün", "kind": "route_day", "route_name": "Es-cha Hut -> Bergün", "ops_route": 3670, "parts": [{"ops_route": 3670, "name": "Es-cha Hut -> Bergün", "rwgps_id": "57650177"}], "km": 20.1, "gain_m": 101, "points": [{"role": "high", "label": "Highest point", "lat": 46.6114, "lon": 9.9029, "ele": 2594}, {"role": "end", "label": "Finish · Bergun", "lat": 46.6289, "lon": 9.7455, "ele": 1368}]}, {"stage": 6, "day": 6, "title": "Departure from Bergün", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bergun", "lat": 46.6302, "lon": 9.7463, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Kesch Trek", "timezone": "Europe/Zurich", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Davos", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Davos", "lat": 46.7931, "lon": 9.8206, "ele": null}]}, {"stage": 2, "day": 2, "title": "Flüela Pass — Grialetsch Hut", "kind": "route_day", "route_name": "Davos -> Grialetsch-Hütte", "ops_route": 5942, "parts": [{"ops_route": 1008, "name": "Flüela Bus Stop -> Chamanna da Grialetsch CAS", "rwgps_id": "50359898"}], "km": 6.3, "gain_m": 448, "points": [{"role": "high", "label": "Highest point", "lat": 46.7269, "lon": 9.9685, "ele": 2781}, {"role": "end", "label": "Finish · Grialetsch-Hütte", "lat": 46.71, "lon": 9.9607, "ele": 2539}]}, {"stage": 3, "day": 3, "title": "Grialetsch Hut — Kesch Hut", "kind": "route_day", "route_name": "Chamanna da Grialetsch CAS -> Kesch-Hütte SAC", "ops_route": 714, "parts": [{"ops_route": 714, "name": "Chamanna da Grialetsch CAS -> Kesch-Hütte SAC", "rwgps_id": "50359994"}], "km": 13.0, "gain_m": 601, "points": [{"role": "high", "label": "Highest point", "lat": 46.6451, "lon": 9.8759, "ele": 2618}, {"role": "end", "label": "Finish · Kesch-Hütte", "lat": 46.6453, "lon": 9.8752, "ele": 2611}]}, {"stage": 4, "day": 4, "title": "Kesch Hut — Es-cha Hut", "kind": "route_day", "route_name": "Kesch-Hütte SAC -> Chamanna d'Es-cha CAS", "ops_route": 715, "parts": [{"ops_route": 715, "name": "Kesch-Hütte SAC -> Chamanna d'Es-cha CAS", "rwgps_id": "50360276"}], "km": 14.1, "gain_m": 968, "points": [{"role": "high", "label": "Highest point", "lat": 46.6079, "lon": 9.8651, "ele": 2871}, {"role": "end", "label": "Finish · Chamanna d'Es-cha", "lat": 46.6114, "lon": 9.9028, "ele": 2576}]}, {"stage": 5, "day": 5, "title": "Es-cha Hut — Bergün", "kind": "route_day", "route_name": "Es-cha Hut -> Bergün", "ops_route": 3670, "parts": [{"ops_route": 3670, "name": "Es-cha Hut -> Bergün", "rwgps_id": "57650177"}], "km": 20.1, "gain_m": 101, "points": [{"role": "high", "label": "Highest point", "lat": 46.6114, "lon": 9.9029, "ele": 2594}, {"role": "end", "label": "Finish · Bergun", "lat": 46.6289, "lon": 9.7455, "ele": 1368}]}, {"stage": 6, "day": 6, "title": "Departure from Bergün", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Bergun", "lat": 46.6302, "lon": 9.7463, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hut To Hut Hiking Switzerland", "site": "https://huttohuthikingswitzerland.com", "privacy": "https://huttohuthikingswitzerland.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Winter Triglav Tour", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Krma Valley — Kredarica Hut", "kind": "route_day", "route_name": "Krma Parking -> Triglav -> Triglavski dom na Kredarici", "ops_route": 773, "parts": [{"ops_route": 773, "name": "Krma Parking -> Triglav -> Triglavski dom na Kredarici", "rwgps_id": "54455982"}], "km": 11.2, "gain_m": 1793, "points": [{"role": "high", "label": "Highest point", "lat": 46.3779, "lon": 13.8373, "ele": 2724}, {"role": "end", "label": "Finish · Triglavski dom na Kredarici", "lat": 46.3788, "lon": 13.8487, "ele": 2469}]}, {"stage": 2, "day": 2, "title": "Kreadarica Hut — Triglav Summit — Krma Valley", "kind": "route_day", "route_name": "Triglavski dom na Kredarici -> Triglav -> Krma Parking", "ops_route": 880, "parts": [{"ops_route": 880, "name": "Triglavski dom na Kredarici -> Triglav -> Krma Parking", "rwgps_id": "54456082"}], "km": 11.4, "gain_m": 266, "points": [{"role": "high", "label": "Highest point", "lat": 46.3779, "lon": 13.8371, "ele": 2773}, {"role": "end", "label": "Finish · Krma Parking", "lat": 46.3911, "lon": 13.9154, "ele": 915}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Winter Triglav Tour", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Krma Valley — Kredarica Hut", "kind": "route_day", "route_name": "Krma Parking -> Triglav -> Triglavski dom na Kredarici", "ops_route": 773, "parts": [{"ops_route": 773, "name": "Krma Parking -> Triglav -> Triglavski dom na Kredarici", "rwgps_id": "54455982"}], "km": 11.2, "gain_m": 1793, "points": [{"role": "high", "label": "Highest point", "lat": 46.3779, "lon": 13.8373, "ele": 2724}, {"role": "end", "label": "Finish · Triglavski dom na Kredarici", "lat": 46.3788, "lon": 13.8487, "ele": 2469}]}, {"stage": 2, "day": 2, "title": "Kreadarica Hut — Triglav Summit — Krma Valley", "kind": "route_day", "route_name": "Triglavski dom na Kredarici -> Triglav -> Krma Parking", "ops_route": 880, "parts": [{"ops_route": 880, "name": "Triglavski dom na Kredarici -> Triglav -> Krma Parking", "rwgps_id": "54456082"}], "km": 11.4, "gain_m": 266, "points": [{"role": "high", "label": "Highest point", "lat": 46.3779, "lon": 13.8371, "ele": 2773}, {"role": "end", "label": "Finish · Krma Parking", "lat": 46.3911, "lon": 13.9154, "ele": 915}]}], "vertical": "Hiking", "brand": {"name": "Triglav Tours", "site": "https://triglavtours.com", "privacy": "https://triglavtours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

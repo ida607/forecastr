@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "The Kullaleden Trail", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Helsingborg", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Helsingborg", "lat": 56.0442, "lon": 12.7037, "ele": null}]}, {"stage": 2, "day": 2, "title": "Helsingborg — Höganäs", "kind": "route_day", "route_name": "Helsingborg -> Höganäs", "ops_route": 3533, "parts": [{"ops_route": 3533, "name": "Helsingborg -> Höganäs", "rwgps_id": "57639258"}], "km": 23.4, "gain_m": 111, "points": [{"role": "high", "label": "Highest point", "lat": 56.0799, "lon": 12.6637, "ele": 38}, {"role": "end", "label": "Finish · Höganäs", "lat": 56.1862, "lon": 12.5947, "ele": 4}]}, {"stage": 3, "day": 3, "title": "Höganäs — Mölle", "kind": "route_day", "route_name": "Höganäs -> Mölle", "ops_route": 5808, "points": [{"role": "place", "label": "Mölle", "lat": 56.2837, "lon": 12.4974, "ele": null}]}, {"stage": 4, "day": 4, "title": "Mölle — Arild", "kind": "route_day", "route_name": "Mölle -> Arild", "ops_route": 5809, "parts": [{"ops_route": 6218, "name": "Mölle -> Arild -> Ängelholm", "rwgps_id": "57837619"}], "km": 34.7, "gain_m": 148, "points": [{"role": "high", "label": "Highest point", "lat": 56.2673, "lon": 12.5505, "ele": 49}, {"role": "end", "label": "Finish · Arild", "lat": 56.2435, "lon": 12.8579, "ele": 4}]}, {"stage": 5, "day": 5, "title": "Arild — Ängelholm", "kind": "route_day", "route_name": "Arild -> Ängelholm", "ops_route": 5928, "parts": [{"ops_route": 4422, "name": "Arild -> Vejbystrand -> Ängelholm", "rwgps_id": "57729992"}], "km": 38.0, "gain_m": 205, "points": [{"role": "high", "label": "Highest point", "lat": 56.2925, "lon": 12.4882, "ele": 98}, {"role": "end", "label": "Finish · Ängelholm", "lat": 56.2435, "lon": 12.8579, "ele": 4}]}, {"stage": 6, "day": 6, "title": "Departure from Ängelholm", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Ängelholm", "lat": 56.2429, "lon": 12.8619, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "The Kullaleden Trail", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Helsingborg", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Helsingborg", "lat": 56.0442, "lon": 12.7037, "ele": null}]}, {"stage": 2, "day": 2, "title": "Helsingborg — Höganäs", "kind": "route_day", "route_name": "Helsingborg -> Höganäs", "ops_route": 3533, "parts": [{"ops_route": 3533, "name": "Helsingborg -> Höganäs", "rwgps_id": "57639258"}], "km": 23.4, "gain_m": 111, "points": [{"role": "high", "label": "Highest point", "lat": 56.0799, "lon": 12.6637, "ele": 38}, {"role": "end", "label": "Finish · Höganäs", "lat": 56.1862, "lon": 12.5947, "ele": 4}]}, {"stage": 3, "day": 3, "title": "Höganäs — Mölle", "kind": "route_day", "route_name": "Höganäs -> Mölle", "ops_route": 5808, "points": [{"role": "place", "label": "Mölle", "lat": 56.2837, "lon": 12.4974, "ele": null}]}, {"stage": 4, "day": 4, "title": "Mölle — Arild", "kind": "route_day", "route_name": "Mölle -> Arild", "ops_route": 5809, "parts": [{"ops_route": 6218, "name": "Mölle -> Arild -> Ängelholm", "rwgps_id": "57837619"}], "km": 34.7, "gain_m": 148, "points": [{"role": "high", "label": "Highest point", "lat": 56.2673, "lon": 12.5505, "ele": 49}, {"role": "end", "label": "Finish · Arild", "lat": 56.2435, "lon": 12.8579, "ele": 4}]}, {"stage": 5, "day": 5, "title": "Arild — Ängelholm", "kind": "route_day", "route_name": "Arild -> Ängelholm", "ops_route": 5928, "parts": [{"ops_route": 4422, "name": "Arild -> Vejbystrand -> Ängelholm", "rwgps_id": "57729992"}], "km": 38.0, "gain_m": 205, "points": [{"role": "high", "label": "Highest point", "lat": 56.2925, "lon": 12.4882, "ele": 98}, {"role": "end", "label": "Finish · Ängelholm", "lat": 56.2435, "lon": 12.8579, "ele": 4}]}, {"stage": 6, "day": 6, "title": "Departure from Ängelholm", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Ängelholm", "lat": 56.2429, "lon": 12.8619, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hiking Tours", "site": "https://hiking-tours.com", "privacy": "https://hiking-tours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

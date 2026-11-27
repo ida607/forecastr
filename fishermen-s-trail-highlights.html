@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Fishermen's Trail Highlights", "timezone": "Europe/Lisbon", "stages": [{"stage": 1, "day": 1, "title": "Arrive in Porto Covo", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Porto Covo", "lat": 37.8517, "lon": -8.7918, "ele": null}]}, {"stage": 2, "day": 2, "title": "Porto Covo — Vila Nova de Milfontes", "kind": "route_day", "route_name": "Porto Covo -> Vila Nova de Milfontes", "ops_route": 3488, "parts": [{"ops_route": 3488, "name": "Porto Covo -> Vila Nova de Milfontes", "rwgps_id": "57639072"}], "km": 19.5, "gain_m": 151, "points": [{"role": "high", "label": "Highest point", "lat": 37.7534, "lon": -8.8065, "ele": 44}, {"role": "end", "label": "Finish · Vila Nova de Milfontes", "lat": 37.7241, "lon": -8.7832, "ele": 20}]}, {"stage": 4, "day": 4, "title": "Cavaleiro — São Teotónio", "kind": "route_day", "route_name": "Casa da Courela Country House -> Casa da Seiceira", "ops_route": 814, "parts": [{"ops_route": 814, "name": "Casa da Courela Country House -> Casa da Seiceira", "rwgps_id": "49893674"}], "km": 19.4, "gain_m": 261, "points": [{"role": "high", "label": "Highest point", "lat": 37.4783, "lon": -8.784, "ele": 68}, {"role": "end", "label": "Finish · Odeceixe", "lat": 37.4781, "lon": -8.7844, "ele": 65}]}, {"stage": 5, "day": 5, "title": "São Teotónio — Odeceixe", "kind": "route_day", "route_name": "Casa da Seiceira -> Odeceixe", "ops_route": 6054, "parts": [{"ops_route": 815, "name": "Casa da Seiceira -> Monte João Roupeiro", "rwgps_id": "49893846"}], "km": 20.9, "gain_m": 293, "points": [{"role": "high", "label": "Highest point", "lat": 37.4097, "lon": -8.7855, "ele": 83}, {"role": "end", "label": "Finish · Odeceixe", "lat": 37.4091, "lon": -8.7853, "ele": 81}]}, {"stage": 6, "day": 6, "title": "Departure from Odeceixe", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Odeceixe", "lat": 37.4332, "lon": -8.7702, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Fishermen's Trail Highlights", "timezone": "Europe/Lisbon", "stages": [{"stage": 1, "day": 1, "title": "Arrive in Porto Covo", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Porto Covo", "lat": 37.8517, "lon": -8.7918, "ele": null}]}, {"stage": 2, "day": 2, "title": "Porto Covo — Vila Nova de Milfontes", "kind": "route_day", "route_name": "Porto Covo -> Vila Nova de Milfontes", "ops_route": 3488, "parts": [{"ops_route": 3488, "name": "Porto Covo -> Vila Nova de Milfontes", "rwgps_id": "57639072"}], "km": 19.5, "gain_m": 151, "points": [{"role": "high", "label": "Highest point", "lat": 37.7534, "lon": -8.8065, "ele": 44}, {"role": "end", "label": "Finish · Vila Nova de Milfontes", "lat": 37.7241, "lon": -8.7832, "ele": 20}]}, {"stage": 4, "day": 4, "title": "Cavaleiro — São Teotónio", "kind": "route_day", "route_name": "Casa da Courela Country House -> Casa da Seiceira", "ops_route": 814, "parts": [{"ops_route": 814, "name": "Casa da Courela Country House -> Casa da Seiceira", "rwgps_id": "49893674"}], "km": 19.4, "gain_m": 261, "points": [{"role": "high", "label": "Highest point", "lat": 37.4783, "lon": -8.784, "ele": 68}, {"role": "end", "label": "Finish · Odeceixe", "lat": 37.4781, "lon": -8.7844, "ele": 65}]}, {"stage": 5, "day": 5, "title": "São Teotónio — Odeceixe", "kind": "route_day", "route_name": "Casa da Seiceira -> Odeceixe", "ops_route": 6054, "parts": [{"ops_route": 815, "name": "Casa da Seiceira -> Monte João Roupeiro", "rwgps_id": "49893846"}], "km": 20.9, "gain_m": 293, "points": [{"role": "high", "label": "Highest point", "lat": 37.4097, "lon": -8.7855, "ele": 83}, {"role": "end", "label": "Finish · Odeceixe", "lat": 37.4091, "lon": -8.7853, "ele": 81}]}, {"stage": 6, "day": 6, "title": "Departure from Odeceixe", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Odeceixe", "lat": 37.4332, "lon": -8.7702, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hiking Tours", "site": "https://hiking-tours.com", "privacy": "https://hiking-tours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

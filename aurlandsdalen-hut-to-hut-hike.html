@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Aurlandsdalen Hut-to-Hut Hike", "timezone": "Europe/Oslo", "stages": [{"stage": 2, "day": 2, "title": "Finse — Geiterygghytta", "kind": "route_day", "route_name": "DNT Brebua -> DNT Geiterygghytta", "ops_route": 694, "parts": [{"ops_route": 694, "name": "DNT Brebua -> DNT Geiterygghytta", "rwgps_id": "53782472"}], "km": 15.1, "gain_m": 488, "points": [{"role": "high", "label": "Highest point", "lat": 60.6514, "lon": 7.5285, "ele": 1643}, {"role": "end", "label": "Finish · Geiterygghytta", "lat": 60.7009, "lon": 7.6038, "ele": 1218}]}, {"stage": 3, "day": 3, "title": "Geiterygghytta — Steinbergdalshytta", "kind": "route_day", "route_name": "DNT Geiterygghytta -> Steinbergdalshytta", "ops_route": 695, "parts": [{"ops_route": 695, "name": "DNT Geiterygghytta -> Steinbergdalshytta", "rwgps_id": "53782919"}], "km": 10.4, "gain_m": 247, "points": [{"role": "high", "label": "Highest point", "lat": 60.7519, "lon": 7.605, "ele": 1381}, {"role": "end", "label": "Finish · Steinbergdalshytta", "lat": 60.7792, "lon": 7.5812, "ele": 1052}]}, {"stage": 4, "day": 4, "title": "Steinbergdalshytta — Østerbø", "kind": "route_day", "route_name": "Steinbergdalshytta -> Østerbø Fjellstove AS", "ops_route": 696, "parts": [{"ops_route": 696, "name": "Steinbergdalshytta -> Østerbø Fjellstove AS", "rwgps_id": "53783028"}], "km": 9.5, "gain_m": 210, "points": [{"role": "high", "label": "Highest point", "lat": 60.7987, "lon": 7.5738, "ele": 1240}, {"role": "end", "label": "Finish · Østerbø", "lat": 60.8286, "lon": 7.5054, "ele": 804}]}, {"stage": 5, "day": 5, "title": "Østerbø — Aurlandsvangen", "kind": "route_day", "route_name": "Østerbø Fjellstove -> Aurlandsvangen", "ops_route": 6107, "parts": [{"ops_route": 947, "name": "Østerbø Fjellstove AS -> Vassbygdi Bus Stop", "rwgps_id": "53783264"}], "km": 15.5, "gain_m": 667, "points": [{"role": "high", "label": "Highest point", "lat": 60.831, "lon": 7.5028, "ele": 834}, {"role": "end", "label": "Finish · Aurlandsvangen", "lat": 60.8743, "lon": 7.3371, "ele": 67}]}, {"stage": 6, "day": 6, "title": "Departure from Aurlandsvangen", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Aurlandsvangen", "lat": 60.9058, "lon": 7.187, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Aurlandsdalen Hut-to-Hut Hike", "timezone": "Europe/Oslo", "stages": [{"stage": 2, "day": 2, "title": "Finse — Geiterygghytta", "kind": "route_day", "route_name": "DNT Brebua -> DNT Geiterygghytta", "ops_route": 694, "parts": [{"ops_route": 694, "name": "DNT Brebua -> DNT Geiterygghytta", "rwgps_id": "53782472"}], "km": 15.1, "gain_m": 488, "points": [{"role": "high", "label": "Highest point", "lat": 60.6514, "lon": 7.5285, "ele": 1643}, {"role": "end", "label": "Finish · Geiterygghytta", "lat": 60.7009, "lon": 7.6038, "ele": 1218}]}, {"stage": 3, "day": 3, "title": "Geiterygghytta — Steinbergdalshytta", "kind": "route_day", "route_name": "DNT Geiterygghytta -> Steinbergdalshytta", "ops_route": 695, "parts": [{"ops_route": 695, "name": "DNT Geiterygghytta -> Steinbergdalshytta", "rwgps_id": "53782919"}], "km": 10.4, "gain_m": 247, "points": [{"role": "high", "label": "Highest point", "lat": 60.7519, "lon": 7.605, "ele": 1381}, {"role": "end", "label": "Finish · Steinbergdalshytta", "lat": 60.7792, "lon": 7.5812, "ele": 1052}]}, {"stage": 4, "day": 4, "title": "Steinbergdalshytta — Østerbø", "kind": "route_day", "route_name": "Steinbergdalshytta -> Østerbø Fjellstove AS", "ops_route": 696, "parts": [{"ops_route": 696, "name": "Steinbergdalshytta -> Østerbø Fjellstove AS", "rwgps_id": "53783028"}], "km": 9.5, "gain_m": 210, "points": [{"role": "high", "label": "Highest point", "lat": 60.7987, "lon": 7.5738, "ele": 1240}, {"role": "end", "label": "Finish · Østerbø", "lat": 60.8286, "lon": 7.5054, "ele": 804}]}, {"stage": 5, "day": 5, "title": "Østerbø — Aurlandsvangen", "kind": "route_day", "route_name": "Østerbø Fjellstove -> Aurlandsvangen", "ops_route": 6107, "parts": [{"ops_route": 947, "name": "Østerbø Fjellstove AS -> Vassbygdi Bus Stop", "rwgps_id": "53783264"}], "km": 15.5, "gain_m": 667, "points": [{"role": "high", "label": "Highest point", "lat": 60.831, "lon": 7.5028, "ele": 834}, {"role": "end", "label": "Finish · Aurlandsvangen", "lat": 60.8743, "lon": 7.3371, "ele": 67}]}, {"stage": 6, "day": 6, "title": "Departure from Aurlandsvangen", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Aurlandsvangen", "lat": 60.9058, "lon": 7.187, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Norway Hut to Hut Hiking", "site": "https://norwayhuttohuthiking.com", "privacy": "https://norwayhuttohuthiking.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

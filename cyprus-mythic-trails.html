@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Cyprus’ Mythic Trails", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Paphos", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Paphos", "lat": 34.7744, "lon": 32.4232, "ele": null}]}, {"stage": 2, "day": 2, "title": "Paphos — Drouseia", "kind": "route_day", "route_name": "Paphos -> Drouseia", "ops_route": 4229, "points": [{"role": "place", "label": "Drouseia", "lat": 34.9628, "lon": 32.3976, "ele": null}]}, {"stage": 3, "day": 3, "title": "Drouseia — Drouseia", "kind": "route_day", "route_name": "Drouseia -> Drouseia #1", "ops_route": 2243, "parts": [{"ops_route": 2243, "name": "Drouseia -> Drouseia #1", "rwgps_id": "57640314"}], "km": 19.7, "gain_m": 618, "points": [{"role": "high", "label": "Highest point", "lat": 34.9606, "lon": 32.3934, "ele": 648}, {"role": "end", "label": "Finish · Drouseia", "lat": 34.9626, "lon": 32.3977, "ele": 623}]}, {"stage": 4, "day": 4, "title": "Drouseia — Drouseia", "kind": "route_day", "route_name": "Drouseia -> Drouseia #2", "ops_route": 2244, "parts": [{"ops_route": 4158, "name": "Baths of Aphrodite -> Baths of Aphrodite", "rwgps_id": "57640319"}], "km": 13.5, "gain_m": 385, "points": [{"role": "high", "label": "Highest point", "lat": 35.064, "lon": 32.3244, "ele": 361}, {"role": "end", "label": "Finish · Drouseia", "lat": 35.0564, "lon": 32.3439, "ele": 46}]}, {"stage": 5, "day": 5, "title": "Drouseia — Drouseia", "kind": "route_day", "route_name": "Drouseia -> Drouseia #3", "ops_route": 2245, "parts": [{"ops_route": 4159, "name": "Neo Chorio -> Neo Chorio", "rwgps_id": "57640321"}], "km": 8.9, "gain_m": 164, "points": [{"role": "high", "label": "Highest point", "lat": 35.024, "lon": 32.3331, "ele": 286}, {"role": "end", "label": "Finish · Drouseia", "lat": 35.0263, "lon": 32.3631, "ele": 181}]}, {"stage": 6, "day": 6, "title": "Departure from Paphos", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Drouseia", "lat": 34.9628, "lon": 32.3976, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Cyprus’ Mythic Trails", "timezone": "Europe/Ljubljana", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Paphos", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Paphos", "lat": 34.7744, "lon": 32.4232, "ele": null}]}, {"stage": 2, "day": 2, "title": "Paphos — Drouseia", "kind": "route_day", "route_name": "Paphos -> Drouseia", "ops_route": 4229, "points": [{"role": "place", "label": "Drouseia", "lat": 34.9628, "lon": 32.3976, "ele": null}]}, {"stage": 3, "day": 3, "title": "Drouseia — Drouseia", "kind": "route_day", "route_name": "Drouseia -> Drouseia #1", "ops_route": 2243, "parts": [{"ops_route": 2243, "name": "Drouseia -> Drouseia #1", "rwgps_id": "57640314"}], "km": 19.7, "gain_m": 618, "points": [{"role": "high", "label": "Highest point", "lat": 34.9606, "lon": 32.3934, "ele": 648}, {"role": "end", "label": "Finish · Drouseia", "lat": 34.9626, "lon": 32.3977, "ele": 623}]}, {"stage": 4, "day": 4, "title": "Drouseia — Drouseia", "kind": "route_day", "route_name": "Drouseia -> Drouseia #2", "ops_route": 2244, "parts": [{"ops_route": 4158, "name": "Baths of Aphrodite -> Baths of Aphrodite", "rwgps_id": "57640319"}], "km": 13.5, "gain_m": 385, "points": [{"role": "high", "label": "Highest point", "lat": 35.064, "lon": 32.3244, "ele": 361}, {"role": "end", "label": "Finish · Drouseia", "lat": 35.0564, "lon": 32.3439, "ele": 46}]}, {"stage": 5, "day": 5, "title": "Drouseia — Drouseia", "kind": "route_day", "route_name": "Drouseia -> Drouseia #3", "ops_route": 2245, "parts": [{"ops_route": 4159, "name": "Neo Chorio -> Neo Chorio", "rwgps_id": "57640321"}], "km": 8.9, "gain_m": 164, "points": [{"role": "high", "label": "Highest point", "lat": 35.024, "lon": 32.3331, "ele": 286}, {"role": "end", "label": "Finish · Drouseia", "lat": 35.0263, "lon": 32.3631, "ele": 181}]}, {"stage": 6, "day": 6, "title": "Departure from Paphos", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Drouseia", "lat": 34.9628, "lon": 32.3976, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hiking Tours", "site": "https://hiking-tours.com", "privacy": "https://hiking-tours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

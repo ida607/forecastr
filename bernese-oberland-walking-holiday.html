@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Bernese Oberland Walking Holiday", "timezone": "Europe/Zurich", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Mürren", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Murren", "lat": 46.5594, "lon": 7.8926, "ele": null}]}, {"stage": 2, "day": 2, "title": "Mürren Mountain View Trail", "kind": "rest", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Murren", "lat": 46.5594, "lon": 7.8926, "ele": null}]}, {"stage": 3, "day": 3, "title": "Wengen & Leiterhorn Trail", "kind": "route_day", "route_name": "Murren -> Wengen", "ops_route": 5960, "points": [{"role": "place", "label": "Wengen", "lat": 46.6054, "lon": 7.9215, "ele": null}]}, {"stage": 4, "day": 4, "title": "Mannlichen to Kleine Scheidegg Panorama Trail", "kind": "route_day", "route_name": "Wengen -> Leiterhorn -> Wengen", "ops_route": 5892, "points": [{"role": "place", "label": "Wengen", "lat": 46.6054, "lon": 7.9215, "ele": null}]}, {"stage": 5, "day": 5, "title": "Eiger Trail & Transfer to Grindelwald", "kind": "route_day", "route_name": "Wengen -> Grindelwald", "ops_route": 5961, "parts": [{"ops_route": 1713, "name": "Eigergletscher Train Station -> Parkhotel Schoenegg", "rwgps_id": "56282462"}], "km": 13.2, "gain_m": 166, "points": [{"role": "high", "label": "Highest point", "lat": 46.5747, "lon": 7.9751, "ele": 2328}, {"role": "end", "label": "Finish · Grindelwald", "lat": 46.6244, "lon": 8.0404, "ele": 1062}]}, {"stage": 6, "day": 6, "title": "Grindelwald Hiking", "kind": "route_day", "route_name": "Grindelwald -> First Cable Car Top Station -> Grindelwald", "ops_route": 6030, "parts": [{"ops_route": 1489, "name": "First Cable Car Top Station -> Grosse Scheidegg Bus Stop", "rwgps_id": "51488895"}], "km": 12.4, "gain_m": 361, "points": [{"role": "high", "label": "Highest point", "lat": 46.668, "lon": 8.0273, "ele": 2276}, {"role": "end", "label": "Finish · Grindelwald", "lat": 46.6559, "lon": 8.1019, "ele": 1955}]}, {"stage": 7, "day": 7, "title": "Jungfraujoch", "kind": "rest", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Grindelwald", "lat": 46.6242, "lon": 8.0414, "ele": null}]}, {"stage": 8, "day": 8, "title": "Departure from Grindelwald", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Grindelwald", "lat": 46.6242, "lon": 8.0414, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Bernese Oberland Walking Holiday", "timezone": "Europe/Zurich", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Mürren", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Murren", "lat": 46.5594, "lon": 7.8926, "ele": null}]}, {"stage": 2, "day": 2, "title": "Mürren Mountain View Trail", "kind": "rest", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Murren", "lat": 46.5594, "lon": 7.8926, "ele": null}]}, {"stage": 3, "day": 3, "title": "Wengen & Leiterhorn Trail", "kind": "route_day", "route_name": "Murren -> Wengen", "ops_route": 5960, "points": [{"role": "place", "label": "Wengen", "lat": 46.6054, "lon": 7.9215, "ele": null}]}, {"stage": 4, "day": 4, "title": "Mannlichen to Kleine Scheidegg Panorama Trail", "kind": "route_day", "route_name": "Wengen -> Leiterhorn -> Wengen", "ops_route": 5892, "points": [{"role": "place", "label": "Wengen", "lat": 46.6054, "lon": 7.9215, "ele": null}]}, {"stage": 5, "day": 5, "title": "Eiger Trail & Transfer to Grindelwald", "kind": "route_day", "route_name": "Wengen -> Grindelwald", "ops_route": 5961, "parts": [{"ops_route": 1713, "name": "Eigergletscher Train Station -> Parkhotel Schoenegg", "rwgps_id": "56282462"}], "km": 13.2, "gain_m": 166, "points": [{"role": "high", "label": "Highest point", "lat": 46.5747, "lon": 7.9751, "ele": 2328}, {"role": "end", "label": "Finish · Grindelwald", "lat": 46.6244, "lon": 8.0404, "ele": 1062}]}, {"stage": 6, "day": 6, "title": "Grindelwald Hiking", "kind": "route_day", "route_name": "Grindelwald -> First Cable Car Top Station -> Grindelwald", "ops_route": 6030, "parts": [{"ops_route": 1489, "name": "First Cable Car Top Station -> Grosse Scheidegg Bus Stop", "rwgps_id": "51488895"}], "km": 12.4, "gain_m": 361, "points": [{"role": "high", "label": "Highest point", "lat": 46.668, "lon": 8.0273, "ele": 2276}, {"role": "end", "label": "Finish · Grindelwald", "lat": 46.6559, "lon": 8.1019, "ele": 1955}]}, {"stage": 7, "day": 7, "title": "Jungfraujoch", "kind": "rest", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Grindelwald", "lat": 46.6242, "lon": 8.0414, "ele": null}]}, {"stage": 8, "day": 8, "title": "Departure from Grindelwald", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Grindelwald", "lat": 46.6242, "lon": 8.0414, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Switzerland Walking Holidays", "site": "https://switzerlandwalkingholidays.com", "privacy": "https://switzerlandwalkingholidays.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

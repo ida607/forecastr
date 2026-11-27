@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Peaks of the Balkans Trail Highlights", "timezone": "Europe/Tirane", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Theth", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Thethi", "lat": 42.3947, "lon": 19.7751, "ele": null}]}, {"stage": 2, "day": 2, "title": "Theth — Valbonë", "kind": "route_day", "route_name": "Theth -> Valbonë", "ops_route": 3518, "parts": [{"ops_route": 3518, "name": "Theth -> Valbonë", "rwgps_id": "57639236"}], "km": 17.5, "gain_m": 1062, "points": [{"role": "high", "label": "Highest point", "lat": 42.4088, "lon": 19.8123, "ele": 1807}, {"role": "end", "label": "Finish · Valbonë", "lat": 42.4456, "lon": 19.8853, "ele": 948}]}, {"stage": 3, "day": 3, "title": "Valbonë — Vusanje", "kind": "route_day", "route_name": "Valbonë -> Vusanje", "ops_route": 3519, "parts": [{"ops_route": 3519, "name": "Valbonë -> Vusanje", "rwgps_id": "57639237"}], "km": 14.3, "gain_m": 1105, "points": [{"role": "high", "label": "Highest point", "lat": 42.4896, "lon": 19.8891, "ele": 2032}, {"role": "end", "label": "Finish · Vusanje", "lat": 42.5273, "lon": 19.8474, "ele": 1046}]}, {"stage": 4, "day": 4, "title": "Vusanje — Theth", "kind": "route_day", "route_name": "Vusanje -> Theth", "ops_route": 3520, "parts": [{"ops_route": 3520, "name": "Vusanje -> Theth", "rwgps_id": "57639238"}], "km": 22.4, "gain_m": 858, "points": [{"role": "high", "label": "Highest point", "lat": 42.4518, "lon": 19.769, "ele": 1738}, {"role": "end", "label": "Finish · Thethi", "lat": 42.3871, "lon": 19.7804, "ele": 725}]}, {"stage": 5, "day": 5, "title": "Departure from Theth", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Thethi", "lat": 42.3947, "lon": 19.7751, "ele": null}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Peaks of the Balkans Trail Highlights", "timezone": "Europe/Tirane", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Theth", "kind": "arrival", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Thethi", "lat": 42.3947, "lon": 19.7751, "ele": null}]}, {"stage": 2, "day": 2, "title": "Theth — Valbonë", "kind": "route_day", "route_name": "Theth -> Valbonë", "ops_route": 3518, "parts": [{"ops_route": 3518, "name": "Theth -> Valbonë", "rwgps_id": "57639236"}], "km": 17.5, "gain_m": 1062, "points": [{"role": "high", "label": "Highest point", "lat": 42.4088, "lon": 19.8123, "ele": 1807}, {"role": "end", "label": "Finish · Valbonë", "lat": 42.4456, "lon": 19.8853, "ele": 948}]}, {"stage": 3, "day": 3, "title": "Valbonë — Vusanje", "kind": "route_day", "route_name": "Valbonë -> Vusanje", "ops_route": 3519, "parts": [{"ops_route": 3519, "name": "Valbonë -> Vusanje", "rwgps_id": "57639237"}], "km": 14.3, "gain_m": 1105, "points": [{"role": "high", "label": "Highest point", "lat": 42.4896, "lon": 19.8891, "ele": 2032}, {"role": "end", "label": "Finish · Vusanje", "lat": 42.5273, "lon": 19.8474, "ele": 1046}]}, {"stage": 4, "day": 4, "title": "Vusanje — Theth", "kind": "route_day", "route_name": "Vusanje -> Theth", "ops_route": 3520, "parts": [{"ops_route": 3520, "name": "Vusanje -> Theth", "rwgps_id": "57639238"}], "km": 22.4, "gain_m": 858, "points": [{"role": "high", "label": "Highest point", "lat": 42.4518, "lon": 19.769, "ele": 1738}, {"role": "end", "label": "Finish · Thethi", "lat": 42.3871, "lon": 19.7804, "ele": 725}]}, {"stage": 5, "day": 5, "title": "Departure from Theth", "kind": "departure", "route_name": null, "ops_route": null, "points": [{"role": "place", "label": "Thethi", "lat": 42.3947, "lon": 19.7751, "ele": null}]}], "vertical": "Hiking", "brand": {"name": "Hiking Tours", "site": "https://hiking-tours.com", "privacy": "https://hiking-tours.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

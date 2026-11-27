@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Jotunheimen Highlights", "timezone": "Europe/Ljubljana", "stages": [{"stage": 3, "day": 3, "title": "Memurubu — Gjendebu", "kind": "route_day", "route_name": "Memurubu -> Gjendebu", "ops_route": 606, "parts": [{"ops_route": 606, "name": "Memurubu -> Gjendebu", "rwgps_id": "53665297"}], "km": 10.3, "gain_m": 614, "points": [{"role": "high", "label": "Highest point", "lat": 61.4848, "lon": 8.5778, "ele": 1477}, {"role": "end", "label": "Finish · Gjendebu", "lat": 61.4515, "lon": 8.4885, "ele": 993}]}], "vertical": "Hiking", "planb": {"all": [{"kind": "note", "text": "In bad weather you can skip either hiking day by boat and still sleep at your booked hut, so nobody has to wait a day."}], "by_day": {"2": [{"kind": "note", "text": "In wind, rain or fog the ridge is slippery and exposed. The options are the path north of Bessvatnet to Memurubu, or the boat."}, {"kind": "leg", "how": "Boat", "from": "Gjendesheim", "to": "Memurubu", "operator": "Gjendebåten", "freq": "several a day, more in July", "months": "June to late September", "runs": "Skips the whole 13.8 km and 984 m of climbing over Besseggen. Buy ahead: boats from Gjendesheim sell out.", "stop": "Gjendesheim pier", "link": "https://gjende.no/rutetider/", "booking": "Recommended", "checked": "2026-10-30", "when": "Day 2"}], "3": [{"kind": "note", "text": "The chained descent to Gjendebu is slippery in rain. The option is the morning or afternoon boat from Memurubu."}, {"kind": "leg", "how": "Boat", "from": "Memurubu", "to": "Gjendebu", "operator": "Gjendebåten", "freq": "twice a day, morning and afternoon", "months": "mid-June to mid-September", "runs": "Skips the whole 10.4 km and 614 m of climbing over Memurutunga and the chained descent.", "stop": "Memurubu pier", "link": "https://gjende.no/rutetider/", "booking": "Not needed", "checked": "2026-10-30", "when": "Day 3"}]}}}</script>
+<script id="product-data" type="application/json">{"product": "Jotunheimen Highlights", "timezone": "Europe/Ljubljana", "stages": [{"stage": 3, "day": 3, "title": "Memurubu — Gjendebu", "kind": "route_day", "route_name": "Memurubu -> Gjendebu", "ops_route": 606, "parts": [{"ops_route": 606, "name": "Memurubu -> Gjendebu", "rwgps_id": "53665297"}], "km": 10.3, "gain_m": 614, "points": [{"role": "high", "label": "Highest point", "lat": 61.4848, "lon": 8.5778, "ele": 1477}, {"role": "end", "label": "Finish · Gjendebu", "lat": 61.4515, "lon": 8.4885, "ele": 993}]}], "vertical": "Hiking", "brand": {"name": "Norway Hut to Hut Hiking", "site": "https://norwayhuttohuthiking.com", "privacy": "https://norwayhuttohuthiking.com/data-privacy-policy"}, "planb": {"all": [{"kind": "note", "text": "In bad weather you can skip either hiking day by boat and still sleep at your booked hut, so nobody has to wait a day."}], "by_day": {"2": [{"kind": "note", "text": "In wind, rain or fog the ridge is slippery and exposed. The options are the path north of Bessvatnet to Memurubu, or the boat."}, {"kind": "leg", "how": "Boat", "from": "Gjendesheim", "to": "Memurubu", "operator": "Gjendebåten", "freq": "several a day, more in July", "months": "June to late September", "runs": "Skips the whole 13.8 km and 984 m of climbing over Besseggen. Buy ahead: boats from Gjendesheim sell out.", "stop": "Gjendesheim pier", "link": "https://gjende.no/rutetider/", "booking": "Recommended", "checked": "2026-10-30", "when": "Day 2"}], "3": [{"kind": "note", "text": "The chained descent to Gjendebu is slippery in rain. The option is the morning or afternoon boat from Memurubu."}, {"kind": "leg", "how": "Boat", "from": "Memurubu", "to": "Gjendebu", "operator": "Gjendebåten", "freq": "twice a day, morning and afternoon", "months": "mid-June to mid-September", "runs": "Skips the whole 10.4 km and 614 m of climbing over Memurutunga and the chained descent.", "stop": "Memurubu pier", "link": "https://gjende.no/rutetider/", "booking": "Not needed", "checked": "2026-10-30", "when": "Day 3"}]}}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

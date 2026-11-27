@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "4-Day Carros de Foc Highlights", "timezone": "Europe/Madrid", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Espot and ascent to Refugi Ernest Mallafré", "kind": "route_day", "route_name": "Espot -> Refugi Ernest Mallafré", "ops_route": 3702, "parts": [{"ops_route": 3702, "name": "Espot -> Refugi Ernest Mallafré", "rwgps_id": "57650529"}], "km": 7.6, "gain_m": 569, "points": [{"role": "high", "label": "Highest point", "lat": 42.5789, "lon": 1.0089, "ele": 1898}, {"role": "end", "label": "Finish · Refugi Ernest Mallafré", "lat": 42.5788, "lon": 1.009, "ele": 1898}]}, {"stage": 2, "day": 2, "title": "Refugi Ernest Mallafré — Refugi d’Estany Llong", "kind": "route_day", "route_name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "ops_route": 722, "parts": [{"ops_route": 722, "name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "rwgps_id": "51066143"}], "km": 8.0, "gain_m": 531, "points": [{"role": "high", "label": "Highest point", "lat": 42.5785, "lon": 0.9734, "ele": 2429}, {"role": "end", "label": "Finish · Refugi d'Estany Llong", "lat": 42.5727, "lon": 0.9423, "ele": 1992}]}, {"stage": 3, "day": 3, "title": "Refugi d’Estany Llong — Refugi Josep Maria Blanc", "kind": "route_day", "route_name": "Refugi d'Estany Llong -> Refugi J M Blanc", "ops_route": 723, "parts": [{"ops_route": 723, "name": "Refugi d'Estany Llong -> Refugi J M Blanc", "rwgps_id": "54783698"}], "km": 17.8, "gain_m": 984, "points": [{"role": "high", "label": "Highest point", "lat": 42.5299, "lon": 1.0215, "ele": 2662}, {"role": "end", "label": "Finish · Refugi J M Blanc", "lat": 42.5456, "lon": 1.0442, "ele": 2312}]}, {"stage": 4, "day": 4, "title": "Refugi Josep Maria Blanc — Espot", "kind": "route_day", "route_name": "Refugi Josep Maria Blanc -> Espot", "ops_route": 3700, "parts": [{"ops_route": 3700, "name": "Refugi Josep Maria Blanc -> Espot", "rwgps_id": "57650526"}], "km": 7.0, "gain_m": 0, "points": [{"role": "high", "label": "Highest point", "lat": 42.5453, "lon": 1.0442, "ele": 2318}, {"role": "end", "label": "Finish · Espot", "lat": 42.5757, "lon": 1.0884, "ele": 1318}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "4-Day Carros de Foc Highlights", "timezone": "Europe/Madrid", "stages": [{"stage": 1, "day": 1, "title": "Arrival in Espot and ascent to Refugi Ernest Mallafré", "kind": "route_day", "route_name": "Espot -> Refugi Ernest Mallafré", "ops_route": 3702, "parts": [{"ops_route": 3702, "name": "Espot -> Refugi Ernest Mallafré", "rwgps_id": "57650529"}], "km": 7.6, "gain_m": 569, "points": [{"role": "high", "label": "Highest point", "lat": 42.5789, "lon": 1.0089, "ele": 1898}, {"role": "end", "label": "Finish · Refugi Ernest Mallafré", "lat": 42.5788, "lon": 1.009, "ele": 1898}]}, {"stage": 2, "day": 2, "title": "Refugi Ernest Mallafré — Refugi d’Estany Llong", "kind": "route_day", "route_name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "ops_route": 722, "parts": [{"ops_route": 722, "name": "Refugi Ernest Mallafré -> Refugi d'Estany Llong", "rwgps_id": "51066143"}], "km": 8.0, "gain_m": 531, "points": [{"role": "high", "label": "Highest point", "lat": 42.5785, "lon": 0.9734, "ele": 2429}, {"role": "end", "label": "Finish · Refugi d'Estany Llong", "lat": 42.5727, "lon": 0.9423, "ele": 1992}]}, {"stage": 3, "day": 3, "title": "Refugi d’Estany Llong — Refugi Josep Maria Blanc", "kind": "route_day", "route_name": "Refugi d'Estany Llong -> Refugi J M Blanc", "ops_route": 723, "parts": [{"ops_route": 723, "name": "Refugi d'Estany Llong -> Refugi J M Blanc", "rwgps_id": "54783698"}], "km": 17.8, "gain_m": 984, "points": [{"role": "high", "label": "Highest point", "lat": 42.5299, "lon": 1.0215, "ele": 2662}, {"role": "end", "label": "Finish · Refugi J M Blanc", "lat": 42.5456, "lon": 1.0442, "ele": 2312}]}, {"stage": 4, "day": 4, "title": "Refugi Josep Maria Blanc — Espot", "kind": "route_day", "route_name": "Refugi Josep Maria Blanc -> Espot", "ops_route": 3700, "parts": [{"ops_route": 3700, "name": "Refugi Josep Maria Blanc -> Espot", "rwgps_id": "57650526"}], "km": 7.0, "gain_m": 0, "points": [{"role": "high", "label": "Highest point", "lat": 42.5453, "lon": 1.0442, "ele": 2318}, {"role": "end", "label": "Finish · Espot", "lat": 42.5757, "lon": 1.0884, "ele": 1318}]}], "vertical": "Hiking", "brand": {"name": "Pyrenees Hut to Hut Hiking", "site": "https://pyreneeshuttohuthiking.com", "privacy": "https://pyreneeshuttohuthiking.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {

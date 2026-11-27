@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stage Weather</title>
+<title>Weather for your stages</title>
 <style>
 :root{
   --bg:#f6f5f2; --card:#ffffff; --ink:#1d2327; --muted:#5d6970; --line:#e2e0da;
@@ -75,10 +75,11 @@ footer{color:var(--muted);font-size:.82rem;margin-top:22px}
       in the Alps and nearby, <a href="https://data.hub.geosphere.at/" target="_blank" rel="noopener">GeoSphere Austria</a>
       (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) for the first days;
       in the United States, the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+    <p id="privacy"></p>
   </footer>
 </main>
 
-<script id="product-data" type="application/json">{"product": "Val di Fiemme Hiking Tour", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Predazzo — Alpe Lusia", "kind": "route_day", "route_name": "Predazzo -> Alpe Lusia", "ops_route": 3638, "parts": [{"ops_route": 3638, "name": "Predazzo -> Alpe Lusia", "rwgps_id": "57650062"}], "km": 13.6, "gain_m": 1058, "points": [{"role": "high", "label": "Highest point", "lat": 46.3434, "lon": 11.7017, "ele": 2049}, {"role": "end", "label": "Finish · Rifugio Lusia", "lat": 46.3434, "lon": 11.7017, "ele": 2049}]}, {"stage": 2, "day": 2, "title": "Alpe Lusia — Bocche Peak", "kind": "route_day", "route_name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "ops_route": 681, "parts": [{"ops_route": 681, "name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "rwgps_id": "55256311"}], "km": 13.7, "gain_m": 869, "points": [{"role": "high", "label": "Highest point", "lat": 46.3542, "lon": 11.7527, "ele": 2715}, {"role": "end", "label": "Finish · Rifugio Capanna Passo Valles", "lat": 46.3386, "lon": 11.8005, "ele": 2036}]}, {"stage": 3, "day": 3, "title": "Bocche Peak — Passo Rolle", "kind": "route_day", "route_name": "Rifugio Capanna Passo Valles -> Passo Rolle", "ops_route": 5819, "parts": [{"ops_route": 682, "name": "Rifugio Capanna Passo Valles -> Hotel Venezia", "rwgps_id": "55310295"}], "km": 11.1, "gain_m": 539, "points": [{"role": "high", "label": "Highest point", "lat": 46.3292, "lon": 11.816, "ele": 2294}, {"role": "end", "label": "Finish · Passo Rolle", "lat": 46.2963, "lon": 11.7826, "ele": 1959}]}, {"stage": 4, "day": 4, "title": "Passo Rolle — Predazzo", "kind": "route_day", "route_name": "Passo Rolle -> Bellamonte Bus Stop", "ops_route": 5820, "parts": [{"ops_route": 5822, "name": "Passo Rolle -> San Martino di Castrozza Bus Station", "rwgps_id": "57914017"}], "km": 8.0, "gain_m": 73, "points": [{"role": "high", "label": "Highest point", "lat": 46.2963, "lon": 11.7874, "ele": 1978}, {"role": "end", "label": "Finish · Bellamonte Bus Stop", "lat": 46.2624, "lon": 11.8042, "ele": 1474}]}], "vertical": "Hiking"}</script>
+<script id="product-data" type="application/json">{"product": "Val di Fiemme Hiking Tour", "timezone": "Europe/Rome", "stages": [{"stage": 1, "day": 1, "title": "Predazzo — Alpe Lusia", "kind": "route_day", "route_name": "Predazzo -> Alpe Lusia", "ops_route": 3638, "parts": [{"ops_route": 3638, "name": "Predazzo -> Alpe Lusia", "rwgps_id": "57650062"}], "km": 13.6, "gain_m": 1058, "points": [{"role": "high", "label": "Highest point", "lat": 46.3434, "lon": 11.7017, "ele": 2049}, {"role": "end", "label": "Finish · Rifugio Lusia", "lat": 46.3434, "lon": 11.7017, "ele": 2049}]}, {"stage": 2, "day": 2, "title": "Alpe Lusia — Bocche Peak", "kind": "route_day", "route_name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "ops_route": 681, "parts": [{"ops_route": 681, "name": "Rifugio Lusia -> Rifugio Capanna Passo Valles", "rwgps_id": "55256311"}], "km": 13.7, "gain_m": 869, "points": [{"role": "high", "label": "Highest point", "lat": 46.3542, "lon": 11.7527, "ele": 2715}, {"role": "end", "label": "Finish · Rifugio Capanna Passo Valles", "lat": 46.3386, "lon": 11.8005, "ele": 2036}]}, {"stage": 3, "day": 3, "title": "Bocche Peak — Passo Rolle", "kind": "route_day", "route_name": "Rifugio Capanna Passo Valles -> Passo Rolle", "ops_route": 5819, "parts": [{"ops_route": 682, "name": "Rifugio Capanna Passo Valles -> Hotel Venezia", "rwgps_id": "55310295"}], "km": 11.1, "gain_m": 539, "points": [{"role": "high", "label": "Highest point", "lat": 46.3292, "lon": 11.816, "ele": 2294}, {"role": "end", "label": "Finish · Passo Rolle", "lat": 46.2963, "lon": 11.7826, "ele": 1959}]}, {"stage": 4, "day": 4, "title": "Passo Rolle — Predazzo", "kind": "route_day", "route_name": "Passo Rolle -> Bellamonte Bus Stop", "ops_route": 5820, "parts": [{"ops_route": 5822, "name": "Passo Rolle -> San Martino di Castrozza Bus Station", "rwgps_id": "57914017"}], "km": 8.0, "gain_m": 73, "points": [{"role": "high", "label": "Highest point", "lat": 46.2963, "lon": 11.7874, "ele": 1978}, {"role": "end", "label": "Finish · Bellamonte Bus Stop", "lat": 46.2624, "lon": 11.8042, "ele": 1474}]}], "vertical": "Hiking", "brand": {"name": "Hut To Hut Hiking Dolomites", "site": "https://huttohuthikingdolomites.com", "privacy": "https://huttohuthikingdolomites.com/data-privacy-policy"}}</script>
 <script>
 const P = JSON.parse(document.getElementById('product-data').textContent);
 const TZ = P.timezone || 'Europe/Zagreb';
@@ -88,7 +89,15 @@ const API = 'https://api.met.no/weatherapi/locationforecast/2.0/complete';
 const CACHE_KEY = 'stage-weather:v1:';
 
 document.getElementById('title').textContent = 'Weather for your stages';
-document.getElementById('subtitle').textContent = P.product;
+// the guest sees the brand they booked with, never the tool's name
+const B = P.brand || null;
+document.title = `${P.product} · Weather for your stages${B && B.name ? ' · ' + B.name : ''}`;
+document.getElementById('subtitle').innerHTML = esc(P.product) +
+  (B && B.name ? ` · <a href="${esc(B.site)}" target="_blank" rel="noopener">${esc(B.name)}</a>` : '');
+document.getElementById('privacy').innerHTML =
+  'Privacy: to show the forecast, this page asks the weather services named above for the points of your route, and they see ' +
+  'your device\'s internet address, as with any website. Your arrival date and choices are kept only on this device.' +
+  (B && B.privacy ? ` See the <a href="${esc(B.privacy)}" target="_blank" rel="noopener">${esc(B.name || '')} Data Privacy Policy</a>.` : '');
 
 // ---------- small helpers ----------
 const store = {
